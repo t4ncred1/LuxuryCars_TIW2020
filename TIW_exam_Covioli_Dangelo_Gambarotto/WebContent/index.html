@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<link rel="stylesheet" type="text/css" media="all"
+	href="./css/mystyle.css" th:href="@{/css/mystyle.css}" />
+<title>QuotationManager Homepage</title>
+</head>
+<body>
+	<div>
+		<form action="Login" method="POST">
+			<input class="loginfield" type="text" name="username" placeholder="username">
+			<br>
+			<input class="loginfield" type="password" name="pwd" placeholder="password">
+			<br>
+			<input class="login button" type="submit" value="Login">
+			<p th:text=" ${errorMsg}"></p>
+		</form>
+		Sei un nuovo utente? <br> <a href="register.html"><button
+				class="register button">Registrati</button></a> <br>
+	</div>
+	<br>
+</body>
+</html>
