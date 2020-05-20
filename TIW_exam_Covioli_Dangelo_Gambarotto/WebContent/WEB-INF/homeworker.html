@@ -2,12 +2,59 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="ISO-8859-1">
+<title>Worker assignment to project</title>
 <link rel="stylesheet" type="text/css" media="all"
-	href="./css/mystyle.css" th:href="@{/css/mystyle.css}" />
-<title>QuotationManager Homepage</title>
+	href="../CSS/mystyle.css" th:href="@{/css/mystyle.css}" />
 </head>
 <body>
 
+	<h1 th:text="#{welcome}">Bentornato</h1>
 
+	<h2 th:text="#{priced}">Preventivi già prezzati</h2>
+	<div>
+		<table border = '1'>
+			<thead>
+				<tr>
+					<th th:text="#{id}">ID</th>
+					<th th:text="#{product}">Prodotto</th>
+					<th th:text="#{cname}">Nome cliente</th>
+					<th th:text="#{price}">Prezzo</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="q : ${workerQuotations}">
+					<td th:text="${q.quotationId}"></td>
+					<td th:text="${q.productName}"></td>
+					<td th:text="${q.clientUsername}"></td>
+					<td th:text="${q.value}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<h2 th:text="#{toPrice}">Preventivi ancora da prezzare</h2>
+	<div>
+		<table border = '1'>
+			<thead>
+				<tr>
+					<th th:text="#{id}">ID</th>
+					<th th:text="#{product}">Prodotto</th>
+					<th th:text="#{cname}">Nome cliente</th>
+					<th>...</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="q : ${freeQuotations}">
+					<td th:text="${q.quotationId}"></td>
+					<td th:text="${q.productName}"></td>
+					<td th:text="${q.clientUsername}"></td>
+					<td><a th:href="@{/ManageQuotation(quotation=${q.quotationId})}">
+						<span th:text="#{showq}">Visualizza richiesta</span></a></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	
 </body>
 </html>

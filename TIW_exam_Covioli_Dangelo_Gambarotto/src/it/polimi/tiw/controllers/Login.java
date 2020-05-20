@@ -21,6 +21,8 @@ import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 import it.polimi.tiw.DAO.UserDAO;
 import it.polimi.tiw.beans.*;
 
+import it.polimi.tiw.utils.SharedPropertyMessageResolver;
+
 @WebServlet("/Login")
 public class Login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -38,6 +40,7 @@ public class Login extends HttpServlet {
 		templateResolver.setTemplateMode(TemplateMode.HTML);
 		this.templateEngine = new TemplateEngine();
 		this.templateEngine.setTemplateResolver(templateResolver);
+		this.templateEngine.setMessageResolver(new SharedPropertyMessageResolver(servletContext, "i18n", "login"));
 		templateResolver.setSuffix(".html");
 		try {
 			ServletContext context = getServletContext();
@@ -91,7 +94,7 @@ public class Login extends HttpServlet {
 			templateEngine.process(path, ctx, response.getWriter());
 		} else {
 			request.getSession().setAttribute("user", u);
-			String target = (u.getRole().equals("worker")) ? "/GoToHomeWorker" : "/GoToHomeClient";
+			String target = (u.getRole().equals("worker")) ? "/HomeWorker" : "/Client";
 			path = path + target;
 			response.sendRedirect(path);
 		}
