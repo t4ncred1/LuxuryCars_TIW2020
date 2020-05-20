@@ -1,9 +1,6 @@
 package it.polimi.tiw.controllers;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -18,13 +15,14 @@ import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
+import it.polimi.tiw.utils.SharedPropertyMessageResolver;
+
 /**
  * Servlet implementation class Index
  */
 @WebServlet("/Index")
 public class Index extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private Connection connection;
     private TemplateEngine templateEngine;
     
     /**
@@ -36,22 +34,11 @@ public class Index extends HttpServlet {
     
     public void init() throws UnavailableException {
     	ServletContext context = getServletContext();
-    	try {
-			String driver = context.getInitParameter("dbDriver");
-			String url = context.getInitParameter("dbUrl");
-			String user = context.getInitParameter("dbUser");
-			String password = context.getInitParameter("dbPassword");
-			Class.forName(driver);
-			connection = DriverManager.getConnection(url, user, password);
-		} catch (ClassNotFoundException e) {
-			throw new UnavailableException("Can't load database driver");
-		} catch (SQLException e) {
-			throw new UnavailableException("Couldn't get db connection");
-		}
     	ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(context);
 		templateResolver.setTemplateMode(TemplateMode.HTML);
 		this.templateEngine = new TemplateEngine();
 		this.templateEngine.setTemplateResolver(templateResolver);
+		this.templateEngine.setMessageResolver(new SharedPropertyMessageResolver(context, "i18n", "login"));
 		templateResolver.setSuffix(".html");
     }
     
@@ -60,7 +47,7 @@ public class Index extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ServletContext servletContext = getServletContext();
-		final WebContext ctx = new WebContext(request, response, servletContext);
+		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
 		templateEngine.process("/index.html", ctx, response.getWriter());	}
 
 }

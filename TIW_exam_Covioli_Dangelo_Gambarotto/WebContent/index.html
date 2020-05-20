@@ -9,14 +9,14 @@
 <body>
 	<div>
 		<form action="Login" method="POST">
-			<input class="loginfield" type="text" name="username" placeholder="username">
+			<input class="loginfield" type="text" name="username" th:placeholder="#{username}">
 			<br>
-			<input class="loginfield" type="password" name="pwd" placeholder="password">
+			<input class="loginfield" type="password" name="pwd" th:placeholder="#{password}">
 			<br>
-			<input class="login button" type="submit" value="Login">
+			<input class="login button" type="submit" th:value="#{login}">
 			<p th:text=" ${errorMsg}">Non ci sono stati errori</p>
 		</form>
-		Sei un nuovo utente? <br> <a href="register.html"><button
+		<p th:text="#{register}"></p><br> <a href="register.html"><button
 				class="register button">Registrati</button></a> <br>
 	</div>
 	<br>
