@@ -94,7 +94,7 @@ public class Login extends HttpServlet {
 			templateEngine.process(path, ctx, response.getWriter());
 		} else {
 			request.getSession().setAttribute("user", u);
-			String target = (u.getRole().equals("worker")) ? "/HomeWorker" : "/Client";
+			String target = (u.getRole().equals("worker")) ? "/HomeWorker" : "/HomeClient";
 			path = path + target;
 			response.sendRedirect(path);
 		}

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Worker assignment to project</title>
+<link rel="stylesheet" type="text/css" media="all"
+	href="../CSS/mystyle.css" th:href="@{/css/mystyle.css}" />
+</head>
+<body>
+
+	<h1 th:text="#{welcome}">Bentornato</h1>
+
+	<h2 th:text="#{intro}">Prodotti disponibili</h2>
+	<div>
+		<table border = '1'>
+			<thead>
+				<tr>
+					<th th:text="#{id}">ID</th>
+					<th th:text="#{product}">Prodotto</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="p : ${products}">
+					<td th:text="${p.id}"></td>
+					<td th:text="${p.name}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+</body>
+</html>
