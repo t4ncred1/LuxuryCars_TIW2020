@@ -12,7 +12,7 @@ public class QuotationBean {
 	private String date;
 	private int productId;
 	private String productName;
-	private List<String> options;
+	private List<OptionBean> options;
 	private int value;
 	
 	public int getValue() {
@@ -69,10 +69,10 @@ public class QuotationBean {
 	public void setProductName(String productName) {
 		this.productName = productName;
 	}
-	public List<String> getOptions() {
+	public List<OptionBean> getOptions() {
 		return options;
 	}
-	public void setOptions(List<String> options) {
+	public void setOptions(List<OptionBean> options) {
 		this.options = options;
 	}
 	

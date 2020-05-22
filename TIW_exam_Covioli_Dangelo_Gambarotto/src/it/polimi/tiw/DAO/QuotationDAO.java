@@ -25,29 +25,15 @@ public class QuotationDAO {
 			try (ResultSet result = pstatement.executeQuery();) {
 				while(result.next()) {
 					QuotationBean quotation = new QuotationBean();
-					quotation.setQuotationId(result.getInt("Q.quotationId"));
+					int qID = result.getInt("Q.quotationId");
+					quotation.setQuotationId(qID);
 					quotation.setClientId(result.getInt("Q.clientId"));
 					quotation.setClientUsername(result.getString("C.username"));
 					quotation.setDate(result.getString("Q.Date"));
 					quotation.setProductId(result.getInt("Q.productId"));
 					quotation.setProductName(result.getNString("P.name"));
-					String subquery = "SELECT O.name "
-										+ "FROM `option` AS O, quotation_option AS QO, quotation AS Q "
-										+ "WHERE QO.quotationId = Q.quotationId "
-											+ "AND QO.optionId = O.optionId "
-											+ "AND O.productId = Q.productId "
-											+ "AND Q.quotationId = ?";
-					try (PreparedStatement subpstatement = con.prepareStatement(subquery);) {
-						subpstatement.setInt(1, quotation.getQuotationId());
-						System.out.println(quotation.getQuotationId());
-						try (ResultSet subresult = subpstatement.executeQuery();) {
-							List<String> options = new ArrayList<>();
-							while(subresult.next()) {
-								options.add(subresult.getString("O.name"));
-							}
-							quotation.setOptions(options);
-						}
-					}
+					OptionDAO opDAO = new OptionDAO(con);
+					quotation.setOptions(opDAO.getOptionByQuotation(qID));
 					freeQuotations.add(quotation);
 				}
 			}
@@ -64,9 +50,11 @@ public class QuotationDAO {
 		try (PreparedStatement pstatement = con.prepareStatement(query);) {
 			pstatement.setInt(1, workerId);
 			try (ResultSet result = pstatement.executeQuery();) {
+				OptionDAO opDAO = new OptionDAO(con);
 				while(result.next()) {
 					QuotationBean quotation = new QuotationBean();
-					quotation.setQuotationId(result.getInt("Q.quotationId"));
+					int qID = result.getInt("Q.quotationId");
+					quotation.setQuotationId(qID);
 					quotation.setClientId(result.getInt("Q.clientId"));
 					quotation.setClientUsername(result.getString("C.username"));
 					quotation.setDate(result.getString("Q.Date"));
@@ -75,11 +63,47 @@ public class QuotationDAO {
 					quotation.setValue(result.getInt("Q.price"));
 					quotation.setWorkerId(result.getInt("Q.workerId"));
 					quotation.setWorkerUsername(result.getString("W.username"));
+					opDAO.getOptionByQuotation(qID);
 					workerQuotations.add(quotation);
 				}
 			}
 		}
 		return workerQuotations;
+	}
+	
+	public QuotationBean getQuotationById(int quotationId) throws SQLException{
+		//NOTA: per la query, sono partito dal presupposto
+		//che ci fosse solo una quotation per quotationId, visto che essa
+		//è chiave nella relativa tabella.
+		String query = "SELECT Q.quotationId, Q.date, Q.productId, P.name, Q.clientId, C.username "
+				+ "FROM quotation AS Q, client AS C, product AS P "
+				+ "WHERE Q.productId = P.productId AND C.idclient = Q.clientId AND Q.quotationId = ?";
+		OptionDAO opDAO = new OptionDAO(con);
+		PreparedStatement pstatement = con.prepareStatement(query); 
+		pstatement.setInt(1, quotationId);
+		ResultSet result = pstatement.executeQuery();
+		QuotationBean quotation = null;
+		if (result.next() != false) {
+			quotation = new QuotationBean();
+			quotation.setQuotationId(result.getInt("Q.quotationId"));
+			quotation.setClientId(result.getInt("Q.clientId"));
+			quotation.setClientUsername(result.getString("C.username"));
+			quotation.setDate(result.getString("Q.Date"));
+			quotation.setProductId(result.getInt("Q.productId"));
+			quotation.setProductName(result.getNString("P.name"));
+			quotation.setOptions(opDAO.getOptionByQuotation(quotationId));
+		}
+		return quotation;
+	}
+	
+	public void setQuotationPrice(int quotationId, int price, int workerId) throws SQLException{
+		String query = "UPDATE TABLE quotation SET price = ?, workerId = ? WHERE quotationId = ?";
+		try (PreparedStatement pstatement = con.prepareStatement(query);){
+			pstatement.setInt(1, price);
+			pstatement.setInt(2, workerId);
+			pstatement.setInt(3, quotationId);
+			pstatement.executeUpdate();
+		}
 	}
 	
 }
