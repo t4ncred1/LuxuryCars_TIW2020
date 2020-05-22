@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title th:text='#{title}'>Project Pricing</title>
+<link rel="stylesheet" type="text/css" media="all"
+	href="../CSS/mystyle.css" th:href="@{/css/mystyle.css}" />
+</head>
+<body>
+
+	<h1 th:text="#{valutation}">Valutazione preventivo</h1>
+
+	<h2 th:text="#{info}">Informazioni Preventivo</h2>
+	<div class="infotable">
+		<table border = '0'>
+			<tbody>
+				<tr>
+					<th th:text="#{productname} + ': '">Prodotto:</td>
+					<td th:text="${quotation.productName}">nome</td>
+				</tr>
+				<tr>
+					<th th:text="#{client} + ': '">Cliente:</td>
+					<td th:text="${quotation.clientUsername}">nome</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<h3 th:text="#{options}">Opzioni selezionate</h3>
+	<div class="optiontable">
+		<table border = '1'>
+			<thead>
+				<tr>
+					<th th:text="#{optionname}">Option name</td>
+					<th th:text="#{inoffer}">In offer?</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="o : ${quotation.options}">
+					<td th:text="${o.name}">opzione1</td>
+					<td th:text="${o.inOffer == true}? #{yes} : #{no}">no</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	
+</body>
+</html>
