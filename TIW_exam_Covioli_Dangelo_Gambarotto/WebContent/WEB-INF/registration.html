@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<link rel="stylesheet" type="text/css" media="all" href="./css/mystyle.css" th:href="@{/css/mystyle.css}" />
+<title>Sign up</title>
+</head>
+<body>
+	<div>
+		<p th:text=" ${errorMsg!=null && errorMsg=='emptyField'} ? #{emptyField}">campi vuoti</p>
+		<p th:text=" ${errorMsg!=null && errorMsg=='usedUsername'} ? #{usedUsername}">username già utilizzato</p>
+		<p th:text=" ${errorMsg!=null && errorMsg=='wrongRole'} ? #{wrongRole}">ruolo inserito sbagliato</p>
+		<form action="Registration" method="POST">
+			<input class="registrationfield" type="text" name="firstName" th:placeholder="#{firstName}" required>
+			<br>
+			<input class="registrationfield" type="text" name="lastName" th:placeholder="#{lastName}" required>
+			<br>
+			<input class="registrationfield" type="text" name="username" th:placeholder="#{username}" required>
+			<br>
+			<input class="registrationfield" type="password" name="pwd" th:placeholder="#{password}" required>
+			<br>
+			<input type="radio" name="role" value="client" checked>
+			<label th:text="#{client}">cliente</label> <br>
+			<input type="radio" name="role" value="worker">
+			<label th:text="#{worker}">Addetto ai lavori</label> <br>
+			<input class="registration button" type="submit" th:value="#{register}">
+		</form>
+	</div>
+</body>
+</html>

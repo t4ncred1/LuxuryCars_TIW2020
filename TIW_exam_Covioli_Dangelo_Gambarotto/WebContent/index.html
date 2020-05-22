@@ -16,7 +16,7 @@
 			<input class="login button" type="submit" th:value="#{login}">
 			<p th:text=" ${errorMsg}">Non ci sono stati errori</p>
 		</form>
-		<p th:text="#{register}"></p><br> <a href="register.html"><button
+		<p th:text="#{register}"></p><br> <a th:href="@{/Registration}" href="register.html"><button
 				class="register button">Registrati</button></a> <br>
 	</div>
 	<br>

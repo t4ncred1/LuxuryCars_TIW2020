@@ -51,5 +51,40 @@ public class UserDAO {
 			}
 		}
 	}
-	
+
+	public void registerUser(String usrn, String pwd, String firstName, String lastName, String role)
+			throws SQLException {
+		String query = "INSERT INTO " + role + " (username, password, name, surname) VALUES (?, ?, ?, ?)";
+
+		PreparedStatement pStatement = con.prepareStatement(query);
+		pStatement.setString(1, usrn);
+		pStatement.setString(2, pwd);
+		pStatement.setString(3, firstName);
+		pStatement.setString(4, lastName);
+		pStatement.execute();
+
+		closeConnection(pStatement);
+		return;
+	}
+
+	private void closeConnection(PreparedStatement pStatement) throws SQLException {
+		try {
+			pStatement.close();
+		} catch (SQLException e) {
+			throw new SQLException("Cannot close statement");
+		}
+	}
+
+	private void closeConnection(ResultSet res, PreparedStatement pStatement) throws SQLException {
+		try {
+			res.close();
+		} catch (SQLException e) {
+			throw new SQLException("Cannot close result");
+		}
+		try {
+			pStatement.close();
+		} catch (SQLException e) {
+			throw new SQLException("Cannot close statement");
+		}
+	}
 }
