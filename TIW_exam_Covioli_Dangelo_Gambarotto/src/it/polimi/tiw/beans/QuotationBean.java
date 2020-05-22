@@ -13,12 +13,12 @@ public class QuotationBean {
 	private int productId;
 	private String productName;
 	private List<OptionBean> options;
-	private int value;
+	private Double value;
 	
-	public int getValue() {
+	public Double getValue() {
 		return value;
 	}
-	public void setValue(int value) {
+	public void setValue(Double value) {
 		this.value = value;
 	}
 	public int getQuotationId() {

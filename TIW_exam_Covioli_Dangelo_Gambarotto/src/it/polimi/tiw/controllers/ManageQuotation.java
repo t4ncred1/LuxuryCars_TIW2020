@@ -1,6 +1,7 @@
 package it.polimi.tiw.controllers;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -72,9 +73,7 @@ public class ManageQuotation extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		QuotationDAO qDAO = new QuotationDAO(connection);
 		int qID = 0;
-		UserBean u =null;
-		HttpSession s = request.getSession();
-		u = (UserBean) s.getAttribute("user");
+		
 		
 		try {
 			if( request.getParameter("quotation")!= null)
@@ -84,6 +83,8 @@ public class ManageQuotation extends HttpServlet {
 			//TODO error handling: non è stato passato un id o 
 			// l'id passato non è un numero
 			e.printStackTrace();
+			response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath()+"/HomeWorker"));
+			return;
 		}
 		
 		try {
@@ -97,10 +98,18 @@ public class ManageQuotation extends HttpServlet {
 		} catch (SQLException e) {
 			// TODO error handling: SQLException
 			e.printStackTrace();
+			response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath()+"/HomeWorker"));
+			return;
 		}
 				
 		ServletContext servletContext = getServletContext();
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
+		//if the error parameter was passed, set the context
+		if (request.getParameter("priceerror")!=null && request.getParameter("priceerror").equals("true")) {
+			ctx.setVariable("priceerror", true);
+		}
+		
+		//send quotation object
 		try {
 			QuotationBean q = qDAO.getQuotationById(qID);
 			if (q==null) {
@@ -111,18 +120,89 @@ public class ManageQuotation extends HttpServlet {
 		} catch (SQLException e) {
 			// TODO error handling: SQLException
 			e.printStackTrace();
+			response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath()+"/HomeWorker"));
+			return;
 		}
 		String path = "/WEB-INF/managequotation.html";
 		templateEngine.process(path, ctx, response.getWriter());
 		//TODO check if the user is logged in (supposedly done via filter)
 	}
 
+	
+	
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		HttpSession s = request.getSession();
+		UserBean u = (UserBean) s.getAttribute("user");
+		Double price = 0.0;
+		int intPrice = 0;
+		
+		QuotationDAO qDAO = new QuotationDAO(connection);
+		int qID = 0;
+		
+		//check if parameter quotation is correct
+		try {
+			if( request.getParameter("quotation")!= null)
+				qID = Integer.parseInt(request.getParameter("quotation"));
+			else throw new NullPointerException();
+		} catch(NumberFormatException|NullPointerException e) {
+			//TODO error handling: non è stato passato un id o 
+			// l'id passato non è un numero
+			e.printStackTrace();
+			response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath()+"/HomeWorker"));
+			return;
+		}
+		
+		//check if parameter price is correct
+		try {
+			if( request.getParameter("price")!= null)
+				price = Double.parseDouble(request.getParameter("price"));
+			else throw new NullPointerException();
+		} catch(NumberFormatException|NullPointerException e) {
+			response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/ManageQuotation?quotation="+qID+"&priceerror=true"));
+			return;
+		}
+
+		//check if the quotation ID is set
+		try {
+			List<Integer> freeIDs = qDAO.getFreeQuotations().stream()
+					.map(id -> id.getQuotationId())
+					.collect(Collectors.toList());
+			if(!freeIDs.contains(qID)) {
+				//TODO error: id non è tra gli id liberi.
+				throw new SQLException("not in the freeIDs list");
+			}
+		} catch (SQLException e) {
+			// TODO error handling: SQLException
+			e.printStackTrace();
+			response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath()+"/HomeWorker"));
+			return;
+		}
+		
+		//check if the price float is in a correct format
+		if(BigDecimal.valueOf(price).scale() > 2) {
+			//redirect to the page, but with the additional parameter "error" set to true.
+			System.out.println("error while checking the scale of the element " + Double.parseDouble(request.getParameter("price")));
+			response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/ManageQuotation?quotation="+qID+"&priceerror=true"));
+			return;
+		} else {
+			Double newprice = price * 100;
+			intPrice = newprice.intValue();
+		}
+		
+		
+		//set the price for the quotation
+		try {
+			qDAO.setQuotationPrice(qID, intPrice, u.getUserid());
+		} catch (SQLException e) {
+			// TODO exception handling: SQLException
+			e.printStackTrace();
+			response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath()+"/HomeWorker"));
+			return;
+		}
+		response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath()+"/HomeWorker"));
 	}
 
 }

@@ -60,7 +60,7 @@ public class QuotationDAO {
 					quotation.setDate(result.getString("Q.Date"));
 					quotation.setProductId(result.getInt("Q.productId"));
 					quotation.setProductName(result.getNString("P.name"));
-					quotation.setValue(result.getInt("Q.price"));
+					quotation.setValue(Double.valueOf(result.getInt("Q.price"))/100);
 					quotation.setWorkerId(result.getInt("Q.workerId"));
 					quotation.setWorkerUsername(result.getString("W.username"));
 					opDAO.getOptionByQuotation(qID);
@@ -75,7 +75,7 @@ public class QuotationDAO {
 		//NOTA: per la query, sono partito dal presupposto
 		//che ci fosse solo una quotation per quotationId, visto che essa
 		//è chiave nella relativa tabella.
-		String query = "SELECT Q.quotationId, Q.date, Q.productId, P.name, Q.clientId, C.username "
+		String query = "SELECT Q.quotationId, Q.date, Q.productId, P.name, Q.clientId, C.username, Q.price "
 				+ "FROM quotation AS Q, client AS C, product AS P "
 				+ "WHERE Q.productId = P.productId AND C.idclient = Q.clientId AND Q.quotationId = ?";
 		OptionDAO opDAO = new OptionDAO(con);
@@ -91,13 +91,16 @@ public class QuotationDAO {
 			quotation.setDate(result.getString("Q.Date"));
 			quotation.setProductId(result.getInt("Q.productId"));
 			quotation.setProductName(result.getNString("P.name"));
+			if (result.getInt("Q.price") != 0) {
+				quotation.setValue(Double.valueOf(result.getInt("Q.price"))/100);
+			}
 			quotation.setOptions(opDAO.getOptionByQuotation(quotationId));
 		}
 		return quotation;
 	}
 	
 	public void setQuotationPrice(int quotationId, int price, int workerId) throws SQLException{
-		String query = "UPDATE TABLE quotation SET price = ?, workerId = ? WHERE quotationId = ?";
+		String query = "UPDATE quotation SET price = ?, workerId = ? WHERE quotationId = ?";
 		try (PreparedStatement pstatement = con.prepareStatement(query);){
 			pstatement.setInt(1, price);
 			pstatement.setInt(2, workerId);
