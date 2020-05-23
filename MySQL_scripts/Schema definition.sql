@@ -75,7 +75,7 @@ CREATE TABLE `option` (
 CREATE TABLE `quotation_option` (
 	`quotationId` int NOT NULL,
 	`optionId` int NOT NULL, 
-	PRIMARY KEY (`optionId`),
+	PRIMARY KEY (`optionId`, `quotationId`),
 	FOREIGN KEY (`quotationId`) REFERENCES `quotation`(`quotationId`) ON DELETE CASCADE ON UPDATE CASCADE,
 	FOREIGN KEY (`optionId`) REFERENCES `option`(`optionId`)  ON DELETE CASCADE ON UPDATE CASCADE
 );
