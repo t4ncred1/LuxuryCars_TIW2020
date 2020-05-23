@@ -43,16 +43,28 @@ public class CheckWorker implements Filter {
 
 			if (!uBean.getRole().equals("worker")) {
 				System.out.println("checkWorker Filter log");
-				response.sendRedirect(req.getServletContext().getContextPath());
-				return;
+				switch (uBean.getRole()) {
+				case "client":
+					response.sendRedirect(req.getServletContext().getContextPath() + "/HomeClient");
+					return;
+				default:
+					response.sendRedirect(req.getServletContext().getContextPath());
+					return;
+				}
 			}
 
 			UserDAO uDao = new UserDAO(connection);
 
 			if (!uDao.existsWorker(uBean.getUsername())) {
 				System.out.println("checkWorker Filter log");
-				response.sendRedirect(req.getServletContext().getContextPath());
-				return;
+				switch (uBean.getRole()) {
+				case "client":
+					response.sendRedirect(req.getServletContext().getContextPath() + "/HomeClient");
+					return;
+				default:
+					response.sendRedirect(req.getServletContext().getContextPath());
+					return;
+				}
 			}
 			chain.doFilter(request, response);
 		} catch (SQLException e) {
