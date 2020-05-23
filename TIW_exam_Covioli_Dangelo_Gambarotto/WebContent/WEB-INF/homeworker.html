@@ -3,16 +3,20 @@
 <head>
 <meta charset="ISO-8859-1">
 <title th:text='#{title}'>Worker assignment to project</title>
-<link rel="stylesheet" type="text/css" media="all"
-	href="../CSS/mystyle.css" th:href="@{/css/mystyle.css}" />
+<link rel="stylesheet" type="text/css" media="all" href="../CSS/mystyle.css" th:href="@{/css/mystyle.css}" />
 </head>
 <body>
+	<div class="logout">
+		<form action="Logout" method="GET">
+			<input class="logout button" type="submit" th:value="#{logout}">
+		</form>
+	</div>
 
 	<h1 th:text="#{welcome}">Bentornato</h1>
 
 	<h2 th:text="#{priced}">Preventivi già prezzati</h2>
 	<div>
-		<table border = '1'>
+		<table border='1'>
 			<thead>
 				<tr>
 					<th th:text="#{id}">ID</th>
@@ -34,7 +38,7 @@
 
 	<h2 th:text="#{toPrice}">Preventivi ancora da prezzare</h2>
 	<div>
-		<table border = '1'>
+		<table border='1'>
 			<thead>
 				<tr>
 					<th th:text="#{id}">ID</th>
@@ -48,13 +52,13 @@
 					<td th:text="${q.quotationId}"></td>
 					<td th:text="${q.productName}"></td>
 					<td th:text="${q.clientUsername}"></td>
-					<td><a th:href="@{/ManageQuotation(quotation=${q.quotationId})}">
-						<span th:text="#{showq}">Visualizza richiesta</span></a></td>
+					<td><a th:href="@{/ManageQuotation(quotation=${q.quotationId})}"> <span th:text="#{showq}">Visualizza
+								richiesta</span></a></td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
-	
-	
+
+
 </body>
 </html>
