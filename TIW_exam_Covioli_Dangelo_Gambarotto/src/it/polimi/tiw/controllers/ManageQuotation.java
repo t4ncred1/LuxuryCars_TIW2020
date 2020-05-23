@@ -12,6 +12,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -105,8 +106,18 @@ public class ManageQuotation extends HttpServlet {
 		ServletContext servletContext = getServletContext();
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
 		//if the error parameter was passed, set the context
-		if (request.getParameter("priceerror")!=null && request.getParameter("priceerror").equals("true")) {
-			ctx.setVariable("priceerror", true);
+//		if (request.getParameter("priceerror")!=null && request.getParameter("priceerror").equals("true")) {
+//			ctx.setVariable("priceerror", true);
+//		}
+		if (request.getCookies()!=null) {
+			for (Cookie c : request.getCookies()) {
+				if (c.getName().equals("priceerror") && c.getValue().equals("true")) {
+					ctx.setVariable("priceerror", true);
+					Cookie eliminate = new Cookie("priceerror","");
+					eliminate.setMaxAge(0);
+					response.addCookie(eliminate);
+				}
+			}
 		}
 		
 		//send quotation object
@@ -161,7 +172,9 @@ public class ManageQuotation extends HttpServlet {
 				price = Double.parseDouble(request.getParameter("price"));
 			else throw new NullPointerException();
 		} catch(NumberFormatException|NullPointerException e) {
-			response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/ManageQuotation?quotation="+qID+"&priceerror=true"));
+			Cookie error = new Cookie("priceerror","true");
+			response.addCookie(error);
+			response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/ManageQuotation?quotation="+qID));
 			return;
 		}
 
@@ -185,7 +198,9 @@ public class ManageQuotation extends HttpServlet {
 		if(BigDecimal.valueOf(price).scale() > 2) {
 			//redirect to the page, but with the additional parameter "error" set to true.
 			System.out.println("error while checking the scale of the element " + Double.parseDouble(request.getParameter("price")));
-			response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/ManageQuotation?quotation="+qID+"&priceerror=true"));
+			Cookie error = new Cookie("priceerror","true");
+			response.addCookie(error);
+			response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/ManageQuotation?quotation="+qID));
 			return;
 		} else {
 			Double newprice = price * 100;
