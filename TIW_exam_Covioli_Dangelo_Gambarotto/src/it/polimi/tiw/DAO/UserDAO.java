@@ -72,6 +72,20 @@ public class UserDAO {
 		}
 	}
 
+	public boolean existsClient(String usrn) throws SQLException {
+		String query = "SELECT idclient FROM client  WHERE username = ?";
+		PreparedStatement pStatement = con.prepareStatement(query);
+		pStatement.setString(1, usrn);
+		ResultSet result = pStatement.executeQuery();
+		if (!result.isBeforeFirst()) {
+			closeConnection(result, pStatement);
+			return false;
+		} else {
+			closeConnection(result, pStatement);
+			return true;
+		}
+	}
+
 	public void registerUser(String usrn, String pwd, String firstName, String lastName, String role)
 			throws SQLException {
 		String query = "INSERT INTO " + role + " (username, password, name, surname) VALUES (?, ?, ?, ?)";
