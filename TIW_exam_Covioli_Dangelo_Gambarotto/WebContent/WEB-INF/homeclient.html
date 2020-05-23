@@ -9,20 +9,66 @@
 <body>
 
 	<h1 th:text="#{welcome}">Bentornato</h1>
-
-	<h2 th:text="#{intro}">Prodotti disponibili</h2>
+	
+	<p th:if="${showSuccessMessage}==true" th:text="#{success}"></p>
+	<p th:if="${showErrorMessage}==true" th:text="#{error}"></p>
+	
+	
+	<h2 th:text="#{quotations}">Le tue richieste</h2>
 	<div>
 		<table border = '1'>
 			<thead>
 				<tr>
 					<th th:text="#{id}">ID</th>
 					<th th:text="#{product}">Prodotto</th>
+					<th th:text="#{date}">Data</th>
+					<th th:text="#{price}">Prezzo</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="q : ${quotations}">
+					<td th:text="${q.quotationId}">1</td>
+					<td th:text="${q.productName}">Toyota Aygo</td>
+					<td th:text="${q.date}">17/02/1996</td>
+					<td th:if="${q.value}!=0" th:text="${q.value}">100E</td>
+					<td th:if="${q.value}==0" th:text="#{pending}">100E</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	
+	
+	<h2 th:text="#{intro}">Prodotti disponibili</h2>
+	<div>
+		<table border = '1'>
+			<thead>
+				<tr>
+					<th th:text="#{id}">ID</th>
+					<th th:text="#{picture}">Immagine</th>
+					<th th:text="#{product}">Prodotto</th>
+					<th>...</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr th:each="p : ${products}">
-					<td th:text="${p.id}"></td>
-					<td th:text="${p.name}"></td>
+					<td th:text="${p.id}">1</td>
+					<td><img th:src="@{/ProductImage(product=${p.id}, thumbnail=true)}" width="200"></td>
+									
+					<td><a
+						th:href="@{/HomeClient(product=${p.id})}"><span
+							th:text="${p.name}">Toyota Aygo</span></a></td>
+					<td th:if="${selProd == p.id}">
+						<form action="SubmitRequest" method="POST">
+							<input type="hidden" name="productId" required="required"
+											th:value="${p.id}" />
+							<div th:each="o : ${p.options}">
+						 	 <input type="checkbox" th:id="${o.id}" th:name="options" th:value="${o.id}">
+								<label th:for="${o.name}" th:text="${o.name}"> I have a boat</label><br>				
+							</div>
+						  	<input type="submit" value="Submit">
+						</form>
+					</td>
 				</tr>
 			</tbody>
 		</table>

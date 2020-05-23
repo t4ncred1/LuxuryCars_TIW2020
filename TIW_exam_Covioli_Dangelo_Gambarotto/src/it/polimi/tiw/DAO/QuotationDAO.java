@@ -71,6 +71,34 @@ public class QuotationDAO {
 		return workerQuotations;
 	}
 	
+	
+	public List<QuotationBean> getClientQuotations(int clientId) throws SQLException {
+		List<QuotationBean> clientQuotations = new ArrayList<>();
+		String query = "SELECT Q.quotationId, Q.price, Q.date, Q.productId, P.name "
+							+ "FROM quotation AS Q, product AS P "
+							+ "WHERE Q.productId = P.productId AND Q.clientId = ? "
+							+ "ORDER BY Q.date ASC";
+		try (PreparedStatement pstatement = con.prepareStatement(query);) {
+			pstatement.setInt(1, clientId);
+			try (ResultSet result = pstatement.executeQuery();) {
+				OptionDAO opDAO = new OptionDAO(con);
+				while(result.next()) {
+					QuotationBean quotation = new QuotationBean();
+					int qID = result.getInt("Q.quotationId");
+					quotation.setQuotationId(qID);
+					quotation.setClientId(clientId);
+					quotation.setDate(result.getString("Q.Date"));
+					quotation.setProductId(result.getInt("Q.productId"));
+					quotation.setProductName(result.getNString("P.name"));
+					quotation.setValue(Double.valueOf(result.getInt("Q.price"))/100);
+					opDAO.getOptionByQuotation(qID);
+					clientQuotations.add(quotation);
+				}
+			}
+		}
+		return clientQuotations;
+	}
+	
 	public QuotationBean getQuotationById(int quotationId) throws SQLException{
 		//NOTA: per la query, sono partito dal presupposto
 		//che ci fosse solo una quotation per quotationId, visto che essa
@@ -107,6 +135,36 @@ public class QuotationDAO {
 			pstatement.setInt(3, quotationId);
 			pstatement.executeUpdate();
 		}
+	}
+	
+	
+	public void addQuotation(int clientId, int productId, List<Integer> options) throws SQLException{
+		String insertion = "INSERT into quotation (clientId, productId)   VALUES(?, ?)";
+		try (PreparedStatement pstatement = con.prepareStatement(insertion);) {
+			pstatement.setInt(1, clientId);
+			pstatement.setInt(2, productId);
+			pstatement.executeUpdate();
+		}
+		
+		String lastId = "SELECT LAST_INSERT_ID() AS id FROM quotation";
+		int id = 0;
+		try (PreparedStatement pstatement = con.prepareStatement(lastId);) {
+			try (ResultSet result = pstatement.executeQuery();) {
+				if(result.next()) {
+					id = result.getInt("id");
+				}
+			}
+		}		
+		
+		for(Integer o : options) {
+			insertion = "INSERT into quotation_option (optionId, quotationId)   VALUES(?, ?)";
+			try (PreparedStatement pstatement = con.prepareStatement(insertion);) {
+				pstatement.setInt(1, o);
+				pstatement.setInt(2, id);
+				pstatement.executeUpdate();
+			}
+		}
+		
 	}
 	
 }

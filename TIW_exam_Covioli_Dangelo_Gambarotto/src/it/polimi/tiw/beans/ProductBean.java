@@ -27,4 +27,11 @@ public class ProductBean {
 		this.options = options;
 	}
 	
+	public boolean isAValidOption(int optionId){
+		for(OptionBean o : options) {
+			if(o.getId()==optionId) return true;
+		}
+		return false;
+	}
+	
 }
