@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `tiw_examdb` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `tiw_examdb`;
 -- MySQL dump 10.13  Distrib 8.0.19, for Win64 (x86_64)
 --
 -- Host: localhost    Database: tiw_examdb
@@ -37,7 +39,7 @@ CREATE TABLE `quotation` (
   CONSTRAINT `quotation_ibfk_1` FOREIGN KEY (`clientId`) REFERENCES `client` (`idclient`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `quotation_ibfk_2` FOREIGN KEY (`workerId`) REFERENCES `worker` (`idworker`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `quotation_ibfk_3` FOREIGN KEY (`productId`) REFERENCES `product` (`productId`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -46,7 +48,7 @@ CREATE TABLE `quotation` (
 
 LOCK TABLES `quotation` WRITE;
 /*!40000 ALTER TABLE `quotation` DISABLE KEYS */;
-INSERT INTO `quotation` VALUES (1,1000,'2020-05-19',1,1,2),(2,NULL,'2020-05-19',2,NULL,4),(6,10000,'2020-05-22',1,2,1),(7,NULL,'2020-05-22',1,NULL,3),(8,NULL,'2020-05-22',1,NULL,2),(9,NULL,'2020-05-22',1,NULL,2),(10,NULL,'2020-05-22',1,NULL,5),(11,NULL,'2020-05-23',1,NULL,1),(12,NULL,'2020-05-23',1,NULL,3);
+INSERT INTO `quotation` VALUES (1,NULL,'2020-05-23',1,NULL,1),(2,NULL,'2020-05-24',1,NULL,1),(3,NULL,'2020-05-24',1,NULL,3),(4,NULL,'2020-05-24',1,NULL,4),(5,NULL,'2020-05-24',1,NULL,3),(6,NULL,'2020-05-24',1,NULL,3);
 /*!40000 ALTER TABLE `quotation` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -78,4 +80,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-05-23  9:58:44
+-- Dump completed on 2020-05-24  8:59:56

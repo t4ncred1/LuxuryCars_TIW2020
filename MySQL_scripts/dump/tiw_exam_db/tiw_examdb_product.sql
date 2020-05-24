@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `tiw_examdb` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `tiw_examdb`;
 -- MySQL dump 10.13  Distrib 8.0.19, for Win64 (x86_64)
 --
 -- Host: localhost    Database: tiw_examdb
@@ -28,7 +30,7 @@ CREATE TABLE `product` (
   `img_path` varchar(80) NOT NULL,
   PRIMARY KEY (`productId`),
   UNIQUE KEY `productId_UNIQUE` (`productId`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,7 +39,7 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` VALUES (1,'fiat multipla','multipla.png'),(2,'toyota aygo','aygo.png'),(3,'ferrari sf70h','sf70h.png'),(4,'mercedes w08','w08.png'),(5,'hyundai i20 wrc+','i20.png');
+INSERT INTO `product` VALUES (1,'Fiat Multipla','multipla.png'),(2,'Toyota Aygo','aygo.png'),(3,'Ferrari SF70-H','sf70h.png'),(4,'Mercedes W08','w08.png'),(5,'Hyundai i20 wrc+','i20.png');
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -50,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-05-23  9:58:43
+-- Dump completed on 2020-05-24  8:59:55

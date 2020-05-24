@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `tiw_examdb` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `tiw_examdb`;
 -- MySQL dump 10.13  Distrib 8.0.19, for Win64 (x86_64)
 --
 -- Host: localhost    Database: tiw_examdb
@@ -26,12 +28,13 @@ CREATE TABLE `option` (
   `optionId` int NOT NULL AUTO_INCREMENT,
   `productId` int NOT NULL,
   `name` varchar(255) NOT NULL,
+  `name_it` varchar(255) NOT NULL,
   `Stato` enum('normale','in offerta') DEFAULT 'normale',
   PRIMARY KEY (`optionId`,`productId`),
   UNIQUE KEY `optionId_UNIQUE` (`optionId`),
   KEY `productId` (`productId`),
   CONSTRAINT `option_ibfk_1` FOREIGN KEY (`productId`) REFERENCES `product` (`productId`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,7 +43,7 @@ CREATE TABLE `option` (
 
 LOCK TABLES `option` WRITE;
 /*!40000 ALTER TABLE `option` DISABLE KEYS */;
-INSERT INTO `option` VALUES (1,1,'sedili riscaldati','normale'),(2,1,'carchi in lega','in offerta'),(3,2,'fendinebbia','normale'),(4,2,'tergicristalli rinforzati','normale'),(5,3,'cerchi in lega','normale'),(6,4,'lunotto riscaldato','in offerta'),(7,4,'cinture 6 punti','in offerta'),(8,5,'cinture 5 punti','normale');
+INSERT INTO `option` VALUES (1,1,'1.6 TURBO Engine','Motore 1.6 TURBO','in offerta'),(2,1,'Fog lights','Fendinebbia','normale'),(3,1,'Heated seats','Sedili riscaldati','normale'),(4,2,'Alloy rims','Cerchi in lega','normale'),(5,2,'Led lights','Luci a led','in offerta'),(6,3,'6-points seatbelts','Cinture a 6 punti','in offerta'),(7,3,'High-downforce rear wing','Ala posteriore ad alto carico','normale'),(8,4,'6-points seatbelts','Cinture 6 punti','in offerta'),(9,4,'Oversized-turbo','Turbo maggiorato','normale'),(10,5,'Gravel suspensions','Sospensioni da sterrato','normale'),(11,5,'Improved brake pads','Pastiglie freno migliorate','in offerta');
 /*!40000 ALTER TABLE `option` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -54,7 +57,7 @@ UNLOCK TABLES;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `no_double_options` BEFORE INSERT ON `option` FOR EACH ROW BEGIN
 	if(EXISTS (SELECT name, productId
-		FROM `option`
+		FROM `option` AS O
         WHERE name=new.name AND productId=new.productId)
 		 ) then signal sqlstate '45000' set message_text = "Option still in the DB!";
 	end if; 
@@ -74,4 +77,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-05-23  9:58:43
+-- Dump completed on 2020-05-24  8:59:56

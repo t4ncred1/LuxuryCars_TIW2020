@@ -66,11 +66,13 @@ CREATE TABLE `option` (
   `optionId` int NOT NULL AUTO_INCREMENT,
   `productId` int NOT NULL,
   `name` varchar(255) NOT NULL,
+  `name_it` varchar(255) NOT NULL,
   `Stato` ENUM ("normale","in offerta") DEFAULT "normale",
   PRIMARY KEY (`optionId`,`productId`),
   UNIQUE KEY `optionId_UNIQUE` (`optionId`),
   FOREIGN KEY (`productId`) REFERENCES `product` (`productId`) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
 
 CREATE TABLE `quotation_option` (
 	`quotationId` int NOT NULL,
@@ -102,7 +104,7 @@ BEFORE INSERT ON `option`
 FOR EACH ROW
 BEGIN
 	if(EXISTS (SELECT name, productId
-		FROM `option`
+		FROM `option` AS O
         WHERE name=new.name AND productId=new.productId)
 		 ) then signal sqlstate '45000' set message_text = "Option still in the DB!";
 	end if; 
@@ -127,6 +129,37 @@ BEGIN
             FROM `option`
             WHERE optionid = new.optionId
         )) then signal sqlstate '45000' set message_text = "Option not valid!";
+	end if; 
+END
+;;
+
+
+DELIMITER ;;
+CREATE TRIGGER no_double_username_1
+BEFORE INSERT ON `client`
+FOR EACH ROW
+BEGIN
+	if(new.username
+        IN
+        (
+			SELECT username
+            FROM `worker`
+        )) then signal sqlstate '45000' set message_text = "Username yet in use";
+	end if; 
+END
+;;
+
+DELIMITER ;;
+CREATE TRIGGER no_double_username_2
+BEFORE INSERT ON `worker`
+FOR EACH ROW
+BEGIN
+	if(new.username
+        IN
+        (
+			SELECT username
+            FROM `client`
+        )) then signal sqlstate '45000' set message_text = "Username yet in use";
 	end if; 
 END
 ;;
