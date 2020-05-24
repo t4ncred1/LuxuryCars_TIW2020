@@ -4,3 +4,71 @@
  	background-size : cover;
  	background-attachment : fixed;
 }
+
+.registerbox{
+	position: center;
+  	right: 120px;
+	color : white;
+	border : 2px black;
+	border-radius : 20px;
+	text-align : center;
+	padding : 40px;
+  	width: 240px;
+  	margin: 0 auto;
+  	margin-top: 50px;
+  	background-color : rgba(0, 0, 0, 0.8);/*rgba(204, 163, 0, 0.5);*/
+  	transition : .3s;
+}
+
+.registerlogo{
+	margin : 30px;
+	margin-left: 14px;
+	width: 200px;
+	transition : .3s;
+}
+
+.registerfield{
+	color : white;
+	text-align : center;
+	border-radius : 7px;
+	font-size : 17pt;
+	margin-bottom : 5px;
+	width : 230px;
+	height : 30px;
+	border : 2px solid rgba(204, 163, 0, 0.5);
+	background-color : rgba(255, 255, 255, 0.03);
+}
+:-ms-input-placeholder { /* Internet Explorer 10+ */
+    color: GrayText;
+}
+::-webkit-input-placeholder { /* WebKit browsers */
+     color: GrayText;
+}
+
+.rbutton{
+	color: white;
+	border:none;
+	padding: 12px 27px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	margin: 4px 2px;
+	cursor: pointer;
+	background-color: #e6b800;
+	color : black;
+	font-size : large;
+	transition : .3s;
+	border-radius : 7px;
+}
+
+.rbutton:hover{
+	transform : scale(1.09);
+}
+
+
+
+.checkmark {
+  height: 20px;
+  width: 20px;
+}
