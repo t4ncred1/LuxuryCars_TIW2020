@@ -7,9 +7,9 @@
 </head>
 <body>
 	<div>
-		<p th:text=" ${errorMsg!=null && errorMsg=='emptyField'} ? #{emptyField}">campi vuoti</p>
-		<p th:text=" ${errorMsg!=null && errorMsg=='usedUsername'} ? #{usedUsername}">username già utilizzato</p>
-		<p th:text=" ${errorMsg!=null && errorMsg=='wrongRole'} ? #{wrongRole}">ruolo inserito sbagliato</p>
+		<p th:if=" ${errorMsg!=null && errorMsg=='emptyField'}" th:text="#{emptyField}">campi vuoti</p>
+		<p th:if=" ${errorMsg!=null && errorMsg=='usedUsername'}" th:text="#{usedUsername}">username già utilizzato</p>
+		<p th:if=" ${errorMsg!=null && errorMsg=='wrongRole'}" th:text="#{wrongRole}">ruolo inserito sbagliato</p>
 		<form action="Registration" method="POST">
 			<input class="registrationfield" type="text" name="firstName" th:placeholder="#{firstName}" required>
 			<br>
