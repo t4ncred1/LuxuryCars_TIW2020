@@ -15,8 +15,8 @@ public class OptionDAO {
 		this.con = connection;
 	}
 	
-	public List<OptionBean> getOptionByQuotation(int qID) throws SQLException{
-		String query = "SELECT O.name, O.optionId, O.Stato, O.productId "
+	public List<OptionBean> getOptionByQuotation(int qID, String language) throws SQLException{
+		String query = "SELECT O.name, O.name_it, O.optionId, O.Stato, O.productId "
 				+ "FROM `option` AS O, quotation_option AS QO, quotation AS Q "
 				+ "WHERE QO.quotationId = Q.quotationId "
 					+ "AND QO.optionId = O.optionId "
@@ -26,10 +26,10 @@ public class OptionDAO {
 			pstatement.setInt(1, qID);
 			try (ResultSet result = pstatement.executeQuery();) {
 				List<OptionBean> options = new ArrayList<>();
-				OptionBean option = new OptionBean();
 				while(result.next()) {
+					OptionBean option = new OptionBean();
 					option.setId(result.getInt("O.optionId"));
-					option.setName(result.getString("O.name"));
+					option.setName(result.getString("O.name" + language));
 					String stato = result.getString("O.Stato");
 					if (stato.equals("normale")) option.setInOffer(false);
 					else if (stato.equals("in offerta")) option.setInOffer(true);

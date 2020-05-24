@@ -16,15 +16,15 @@
 
 	<h2 th:text="#{info}">Informazioni Preventivo</h2>
 	<div class="infotable">
-		<table border='0'>
+		<table border='1' >
 			<tbody>
 				<tr>
-					<th th:text="#{productname} + ': '">Prodotto:
+					<td th:text="#{productname} + ': '">Prodotto:
 					</td>
 					<td th:text="${quotation.productName}">nome</td>
 				</tr>
 				<tr>
-					<th th:text="#{client} + ': '">Cliente:
+					<td th:text="#{client} + ': '">Cliente:
 					</td>
 					<td th:text="${quotation.clientUsername}">nome</td>
 				</tr>
@@ -36,9 +36,9 @@
 		<table border='1'>
 			<thead>
 				<tr>
-					<th th:text="#{optionname}">Option name
+					<td th:text="#{optionname}">Option name
 					</td>
-					<th th:text="#{inoffer}">In offer?
+					<td th:text="#{inoffer}">In offer?
 					</td>
 				</tr>
 			</thead>

@@ -75,10 +75,13 @@ public class HomeClient extends HttpServlet {
 		HttpSession s = request.getSession();
 		u = (UserBean) s.getAttribute("user");
 
+		String language="";
+		if(request.getLocale().toLanguageTag().contains("it")) language="_it";
+		
 		QuotationDAO qDAO = new QuotationDAO(connection);
 		List<QuotationBean> clientQuotations = null;
 		try {
-			clientQuotations = qDAO.getClientQuotations(u.getUserid());
+			clientQuotations = qDAO.getClientQuotations(u.getUserid(), language);
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -96,7 +99,7 @@ public class HomeClient extends HttpServlet {
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
 		
 		try {
-			ctx.setVariable("products", pDAO.getAvailableProducts());
+			ctx.setVariable("products", pDAO.getAvailableProducts(language));
 			ctx.setVariable("selProd", selProd);
 			ctx.setVariable("quotations", clientQuotations);
 			if(success!=null && success.equals("true")){

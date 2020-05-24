@@ -16,7 +16,7 @@ public class QuotationDAO {
 		this.con = connection;
 	}
 	
-	public List<QuotationBean> getFreeQuotations() throws SQLException {
+	public List<QuotationBean> getFreeQuotations(String language) throws SQLException {
 		List<QuotationBean> freeQuotations = new ArrayList<>();
 		String query = "SELECT Q.quotationId, Q.date, Q.productId, P.name,	Q.clientId, C.username "
 							+ "FROM quotation AS Q, client AS C, product AS P "
@@ -33,7 +33,7 @@ public class QuotationDAO {
 					quotation.setProductId(result.getInt("Q.productId"));
 					quotation.setProductName(result.getNString("P.name"));
 					OptionDAO opDAO = new OptionDAO(con);
-					quotation.setOptions(opDAO.getOptionByQuotation(qID));
+					quotation.setOptions(opDAO.getOptionByQuotation(qID, language));
 					freeQuotations.add(quotation);
 				}
 			}
@@ -42,7 +42,7 @@ public class QuotationDAO {
 	}
 	
 	
-	public List<QuotationBean> getWorkerQuotations(int workerId) throws SQLException {
+	public List<QuotationBean> getWorkerQuotations(int workerId, String language) throws SQLException {
 		List<QuotationBean> workerQuotations = new ArrayList<>();
 		String query = "SELECT Q.quotationId, Q.price, Q.date, Q.productId, P.name,	Q.clientId, C.username, Q.workerId, W.username "
 							+ "FROM quotation AS Q, client AS C, product AS P, worker AS W "
@@ -63,7 +63,7 @@ public class QuotationDAO {
 					quotation.setValue(Double.valueOf(result.getInt("Q.price"))/100);
 					quotation.setWorkerId(result.getInt("Q.workerId"));
 					quotation.setWorkerUsername(result.getString("W.username"));
-					opDAO.getOptionByQuotation(qID);
+					opDAO.getOptionByQuotation(qID, language);
 					workerQuotations.add(quotation);
 				}
 			}
@@ -72,7 +72,7 @@ public class QuotationDAO {
 	}
 	
 	
-	public List<QuotationBean> getClientQuotations(int clientId) throws SQLException {
+	public List<QuotationBean> getClientQuotations(int clientId, String language) throws SQLException {
 		List<QuotationBean> clientQuotations = new ArrayList<>();
 		String query = "SELECT Q.quotationId, Q.price, Q.date, Q.productId, P.name "
 							+ "FROM quotation AS Q, product AS P "
@@ -91,7 +91,7 @@ public class QuotationDAO {
 					quotation.setProductId(result.getInt("Q.productId"));
 					quotation.setProductName(result.getNString("P.name"));
 					quotation.setValue(Double.valueOf(result.getInt("Q.price"))/100);
-					opDAO.getOptionByQuotation(qID);
+					opDAO.getOptionByQuotation(qID, language);
 					clientQuotations.add(quotation);
 				}
 			}
@@ -99,7 +99,7 @@ public class QuotationDAO {
 		return clientQuotations;
 	}
 	
-	public QuotationBean getQuotationById(int quotationId) throws SQLException{
+	public QuotationBean getQuotationById(int quotationId, String language) throws SQLException{
 		//NOTA: per la query, sono partito dal presupposto
 		//che ci fosse solo una quotation per quotationId, visto che essa
 		//è chiave nella relativa tabella.
@@ -122,7 +122,7 @@ public class QuotationDAO {
 			if (result.getInt("Q.price") != 0) {
 				quotation.setValue(Double.valueOf(result.getInt("Q.price"))/100);
 			}
-			quotation.setOptions(opDAO.getOptionByQuotation(quotationId));
+			quotation.setOptions(opDAO.getOptionByQuotation(quotationId, language));
 		}
 		return quotation;
 	}

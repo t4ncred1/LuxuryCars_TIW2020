@@ -72,9 +72,12 @@ public class ManageQuotation extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		String language="";
+		if(request.getLocale().toLanguageTag().contains("it")) language="_it";
+		
 		QuotationDAO qDAO = new QuotationDAO(connection);
 		int qID = 0;
-		
 		
 		try {
 			if( request.getParameter("quotation")!= null)
@@ -89,7 +92,7 @@ public class ManageQuotation extends HttpServlet {
 		}
 		
 		try {
-			List<Integer> freeIDs = qDAO.getFreeQuotations().stream()
+			List<Integer> freeIDs = qDAO.getFreeQuotations(language).stream()
 					.map(id -> id.getQuotationId())
 					.collect(Collectors.toList());
 			if(!freeIDs.contains(qID)) {
@@ -122,7 +125,7 @@ public class ManageQuotation extends HttpServlet {
 		
 		//send quotation object
 		try {
-			QuotationBean q = qDAO.getQuotationById(qID);
+			QuotationBean q = qDAO.getQuotationById(qID, language);
 			if (q==null) {
 				// TODO error handling
 				throw new SQLException();
@@ -145,6 +148,10 @@ public class ManageQuotation extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		String language="";
+		if(request.getLocale().toLanguageTag().contains("it")) language="_it";
+		
 		HttpSession s = request.getSession();
 		UserBean u = (UserBean) s.getAttribute("user");
 		Double price = 0.0;
@@ -180,7 +187,7 @@ public class ManageQuotation extends HttpServlet {
 
 		//check if the quotation ID is set
 		try {
-			List<Integer> freeIDs = qDAO.getFreeQuotations().stream()
+			List<Integer> freeIDs = qDAO.getFreeQuotations(language).stream()
 					.map(id -> id.getQuotationId())
 					.collect(Collectors.toList());
 			if(!freeIDs.contains(qID)) {

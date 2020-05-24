@@ -72,14 +72,17 @@ public class HomeWorker extends HttpServlet {
 		HttpSession s = request.getSession();
 		u = (UserBean) s.getAttribute("user");
 
+		String language="";
+		if(request.getLocale().toLanguageTag().contains("it")) language="_it";
+		
 		QuotationDAO qDAO = new QuotationDAO(connection);
 		
 		ServletContext servletContext = getServletContext();
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
 		
 		try {
-			ctx.setVariable("workerQuotations", qDAO.getWorkerQuotations(u.getUserid()));
-			ctx.setVariable("freeQuotations", qDAO.getFreeQuotations());
+			ctx.setVariable("workerQuotations", qDAO.getWorkerQuotations(u.getUserid(), language));
+			ctx.setVariable("freeQuotations", qDAO.getFreeQuotations(language));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

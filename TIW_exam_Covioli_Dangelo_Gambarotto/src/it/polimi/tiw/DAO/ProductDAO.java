@@ -16,7 +16,7 @@ public class ProductDAO {
 		this.con = connection;
 	}
 	
-	public List<ProductBean> getAvailableProducts() throws SQLException {
+	public List<ProductBean> getAvailableProducts(String language) throws SQLException {
 		List<ProductBean> products = new ArrayList<>();
 		String query = "SELECT * FROM product";
 		try (PreparedStatement pstatement = con.prepareStatement(query);) {
@@ -34,7 +34,7 @@ public class ProductDAO {
 								OptionBean option = new OptionBean();
 								option.setId(subresult.getInt("optionId"));
 								option.setProduct(subresult.getInt("productId"));
-								option.setName(subresult.getString("name"));
+								option.setName(subresult.getString("name" + language));
 								if(subresult.getString("Stato").equals("normale"))
 									option.setInOffer(false);
 								else option.setInOffer(true);
@@ -52,7 +52,7 @@ public class ProductDAO {
 	
 	
 	
-	public ProductBean getProductById(int productId) throws SQLException{
+	public ProductBean getProductById(int productId, String language) throws SQLException{
 		ProductBean product = new ProductBean();
 		String query = "SELECT * FROM product WHERE productId = ?";
 		try (PreparedStatement pstatement = con.prepareStatement(query);) {
@@ -70,7 +70,7 @@ public class ProductDAO {
 								OptionBean option = new OptionBean();
 								option.setId(subresult.getInt("optionId"));
 								option.setProduct(subresult.getInt("productId"));
-								option.setName(subresult.getString("name"));
+								option.setName(subresult.getString("name" + language));
 								if(subresult.getString("Stato").equals("normale"))
 									option.setInOffer(false);
 								else option.setInOffer(true);

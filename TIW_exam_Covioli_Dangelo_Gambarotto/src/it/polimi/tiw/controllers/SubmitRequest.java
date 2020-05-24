@@ -77,7 +77,7 @@ public class SubmitRequest extends HttpServlet {
 		QuotationDAO qDAO = new QuotationDAO(connection);
 		ProductBean product;
 		try {
-			product = pDAO.getProductById(productId);
+			product = pDAO.getProductById(productId, "");
 			List<Integer> options = new ArrayList<>();		
 			String[] selectedOptions = request.getParameterValues("options");
 			if(selectedOptions==null) {
