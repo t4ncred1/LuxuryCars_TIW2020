@@ -9,6 +9,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -60,10 +61,20 @@ public class Registration extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		ServletContext servletContext = getServletContext();
+		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
+		if (request.getCookies() != null) {
+			for (Cookie c : request.getCookies()) {
+				if (c.getName().equals("registrationError")) {
+					ctx.setVariable("errorMsg", c.getValue());
+					Cookie eliminate = new Cookie("registrationError", "");
+					eliminate.setMaxAge(0);
+					response.addCookie(eliminate);
+				}
+			}
+		}
 		try {
 			String path = "/WEB-INF/registration.html";
-			ServletContext servletContext = getServletContext();
-			final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
 			templateEngine.process(path, ctx, response.getWriter());
 		} catch (IOException e) {
 			response.sendError(555, "I/O Exception: cannot load response.getWriter()");
@@ -82,31 +93,25 @@ public class Registration extends HttpServlet {
 
 		try {
 			if (firstName == "" || lastName == "" || username == "" || password == "" || role == "") {
-				String path = "/WEB-INF/registration.html";
-				ServletContext servletContext = getServletContext();
-				final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-				ctx.setVariable("errorMsg", "emptyField");
-				templateEngine.process(path, ctx, response.getWriter());
+				Cookie error = new Cookie("registrationError", "emptyField");
+				response.addCookie(error);
+				response.sendRedirect(getServletContext().getContextPath() + "/Registration");
 				return;
 			}
 			if (uDao.existsUser(username)) {
-				String path = "/WEB-INF/registration.html";
-				ServletContext servletContext = getServletContext();
-				final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-				ctx.setVariable("errorMsg", "usedUsername");
-				templateEngine.process(path, ctx, response.getWriter());
+				Cookie error = new Cookie("registrationError", "usedUsername");
+				response.addCookie(error);
+				response.sendRedirect(getServletContext().getContextPath() + "/Registration");
 				return;
 			}
 			if (!role.equals("client") && !role.equals("worker")) {
-				String path = "/WEB-INF/registration.html";
-				ServletContext servletContext = getServletContext();
-				final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-				ctx.setVariable("errorMsg", "wrongRole");
-				templateEngine.process(path, ctx, response.getWriter());
+				Cookie error = new Cookie("registrationError", "wrongRole");
+				response.addCookie(error);
+				response.sendRedirect(getServletContext().getContextPath() + "/Registration");
 				return;
 			}
 			uDao.registerUser(username, password, firstName, lastName, role);
-			response.sendRedirect(getServletContext().getContextPath());
+			response.sendRedirect(getServletContext().getContextPath() + "/");
 			return;
 		} catch (SQLException e) {
 			response.sendError(500, "Database access failed");
