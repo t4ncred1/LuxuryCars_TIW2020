@@ -68,7 +68,7 @@ public class SubmitRequest extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		UserBean u = null;
-		HttpSession s = request.getSession();
+		HttpSession s = request.getSession(false);
 		u = (UserBean) s.getAttribute("user");
 		
 		int productId = Integer.parseInt(request.getParameter("productId"));

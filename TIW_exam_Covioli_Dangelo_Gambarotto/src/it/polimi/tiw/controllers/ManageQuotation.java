@@ -152,7 +152,7 @@ public class ManageQuotation extends HttpServlet {
 		String language="";
 		if(request.getLocale().toLanguageTag().contains("it")) language="_it";
 		
-		HttpSession s = request.getSession();
+		HttpSession s = request.getSession(false);
 		UserBean u = (UserBean) s.getAttribute("user");
 		Double price = 0.0;
 		int intPrice = 0;

@@ -69,7 +69,7 @@ public class HomeWorker extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		UserBean u = null;
-		HttpSession s = request.getSession();
+		HttpSession s = request.getSession(false);
 		u = (UserBean) s.getAttribute("user");
 
 		String language="";
