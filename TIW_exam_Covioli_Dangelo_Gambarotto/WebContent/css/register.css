@@ -1,0 +1,6 @@
+.registerpage{
+	background-image:linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.2)), url("./resources/ferrari.jpg");
+ 	background-repeat : no-repeat;
+ 	background-size : cover;
+ 	background-attachment : fixed;
+}

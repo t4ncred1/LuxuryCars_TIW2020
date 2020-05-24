@@ -5,7 +5,7 @@
 <link rel="stylesheet" type="text/css" media="all" href="./css/mystyle.css" th:href="@{/css/mystyle.css}" />
 <title>Sign up</title>
 </head>
-<body>
+<body class="registerpage">
 	<div>
 		<p th:if=" ${errorMsg!=null && errorMsg=='emptyField'}" th:text="#{emptyField}">campi vuoti</p>
 		<p th:if=" ${errorMsg!=null && errorMsg=='usedUsername'}" th:text="#{usedUsername}">username già utilizzato</p>

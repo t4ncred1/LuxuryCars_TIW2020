@@ -6,18 +6,25 @@
 	href="./css/mystyle.css" th:href="@{/css/mystyle.css}" />
 <title>QuotationManager Homepage</title>
 </head>
-<body>
-	<div>
+<body class="indexpage">
+
+	<img class="logo" src="./images/logo.png">
+	
+	<div class="formbox">
 		<form action="Login" method="POST">
 			<input class="loginfield" type="text" name="username" th:placeholder="#{username}">
 			<br>
 			<input class="loginfield" type="password" name="pwd" th:placeholder="#{password}">
 			<br>
 			<input class="login button" type="submit" th:value="#{login}">
-			<p th:text=" ${errorMsg}">Non ci sono stati errori</p>
+			<p th:if="${errorMsg} != null" class="error" th:text="${errorMsg}">Non ci sono stati errori</p>
 		</form>
-		<p th:text="#{register}"></p><br> <a th:href="@{/Registration}" href="register.html"><button
-				class="register button">Registrati</button></a> <br>
+		<br><br><br>
+		<label class="registerLabel" th:text="#{register}">Nuovo qui? Registrati</label><br>
+		<a th:href="@{/Registration}" href="register.html">
+			<button	class="register button" th:text="#{registerbutton}">Registrati</button>
+		</a><br>
+		
 	</div>
 	<br>
 </body>
