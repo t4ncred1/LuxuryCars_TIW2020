@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title th:text="#{title} + ${errorCode}">Error</title>
+</head>
+<body>
+
+<h1 th:text="#{title}+${errorCode}">Error</h1>
+<p th:text="#{maintext}">The web application encountered an error.</p><br>
+<p th:if="${throwable} != null" th:text="#{encounter}' + ${throwable}"> 
+	The exception exception was encountered.</p><br th:if="${throwable} != null">
+<p th:if="${errorMessage} != null" th:text="${errorMessage}"> 
+	Error Message</p><br th:if="${errorMessage} != null">
+<br>
+<a th:if="${requestUri} != null" th:href="${requestUri}"> <span th:text="#{return}">Return to previous page</span></a>
+<br th:if="${requestUri} != null">
+<a th:if="${worker} == true" th:href="@{/HomeWorker}"> <span th:text="#{homepage}">Go to your home page</span></a>
+<br th:if="${worker} == true">
+<a th:if="${client} == true" th:href="@{/HomeClient}"> <span th:text="#{homepage}">Go to your home page</span></a>
+<br th:if="${client} == true">
+
+<a th:href="@{/Logout}"><span th:text="#{gologin}">Logout</span></a>
+
+</body>
+</html>
