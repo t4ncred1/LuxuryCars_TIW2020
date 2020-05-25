@@ -31,7 +31,6 @@ public class Login extends HttpServlet {
 
 	public Login() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public void init() throws ServletException {
@@ -56,13 +55,6 @@ public class Login extends HttpServlet {
 		} catch (SQLException e) {
 			throw new UnavailableException("Couldn't get db connection");
 		}
-	}
-
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		/* TODO: what is this?*/
-		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -113,6 +105,8 @@ public class Login extends HttpServlet {
 				connection.close();
 			}
 		} catch (SQLException sqle) {
+			sqle.printStackTrace();
+			System.out.println("There was an error while trying to close the connection to the database.");
 		}
 	}
 }

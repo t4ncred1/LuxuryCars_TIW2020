@@ -84,11 +84,10 @@ public class ManageQuotation extends HttpServlet {
 				qID = Integer.parseInt(request.getParameter("quotation"));
 			else throw new NullPointerException();
 		} catch(NumberFormatException|NullPointerException e) {
-			//TODO error handling: non è stato passato un id o 
+			//error handling: non è stato passato un id o 
 			// l'id passato non è un numero
-			//e.printStackTrace();
-			//response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath()+"/HomeWorker"));
 			response.sendError(422, "The passed ID is not a number");
+			e.printStackTrace();
 			return;
 		}
 		
@@ -161,10 +160,8 @@ public class ManageQuotation extends HttpServlet {
 				qID = Integer.parseInt(request.getParameter("quotation"));
 			else throw new NullPointerException();
 		} catch(NumberFormatException|NullPointerException e) {
-//			e.printStackTrace();
-//			response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath()+"/HomeWorker"));
-//			return;
 			response.sendError(422, "The passed id is not a valid number.");
+			e.printStackTrace();
 			return;
 		}
 		
@@ -186,19 +183,13 @@ public class ManageQuotation extends HttpServlet {
 					.map(id -> id.getQuotationId())
 					.collect(Collectors.toList());
 			if(!freeIDs.contains(qID)) {
-				//TODO error: id non è tra gli id liberi.
-//				throw new SQLException("not in the freeIDs list");
-//				response.sendError(422, "The passed ID is not in the list of free IDs");
-				throw new SQLException();
-//				response.sendError(422);
-//				return;
+				response.sendError(422, "The passed ID is not in the list of free IDs");
+				return;
 			}
 		} catch (SQLException e) {
 			// TODO error handling: SQLException
-//			e.printStackTrace();
-//			response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath()+"/HomeWorker"));
+			e.printStackTrace();
 			response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE, "Database Not Working.");
-//			throw new ServletException();
 			return;
 			
 		}
@@ -221,15 +212,22 @@ public class ManageQuotation extends HttpServlet {
 		try {
 			qDAO.setQuotationPrice(qID, intPrice, u.getUserid());
 		} catch (SQLException e) {
-			// TODO exception handling: SQLException
-//			e.printStackTrace();
-//			response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath()+"/HomeWorker"));
-//			return;
 			response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE, "The database is currently not working.");
+			e.printStackTrace();
 			return;
 			
 		}
 		response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath()+"/HomeWorker"));
 	}
-
+	
+	public void destroy() {
+		try {
+			if (connection != null) {
+				connection.close();
+			}
+		} catch (SQLException sqle) {
+			sqle.printStackTrace();
+			System.out.println("There was an error while trying to close the connection to the database.");
+		}
+	}
 }

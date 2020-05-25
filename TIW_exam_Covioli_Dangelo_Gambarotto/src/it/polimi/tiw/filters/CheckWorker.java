@@ -26,11 +26,18 @@ public class CheckWorker implements Filter {
 	private Connection connection = null;
 
 	public CheckWorker() {
-		// TODO Auto-generated constructor stub
+		super();
 	}
 
 	public void destroy() {
-		// TODO Auto-generated method stub
+		try {
+			if (connection != null) {
+				connection.close();
+			}
+		} catch (SQLException sqle) {
+			sqle.printStackTrace();
+			System.out.println("There was an error while trying to close the connection to the database.");
+		}
 	}
 
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
@@ -68,10 +75,13 @@ public class CheckWorker implements Filter {
 			}
 			chain.doFilter(request, response);
 		} catch (SQLException e) {
-			response.sendError(500, "Database access failed");
-		} catch (IOException e) {
-			response.sendError(555, "I/O Exception: Something wrong in filter chain");
+			response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE, "Database access failed");
 			e.printStackTrace();
+			return;
+		} catch (IOException e) {
+			response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE, "I/O Exception: Something wrong in filter chain");
+			e.printStackTrace();
+			return;
 		}
 	}
 

@@ -36,7 +36,6 @@ public class HomeWorker extends HttpServlet {
      */
     public HomeWorker() {
         super();
-        // TODO Auto-generated constructor stub
     }
     
     public void init() throws ServletException {
@@ -67,7 +66,6 @@ public class HomeWorker extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		UserBean u = null;
 		HttpSession s = request.getSession(false);
 		u = (UserBean) s.getAttribute("user");
@@ -85,6 +83,8 @@ public class HomeWorker extends HttpServlet {
 			ctx.setVariable("freeQuotations", qDAO.getFreeQuotations(language));
 		} catch (SQLException e) {
 			e.printStackTrace();
+			response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE, "Database access failed");
+			return;
 		}
 		String path = "/WEB-INF/homeworker.html";
 		templateEngine.process(path, ctx, response.getWriter());
@@ -94,7 +94,6 @@ public class HomeWorker extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 	
@@ -104,6 +103,8 @@ public class HomeWorker extends HttpServlet {
 				connection.close();
 			}
 		} catch (SQLException sqle) {
+			sqle.printStackTrace();
+			System.out.println("There was an error while trying to close the connection to the database.");
 		}
 	}
 

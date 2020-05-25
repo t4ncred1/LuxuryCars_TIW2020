@@ -29,7 +29,6 @@ public class ProductImage extends HttpServlet {
 
 	public ProductImage() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public void init() throws ServletException {
@@ -82,15 +81,23 @@ public class ProductImage extends HttpServlet {
 		        outStream.close();
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			//TODO come gestiamo questo errore?
+		
 			e.printStackTrace();
+			return;
 		}
 
 	}
-
 	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		return;
+	public void destroy() {
+		try {
+			if (connection != null) {
+				connection.close();
+			}
+		} catch (SQLException sqle) {
+			sqle.printStackTrace();
+			System.out.println("There was an error while trying to close the connection to the database.");
+		}
 	}
 
 }

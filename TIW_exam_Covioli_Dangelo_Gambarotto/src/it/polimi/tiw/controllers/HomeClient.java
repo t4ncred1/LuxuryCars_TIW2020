@@ -39,7 +39,6 @@ public class HomeClient extends HttpServlet {
      */
     public HomeClient() {
         super();
-        // TODO Auto-generated constructor stub
     }
     
     public void init() throws ServletException {
@@ -70,7 +69,6 @@ public class HomeClient extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		UserBean u = null;
 		HttpSession s = request.getSession(false);
 		u = (UserBean) s.getAttribute("user");
@@ -83,8 +81,8 @@ public class HomeClient extends HttpServlet {
 		try {
 			clientQuotations = qDAO.getClientQuotations(u.getUserid(), language);
 		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
+			response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE,"The database encountered an error.");
 		}
 		
 		String success = request.getParameter("success");
@@ -93,6 +91,13 @@ public class HomeClient extends HttpServlet {
 		int selProd = 0;
 		if(prod!=null) selProd = Integer.parseInt(prod);
 		
+		int selProd = 0;
+		try {
+			if(prod!=null) selProd = Integer.parseInt(prod);
+		} catch (NumberFormatException e) {
+			response.sendError(422,"The product id inserted is not a valid number.");
+			return;
+		}
 		ProductDAO pDAO = new ProductDAO(connection);
 		
 		ServletContext servletContext = getServletContext();
@@ -110,6 +115,8 @@ public class HomeClient extends HttpServlet {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE, "The database encountered an error.");
+			return;
 		}
 		String path = "/WEB-INF/homeclient.html";
 		templateEngine.process(path, ctx, response.getWriter());
@@ -119,7 +126,6 @@ public class HomeClient extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 	
@@ -129,6 +135,8 @@ public class HomeClient extends HttpServlet {
 				connection.close();
 			}
 		} catch (SQLException sqle) {
+			sqle.printStackTrace();
+			System.out.println("There was an error while trying to close the connection to the database.");
 		}
 	}
 

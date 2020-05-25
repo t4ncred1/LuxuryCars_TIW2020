@@ -34,7 +34,6 @@ public class SubmitRequest extends HttpServlet {
      */
     public SubmitRequest() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	public void init() throws ServletException {
@@ -58,7 +57,7 @@ public class SubmitRequest extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
@@ -94,8 +93,9 @@ public class SubmitRequest extends HttpServlet {
 			}
 			qDAO.addQuotation(u.getUserid(), productId, options);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE, "The database encountered an error.");
+			return;
 		}
 		response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath()+"/HomeClient?success=true"));
 		return;
@@ -109,6 +109,8 @@ public class SubmitRequest extends HttpServlet {
 				connection.close();
 			}
 		} catch (SQLException sqle) {
+			sqle.printStackTrace();
+			System.out.println("There was an error while trying to close the connection to the database.");
 		}
 	}
 	
