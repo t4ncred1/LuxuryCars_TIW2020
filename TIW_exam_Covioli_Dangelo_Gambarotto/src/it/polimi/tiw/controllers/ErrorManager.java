@@ -55,7 +55,6 @@ public class ErrorManager extends HttpServlet {
 		Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
 		String servletName = (String) request.getAttribute("javax.servlet.error.servlet_name");
 		String errorMessage = (String) request.getAttribute("javax.servlet.error.message");
-		String requestUri = (String) request.getAttribute("javax.servlet.error.request_uri");
 		
 		System.out.println("An Error was thrown:");
 		if (throwable!=null) {
@@ -72,10 +71,6 @@ public class ErrorManager extends HttpServlet {
 		if (errorMessage!=null) {
 			ctx.setVariable("errorMessage", errorMessage);
 			System.out.println(" The error message was "+errorMessage+".");
-		}
-		if (requestUri!=null) {
-			ctx.setVariable("requestUri", requestUri);
-			System.out.println(" The error came from "+requestUri+". ");
 		}
 		if (request.getSession(false)!=null && request.getSession(false).getAttribute("user")!=null) {
 			

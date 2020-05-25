@@ -13,8 +13,6 @@
 <p th:if="${errorMessage} != null" th:text="${errorMessage}"> 
 	Error Message</p><br th:if="${errorMessage} != null">
 <br>
-<a th:if="${requestUri} != null" th:href="${requestUri}"> <span th:text="#{return}">Return to previous page</span></a>
-<br th:if="${requestUri} != null">
 <a th:if="${worker} == true" th:href="@{/HomeWorker}"> <span th:text="#{homepage}">Go to your home page</span></a>
 <br th:if="${worker} == true">
 <a th:if="${client} == true" th:href="@{/HomeClient}"> <span th:text="#{homepage}">Go to your home page</span></a>
