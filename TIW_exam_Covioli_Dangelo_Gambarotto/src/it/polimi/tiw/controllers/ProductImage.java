@@ -62,7 +62,8 @@ public class ProductImage extends HttpServlet {
 				String thumb = request.getParameter("thumbnail");
 				if(thumb!=null && thumb.equals("true")) {
 					imgPath = "thumbnail_" + imgPath;
-				
+				}
+					
 		    	response.setContentType("image/png");
 		
 		        ServletOutputStream outStream;
@@ -79,7 +80,6 @@ public class ProductImage extends HttpServlet {
 		        fin.close();
 		        bout.close();
 		        outStream.close();
-			}
 		} catch (SQLException e) {
 			//TODO come gestiamo questo errore?
 		

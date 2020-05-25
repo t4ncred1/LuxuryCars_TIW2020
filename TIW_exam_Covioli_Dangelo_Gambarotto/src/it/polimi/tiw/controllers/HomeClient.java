@@ -22,7 +22,7 @@ import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import it.polimi.tiw.DAO.ProductDAO;
-import it.polimi.tiw.DAO.QuotationDAO;
+import it.polimi.tiw.DAO.QuotationDAO; 
 import it.polimi.tiw.beans.QuotationBean;
 import it.polimi.tiw.beans.UserBean;
 import it.polimi.tiw.utils.SharedPropertyMessageResolver;
@@ -87,7 +87,6 @@ public class HomeClient extends HttpServlet {
 		}
 		
 		String prod = request.getParameter("product");
-		
 		int selProd = 0;
 		try {
 			if(prod!=null) selProd = Integer.parseInt(prod);
@@ -115,7 +114,9 @@ public class HomeClient extends HttpServlet {
 		try {
 			ctx.setVariable("products", pDAO.getAvailableProducts(language));
 			ctx.setVariable("selProd", selProd);
+			System.out.println(selProd);
 			ctx.setVariable("quotations", clientQuotations);
+			ctx.setVariable("name", " " + u.getName());
 			if(success!=null && success.equals("true")){
 				ctx.setVariable("showSuccessMessage", true);
 			}

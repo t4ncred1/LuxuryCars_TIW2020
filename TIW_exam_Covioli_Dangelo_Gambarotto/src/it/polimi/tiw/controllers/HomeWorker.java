@@ -81,6 +81,7 @@ public class HomeWorker extends HttpServlet {
 		try {
 			ctx.setVariable("workerQuotations", qDAO.getWorkerQuotations(u.getUserid(), language));
 			ctx.setVariable("freeQuotations", qDAO.getFreeQuotations(language));
+			ctx.setVariable("name", u.getName());
 		} catch (SQLException e) {
 			e.printStackTrace();
 			response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE, "Database access failed");

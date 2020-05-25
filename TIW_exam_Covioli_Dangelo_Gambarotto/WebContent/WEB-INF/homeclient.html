@@ -5,14 +5,14 @@
 <title>Worker assignment to project</title>
 <link rel="stylesheet" type="text/css" media="all" href="../CSS/mystyle.css" th:href="@{/css/mystyle.css}" />
 </head>
-<body>
-	<div class="logout">
-		<form action="Logout" method="GET">
-			<input class="logout button" type="submit" th:value="#{logout}">
-		</form>
-	</div>
+<body class="bodybase clientpage">
 
-	<h1 th:text="#{welcome}">Bentornato</h1>
+	<ul id="topbar">
+		<li><a th:href="@{/Logout}" th:text="#{logout}">Esci</a></li>
+	</ul>
+	
+
+	<h1 th:text="#{welcome} + ${name}">Bentornato</h1>
 
 	<p th:if="${showSuccessMessage}==true" th:text="#{success}"></p>
 	<p th:if="${showErrorMessage}==true" th:text="#{error}"></p>
@@ -20,7 +20,7 @@
 
 	<h2 th:text="#{quotations}">Le tue richieste</h2>
 	<div>
-		<table border='1'>
+		<table id="pastable" border='1'>
 			<thead>
 				<tr>
 					<th th:text="#{id}">ID</th>
@@ -44,24 +44,20 @@
 
 
 	<h2 th:text="#{intro}">Prodotti disponibili</h2>
-	<div>
-		<table border='1'>
-			<thead>
+	<div id="imageslist">
+		<a th:each="p : ${products}" th:href="@{/HomeClient(product=${p.id})}"><img
+			th:src="@{/ProductImage(product=${p.id}, thumbnail=true)}" width="200"><br><span th:text="${p.name}">Toyota Aygo</span></a>			
+		<br>
+	</div>
+	<br>
+	<br>
+	<div th:if="${selProd != null}">
+		<table th:id="chosenproduct" border='1' th:each="p : ${products}">
+			<tbody th:if="${selProd == p.id}">
 				<tr>
-					<th th:text="#{id}">ID</th>
-					<th th:text="#{picture}">Immagine</th>
-					<th th:text="#{product}">Prodotto</th>
-					<th>...</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="p : ${products}">
-					<td th:text="${p.id}">1</td>
-					<td><img th:src="@{/ProductImage(product=${p.id}, thumbnail=true)}" width="200"></td>
-
-					<td><a th:href="@{/HomeClient(product=${p.id})}"><span th:text="${p.name}">Toyota Aygo</span></a></td>
-					<td th:if="${selProd == p.id}">
-						<form action="SubmitRequest" method="POST">
+					<td><img th:src="@{/ProductImage(product=${p.id})}" width="600"></td>
+					<td>
+						<form class="optionbox" action="SubmitRequest" method="POST">
 							<input type="hidden" name="productId" required="required" th:value="${p.id}" />
 							<div th:each="o : ${p.options}">
 								<input type="checkbox" th:id="${o.id}" th:name="options" th:value="${o.id}">
@@ -74,6 +70,7 @@
 			</tbody>
 		</table>
 	</div>
-
+	
+	
 </body>
 </html>

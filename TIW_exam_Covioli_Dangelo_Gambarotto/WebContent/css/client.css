@@ -1,0 +1,74 @@
+.clientpage{
+	background-image:linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.8)), url("./resources/ferrari.jpg");
+ 	background-repeat : no-repeat;
+ 	background-size : cover;
+ 	background-attachment : fixed;
+}
+
+#pastable {
+  border-collapse: collapse;
+  border-color: transparent;
+  width: 600px;
+  background-color : rgba(0, 0, 0, 0.8);
+}
+
+#pastable td, #pastable th {
+  padding: 4px;
+}
+
+#pastable tr:nth-child(even){
+	background-color: rgba(255, 255, 255, 0.1);
+}
+
+#pastable th {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  text-align: left;
+  background-color: #d1ad03;
+  color: black;
+}
+
+#imageslist a{
+	color : white;
+	text-align : center;
+	margin : 6px;
+	display : inline-block;
+	transition : .3s;
+}
+
+#imageslist img {
+	border-radius : 15px;
+	transition : .3s;
+}
+
+#imageslist img:hover{
+	transform : scale(1.09);
+	cursor:pointer;
+}
+
+#chosenproduct{
+	border-collapse = collapse;
+	border-color: transparent;
+	width: 70%;
+	background-color = rgba(0, 0, 0, 0.3);
+	text-align = left;
+}
+
+#chosenproduct td{
+	text-align = left;
+}
+
+
+.optionbox{
+	position: absolute;
+  	right: 120px;
+	color : white;
+	border : 2px black;
+	border-radius : 20px;
+	text-align : center;
+	padding : 30px;
+  	width: 240px;
+  	margin: 0 auto;
+  	background-color : rgba(0, 0, 0, 0.8);/*rgba(204, 163, 0, 0.5);*/
+  	transition : .3s;
+}
