@@ -10,6 +10,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -85,11 +86,7 @@ public class HomeClient extends HttpServlet {
 			response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE,"The database encountered an error.");
 		}
 		
-		String success = request.getParameter("success");
-		
 		String prod = request.getParameter("product");
-		int selProd = 0;
-		if(prod!=null) selProd = Integer.parseInt(prod);
 		
 		int selProd = 0;
 		try {
@@ -102,6 +99,18 @@ public class HomeClient extends HttpServlet {
 		
 		ServletContext servletContext = getServletContext();
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
+		
+		String success = null;
+		if (request.getCookies()!=null) {
+			for (Cookie c : request.getCookies()) {
+				if (c.getName().equals("success")) {
+					success=c.getValue();
+					Cookie eliminate = new Cookie("success","");
+					eliminate.setMaxAge(0);
+					response.addCookie(eliminate);
+				}
+			}
+		}
 		
 		try {
 			ctx.setVariable("products", pDAO.getAvailableProducts(language));

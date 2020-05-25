@@ -11,6 +11,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -77,10 +78,12 @@ public class SubmitRequest extends HttpServlet {
 		ProductBean product;
 		try {
 			product = pDAO.getProductById(productId, "");
-			List<Integer> options = new ArrayList<>();		
+			List<Integer> options = new ArrayList<>();
 			String[] selectedOptions = request.getParameterValues("options");
 			if(selectedOptions==null) {
-				response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath()+"/HomeClient?success=false"));
+				Cookie success = new Cookie("success","false");
+				response.addCookie(success);
+				response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath()+"/HomeClient"));
 				return;
 			}
 			for(String o : selectedOptions) {
@@ -88,7 +91,9 @@ public class SubmitRequest extends HttpServlet {
 				if(product.isAValidOption(oId)) options.add(oId);
 			}
 			if(options.size()==0) {
-				response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath()+"/HomeClient?success=false"));
+				Cookie success = new Cookie("success","false");
+				response.addCookie(success);
+				response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath()+"/HomeClient"));
 				return;
 			}
 			qDAO.addQuotation(u.getUserid(), productId, options);
@@ -97,7 +102,9 @@ public class SubmitRequest extends HttpServlet {
 			response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE, "The database encountered an error.");
 			return;
 		}
-		response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath()+"/HomeClient?success=true"));
+		Cookie success = new Cookie("success","true");
+		response.addCookie(success);
+		response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath()+"/HomeClient"));
 		return;
 		
 
