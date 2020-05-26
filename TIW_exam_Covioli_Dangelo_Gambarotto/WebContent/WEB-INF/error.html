@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+<link rel="icon" type="image/png" th:href="${#servletContext.getInitParameter('favicon_path')}" />
 <meta charset="UTF-8">
 <title th:text="#{title} + ${errorCode}">Error</title>
 </head>
