@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" version="3.1">
+	<display-name>TIW-project_Covioli_Dangelo_Gambarotto</display-name>
+	
+	<!-- Context Params -->
+	<context-param>
+	  <param-name>dbUrl</param-name>
+	  <param-value>jdbc:mysql://localhost:%%port%%/tiw_examdb</param-value>
+	</context-param>
+	<context-param>
+	  <param-name>dbUser</param-name>
+	  <param-value>%%user%%</param-value>
+	</context-param>
+	<context-param>
+	  <param-name>dbPassword</param-name>
+	  <param-value>%%password%%</param-value>
+	</context-param>
+	<context-param>
+	  <param-name>dbDriver</param-name>
+	  <param-value>com.mysql.cj.jdbc.Driver</param-value>
+	</context-param>
+	<context-param>
+	  <param-name>imagesFolderPath</param-name>
+	  <param-value>%%path%%</param-value>
+	</context-param>
+	<context-param>
+	  <param-name>favicon_path</param-name>
+	  <param-value>./images/favicon.png</param-value>
+	</context-param>
+	
+	<!-- Filters -->
+	<filter>
+	  <filter-name>CheckSessionTime</filter-name>
+	  <filter-class>it.polimi.tiw.filters.CheckSessionTime</filter-class>
+ 	</filter>
+ 	<filter>
+	  <filter-name>CheckWorker</filter-name>
+	  <filter-class>it.polimi.tiw.filters.CheckWorker</filter-class>
+ 	</filter>
+	<filter-mapping>
+	 <filter-name>CheckSessionTime</filter-name>
+	 <url-pattern>/HomeClient</url-pattern>
+	 <url-pattern>/HomeWorker</url-pattern>
+	 <url-pattern>/ManageQuotation</url-pattern>
+	 <url-pattern>/Logout</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+	 <filter-name>CheckWorker</filter-name>
+	 <url-pattern>/HomeWorker</url-pattern>
+	 <url-pattern>/ManageQuotation</url-pattern>
+	</filter-mapping>
+	
+	<!-- Error Pages -->
+	<error-page>
+	 	<location>/Error</location>
+	</error-page>
+	<error-page>
+	   <exception-type>java.lang.Throwable</exception-type >
+	   <location>/Error</location>
+	</error-page>
+		
+	<!-- Other Settings -->
+	<session-config>
+        <session-timeout>10</session-timeout>
+    </session-config>
+	<welcome-file-list>
+    	<welcome-file>Index</welcome-file>
+  	</welcome-file-list>
+</web-app>
