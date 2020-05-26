@@ -11,13 +11,12 @@
 	<ul id="topbar">
 		<li><a th:href="@{/Logout}" th:text="#{logout}">Esci</a></li>
 	</ul>
+
+	<p class="successLabel" th:if="${showSuccessMessage}==true" th:text="#{success}"></p>
+	<p class="errorLabel" th:if="${showErrorMessage}==true" th:text="#{error}"></p>
 	
 
 	<h1 th:text="#{welcome} + ${name}">Bentornato</h1>
-
-	<p th:if="${showSuccessMessage}==true" th:text="#{success}"></p>
-	<p th:if="${showErrorMessage}==true" th:text="#{error}"></p>
-
 
 	<h2 th:text="#{quotations}">Le tue richieste</h2>
 	<div>
@@ -52,26 +51,26 @@
 	</div>
 	<br>
 	<br>
-	<div th:if="${selProd != null}">
-		<table th:id="chosenproduct" border='1' th:each="p : ${products}">
-			<tbody th:if="${selProd == p.id}">
-				<tr>
-					<td><img th:src="@{/ProductImage(product=${p.id})}" width="600"></td>
-					<td>
-						<form class="optionbox" action="SubmitRequest" method="POST">
-							<input type="hidden" name="productId" required="required" th:value="${p.id}" />
-							<div th:each="o : ${p.options}">
-								<input type="checkbox" th:id="${o.id}" th:name="options" th:value="${o.id}">
-								<label th:for="${o.name}" th:text="${o.name}"> I have a boat</label><br>
-							</div>
-							<input type="submit" value="Submit">
-						</form>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
 	
+	<div th:if="${selProd != 0}" class="carSelection">
+		<div th:if="${selProd != null}" th:each="p : ${products}">
+			<div th:class="left" th:if="${selProd == p.id}">
+						<img th:src="@{/ProductImage(product=${p.id})}" width="600">
+			</div>
+			<div th:class="right" th:if="${selProd == p.id}">
+						<span class="carName" th:text="${p.name}"></span><br><br>
+						<form action="SubmitRequest" method="POST">
+								<input type="hidden" name="productId" required="required" th:value="${p.id}" />
+								<div th:each="o : ${p.options}">
+									<input type="checkbox" th:id="${o.id}" th:name="options" th:value="${o.id}">
+									<label th:for="${o.name}" th:text="${o.name}"> I have a boat</label><br>
+								</div>
+								<br>
+								<input class="rbutton" type="submit" value="Submit">
+							</form>
+			</div>
+		</div>
+	</div>
 	
 </body>
 </html>

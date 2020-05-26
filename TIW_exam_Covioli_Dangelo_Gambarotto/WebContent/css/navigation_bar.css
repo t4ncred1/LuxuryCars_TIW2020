@@ -10,6 +10,7 @@ ul {
   background-color : black;
 }
 
+
 li {
   float: right;
 }
@@ -23,8 +24,11 @@ li a {
 }
 
 li a:hover {
-  background-color: #b59100;
+  background-color: #e6b800;
   cursor: pointer;
+  color: black;
+  
+  
 }
 
 li:first-child
