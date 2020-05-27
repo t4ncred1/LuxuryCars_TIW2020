@@ -54,12 +54,14 @@
 	<br>
 	<form th:action="@{/ManageQuotation}" method="post">
 		<label for="price" th:text="#{price}">price: </label>
-		<input type="text" id="price" name="price" />
+		<input type="text" id="price" name="price" th:placeholder="#{placeholder}"/>
 		<br>
 		<p th:if="${priceerror == true}" th:text="#{priceerror}" />
 		<br th:if="${priceerror == true}">
+		<p th:if="${pricesignerror == true}" th:text="#{pricesignerror}" />
+		<br th:if="${pricesignerror == true}">
 		<input type="hidden" id="quotation" name="quotation" th:value="${quotation.quotationId}" />
-		<input type="submit" value="Submit" />
+		<input type="submit" th:value="#{submit}" />
 	</form>
 
 

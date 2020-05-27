@@ -115,6 +115,12 @@ public class ManageQuotation extends HttpServlet {
 					eliminate.setMaxAge(0);
 					response.addCookie(eliminate);
 				}
+				if (c.getName().equals("pricesignerror") && c.getValue().equals("true")) {
+					ctx.setVariable("pricesignerror", true);
+					Cookie eliminate = new Cookie("pricesignerror","");
+					eliminate.setMaxAge(0);
+					response.addCookie(eliminate);
+				}
 			}
 		}
 		
@@ -194,6 +200,14 @@ public class ManageQuotation extends HttpServlet {
 			
 		}
 		
+		if(price<=0) {
+			//redirect to the page, but with the additional parameter "error" set to true.
+			System.out.println("error while checking the sign of the element " + Double.parseDouble(request.getParameter("price")));
+			Cookie error = new Cookie("pricesignerror","true");
+			response.addCookie(error);
+			response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/ManageQuotation?quotation="+qID));
+			return;
+		}
 		//check if the price float is in a correct format
 		if(BigDecimal.valueOf(price).scale() > 2) {
 			//redirect to the page, but with the additional parameter "error" set to true.
@@ -202,12 +216,10 @@ public class ManageQuotation extends HttpServlet {
 			response.addCookie(error);
 			response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/ManageQuotation?quotation="+qID));
 			return;
-		} else {
-			Double newprice = price * 100;
-			intPrice = newprice.intValue();
 		}
-		
-		
+		Double newprice = price * 100;
+		intPrice = newprice.intValue();
+				
 		//set the price for the quotation
 		try {
 			qDAO.setQuotationPrice(qID, intPrice, u.getUserid());
