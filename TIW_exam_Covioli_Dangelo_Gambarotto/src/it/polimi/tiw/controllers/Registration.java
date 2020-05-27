@@ -30,7 +30,6 @@ public class Registration extends HttpServlet {
 
 	public Registration() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public void init() throws ServletException {
@@ -86,13 +85,14 @@ public class Registration extends HttpServlet {
 		String firstName = request.getParameter("firstName");
 		String lastName = request.getParameter("lastName");
 		String username = request.getParameter("username");
-		String password = request.getParameter("pwd");
+		String password1 = request.getParameter("pwd1");
+		String password2 = request.getParameter("pwd2");
 		String role = request.getParameter("role");
 
 		UserDAO uDao = new UserDAO(connection);
 
 		try {
-			if (firstName == "" || lastName == "" || username == "" || password == "" || role == "") {
+			if (firstName == "" || lastName == "" || username == "" || password1 == "" || password2 == "" || role == "") {
 				Cookie error = new Cookie("registrationError", "emptyField");
 				response.addCookie(error);
 				response.sendRedirect(getServletContext().getContextPath() + "/Registration");
@@ -110,7 +110,14 @@ public class Registration extends HttpServlet {
 				response.sendRedirect(getServletContext().getContextPath() + "/Registration");
 				return;
 			}
-			uDao.registerUser(username, password, firstName, lastName, role);
+			if(!password1.equals(password2)) {
+				Cookie error = new Cookie("registrationError", "wrongPassword");
+				response.addCookie(error);
+				response.sendRedirect(getServletContext().getContextPath() + "/Registration");
+				return;
+			}
+			
+			uDao.registerUser(username, password1, firstName, lastName, role);
 			response.sendRedirect(getServletContext().getContextPath() + "/");
 			return;
 		} catch (SQLException e) {

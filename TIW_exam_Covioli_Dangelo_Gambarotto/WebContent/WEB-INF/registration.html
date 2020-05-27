@@ -18,6 +18,7 @@
 		<p th:if=" ${errorMsg!=null && errorMsg=='emptyField'}" class="error"  th:text="#{emptyField}">campi vuoti</p>
 		<p th:if=" ${errorMsg!=null && errorMsg=='usedUsername'}" class="error" th:text="#{usedUsername}">username già utilizzato</p>
 		<p th:if=" ${errorMsg!=null && errorMsg=='wrongRole'}" class="error" th:text="#{wrongRole}">ruolo inserito sbagliato</p>
+		<p th:if=" ${errorMsg!=null && errorMsg=='wrongPassword'}" class="error" th:text="#{wrongPassword}">ruolo inserito sbagliato</p>
 		<form action="Registration" method="POST">
 			<input class="registerfield" type="text" name="firstName" th:placeholder="#{firstName}" required>
 			<br>
@@ -25,7 +26,9 @@
 			<br>
 			<input class="registerfield" type="text" name="username" th:placeholder="#{username}" required>
 			<br>
-			<input class="registerfield" type="password" name="pwd" th:placeholder="#{password}" required>
+			<input class="registerfield" type="password" name="pwd1" th:placeholder="#{password}" required>
+			<br>
+			<input class="registerfield" type="password" name="pwd2" th:placeholder="#{password2}" required>
 			<br>
 			
 	
