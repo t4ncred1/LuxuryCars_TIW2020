@@ -65,7 +65,23 @@ public class Registration extends HttpServlet {
 		if (request.getCookies() != null) {
 			for (Cookie c : request.getCookies()) {
 				if (c.getName().equals("registrationError")) {
-					ctx.setVariable("errorMsg", c.getValue());
+					switch(c.getValue()) {
+					case "emptyField": 
+						ctx.setVariable("errorMsg", "emptyField");
+						break;
+					case "usedUsername": 
+						ctx.setVariable("errorMsg", "usedUsername");
+						break;
+					case "wrongRole": 
+						ctx.setVariable("errorMsg", "wrongRole");
+						break;
+					case "wrongPassword": 
+						ctx.setVariable("errorMsg", "wrongPassword");
+						break;
+					default:
+						System.out.println("The user tried to tamper with the cookie \"errorMsg\"");
+					}
+					
 					Cookie eliminate = new Cookie("registrationError", "");
 					eliminate.setMaxAge(0);
 					response.addCookie(eliminate);
