@@ -6,26 +6,24 @@
 <title th:text='#{title}'>Project Pricing</title>
 <link rel="stylesheet" type="text/css" media="all" href="../CSS/mystyle.css" th:href="@{/css/mystyle.css}" />
 </head>
-<body>
-	<div class="logout">
-		<form action="Logout" method="GET">
-			<input class="logout button" type="submit" th:value="#{logout}">
-		</form>
-	</div>
+<body class="bodybase workerpage">
+	<ul id="topbar">
+		<li><a th:href="@{/HomeWorker}" th:text="#{back}">Indietro</a></li>
+	</ul>
 
 	<h1 th:text="#{valutation}">Valutazione preventivo</h1>
 
 	<h2 th:text="#{info}">Informazioni Preventivo</h2>
 	<div class="infotable">
-		<table border='1' >
+		<table class="workertable" >
 			<tbody>
 				<tr>
-					<td th:text="#{productname} + ': '">Prodotto:
+					<td id="productcell" th:text="#{productname} + ': '">Prodotto:
 					</td>
 					<td th:text="${quotation.productName}">nome</td>
 				</tr>
 				<tr>
-					<td th:text="#{client} + ': '">Cliente:
+					<td id="clientcell" th:text="#{client} + ': '">Cliente:
 					</td>
 					<td th:text="${quotation.clientUsername}">nome</td>
 				</tr>
@@ -34,13 +32,13 @@
 	</div>
 	<h3 th:text="#{options}">Opzioni selezionate</h3>
 	<div class="optiontable">
-		<table border='1'>
+		<table class="workertable">
 			<thead>
 				<tr>
-					<td th:text="#{optionname}">Option name
-					</td>
-					<td th:text="#{inoffer}">In offer?
-					</td>
+					<th th:text="#{optionname}">Option name
+					</th>
+					<th th:text="#{inoffer}">In offer?
+					</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -52,17 +50,21 @@
 		</table>
 	</div>
 	<br>
-	<form th:action="@{/ManageQuotation}" method="post">
-		<label for="price" th:text="#{price}">price: </label>
-		<input type="text" id="price" name="price" th:placeholder="#{placeholder}"/>
-		<br>
-		<p th:if="${priceerror == true}" th:text="#{priceerror}" />
-		<br th:if="${priceerror == true}">
-		<p th:if="${pricesignerror == true}" th:text="#{pricesignerror}" />
-		<br th:if="${pricesignerror == true}">
-		<input type="hidden" id="quotation" name="quotation" th:value="${quotation.quotationId}" />
-		<input type="submit" th:value="#{submit}" />
-	</form>
+	
+	<div id="priceinsertion">
+		<form th:action="@{/ManageQuotation}" method="post">
+			<label for="price" th:text="#{price}">price: </label>
+			<input type="number" id="price" name="price" th:placeholder="#{placeholder}" step="0.01" min="0"/>
+			<br>
+			<p th:if="${priceerror == true}" th:text="#{priceerror}" />
+			<br th:if="${priceerror == true}">
+			<p th:if="${pricesignerror == true}" th:text="#{pricesignerror}" />
+			<br th:if="${pricesignerror == true}">
+			<input id="price" type="hidden" name="quotation" th:value="${quotation.quotationId}" />
+			<input id="submitprice" type="submit" th:value="#{submit}" />
+		</form>	
+	</div>
+
 
 
 

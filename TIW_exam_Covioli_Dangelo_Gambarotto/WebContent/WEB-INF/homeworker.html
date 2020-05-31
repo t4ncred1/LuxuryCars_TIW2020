@@ -6,18 +6,16 @@
 <title th:text='#{title}'>Worker assignment to project</title>
 <link rel="stylesheet" type="text/css" media="all" href="../CSS/mystyle.css" th:href="@{/css/mystyle.css}" />
 </head>
-<body>
-	<div class="logout">
-		<form action="Logout" method="GET">
-			<input class="logout button" type="submit" th:value="#{logout}">
-		</form>
-	</div>
+<body class="bodybase workerpage">
+	<ul id="topbar">
+		<li><a th:href="@{/Logout}" th:text="#{logout}">Esci</a></li>
+	</ul>
 
 	<h1 th:text="#{welcome}">Bentornato</h1>
 
 	<h2 th:text="#{priced}">Preventivi già prezzati</h2>
 	<div>
-		<table border='1'>
+		<table class="workertable">
 			<thead>
 				<tr>
 					<th th:text="#{id}">ID</th>
@@ -39,7 +37,7 @@
 
 	<h2 th:text="#{toPrice}">Preventivi ancora da prezzare</h2>
 	<div>
-		<table border='1'>
+		<table class="workertable">
 			<thead>
 				<tr>
 					<th th:text="#{id}">ID</th>
