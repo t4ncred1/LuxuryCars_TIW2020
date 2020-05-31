@@ -18,7 +18,7 @@
 			<input class="loginfield" type="password" name="pwd" th:placeholder="#{password}">
 			<br>
 			<input class="login button" type="submit" th:value="#{login}">
-			<p th:if="${errorMsg} != null" class="error" th:text="${errorMsg}">Non ci sono stati errori</p>
+			<p th:if="${userpasserror} == true" class="error" th:text="#{userpasserror}">Non ci sono stati errori</p>
 		</form>
 		<br><br><br>
 		<label class="registerLabel" th:text="#{register}">Nuovo qui? Registrati</label><br>

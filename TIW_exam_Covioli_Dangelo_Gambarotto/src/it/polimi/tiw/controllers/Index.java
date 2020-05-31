@@ -6,6 +6,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -48,6 +49,15 @@ public class Index extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ServletContext servletContext = getServletContext();
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
+		for (Cookie c : request.getCookies()) {
+			if (c.getName().equals("userpasserror") && c.getValue().equals("true")) {
+				ctx.setVariable("userpasserror", true);
+				Cookie eliminate = new Cookie("userpasserror","");
+				eliminate.setMaxAge(0);
+				response.addCookie(eliminate);
+			}
+		}	
+		response.setCharacterEncoding("UTF-8");
 		templateEngine.process("/index.html", ctx, response.getWriter());	}
 
 }

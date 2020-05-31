@@ -9,38 +9,24 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.WebContext;
-import org.thymeleaf.templatemode.TemplateMode;
-import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
-
 import it.polimi.tiw.DAO.UserDAO;
 import it.polimi.tiw.beans.*;
-
-import it.polimi.tiw.utils.SharedPropertyMessageResolver;
 
 @WebServlet("/Login")
 public class Login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection = null;
-	private TemplateEngine templateEngine;
 
 	public Login() {
 		super();
 	}
 
 	public void init() throws ServletException {
-		ServletContext servletContext = getServletContext();
-		ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
-		templateResolver.setTemplateMode(TemplateMode.HTML);
-		this.templateEngine = new TemplateEngine();
-		this.templateEngine.setTemplateResolver(templateResolver);
-		this.templateEngine.setMessageResolver(new SharedPropertyMessageResolver(servletContext, "i18n", "login"));
-		templateResolver.setSuffix(".html");
 		try {
 			ServletContext context = getServletContext();
 			String driver = context.getInitParameter("dbDriver");
@@ -79,11 +65,9 @@ public class Login extends HttpServlet {
 		}
 		String path = getServletContext().getContextPath();
 		if (u == null) {
-			ServletContext servletContext = getServletContext();
-			final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-			ctx.setVariable("errorMsg", "Nome utente o password errati!");	
-			path = "/index.html";
-			templateEngine.process(path, ctx, response.getWriter());
+			Cookie error = new Cookie("userpasserror", "true");
+			response.addCookie(error);
+			response.sendRedirect(path+"/Index");
 		} else {
 			request.getSession().setAttribute("user", u);
 //			request.getSession(false).setMaxInactiveInterval(15);								TODO
