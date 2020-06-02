@@ -4,23 +4,23 @@
 <link rel="icon" type="image/png" th:href="${#servletContext.getInitParameter('favicon_path')}" />
 <meta charset="ISO-8859-1">
 <title>Worker assignment to project</title>
-<link rel="stylesheet" type="text/css" media="all" href="../CSS/mystyle.css" th:href="@{/css/mystyle.css}" />
+<link rel="stylesheet" type="text/css" media="all" href="../CSS/client.css" th:href="@{/css/client.css}" />
 </head>
-<body class="bodybase clientpage">
+<body class="clientpage">
 
 	<ul id="topbar">
 		<li><a th:href="@{/Logout}" th:text="#{logout}">Esci</a></li>
 	</ul>
 
-	<p class="successLabel" th:if="${showSuccessMessage}==true" th:text="#{success}"></p>
-	<p class="errorLabel" th:if="${showErrorMessage}==true" th:text="#{error}"></p>
+	<p class="success" th:if="${showSuccessMessage}==true" th:text="#{success}"></p>
+	<p class="error" th:if="${showErrorMessage}==true" th:text="#{error}"></p>
 	
 
 	<h1 th:text="#{welcome} + ${name}">Bentornato</h1>
 
 	<h2 th:text="#{quotations}">Le tue richieste</h2>
 	<div>
-		<table id="pastable" border='1'>
+		<table class="table">
 			<thead>
 				<tr>
 					<th th:text="#{id}">ID</th>
@@ -66,7 +66,7 @@
 									<label th:for="${o.name}" th:text="${o.name}"> I have a boat</label><br>
 								</div>
 								<br>
-								<input class="rbutton" type="submit" value="Submit">
+								<input class="button" type="submit" value="Submit">
 							</form>
 			</div>
 		</div>

@@ -4,9 +4,9 @@
 <link rel="icon" type="image/png" th:href="${#servletContext.getInitParameter('favicon_path')}" />
 <meta charset="ISO-8859-1">
 <title th:text='#{title}'>Project Pricing</title>
-<link rel="stylesheet" type="text/css" media="all" href="../CSS/mystyle.css" th:href="@{/css/mystyle.css}" />
+<link rel="stylesheet" type="text/css" media="all" href="../CSS/worker.css" th:href="@{/css/worker.css}" />
 </head>
-<body class="bodybase workerpage">
+<body class="workerpage">
 	<ul id="topbar">
 		<li><a th:href="@{/HomeWorker}" th:text="#{back}">Indietro</a></li>
 	</ul>
@@ -15,7 +15,7 @@
 
 	<h2 th:text="#{info}">Informazioni Preventivo</h2>
 	<div class="infotable">
-		<table class="workertable" >
+		<table class="table" >
 			<tbody>
 				<tr>
 					<td id="productcell" th:text="#{productname} + ': '">Prodotto:
@@ -32,7 +32,7 @@
 	</div>
 	<h3 th:text="#{options}">Opzioni selezionate</h3>
 	<div class="optiontable">
-		<table class="workertable">
+		<table class="workertable table">
 			<thead>
 				<tr>
 					<th th:text="#{optionname}">Option name
@@ -51,17 +51,17 @@
 	</div>
 	<br>
 	
-	<div id="priceinsertion">
+	<div id="priceinsertion" class="box">
 		<form th:action="@{/ManageQuotation}" method="post">
 			<label for="price" th:text="#{price}">price: </label>
 			<input type="number" id="price" name="price" th:placeholder="#{placeholder}" step="0.01" min="0"/>
 			<br>
-			<p th:if="${priceerror == true}" th:text="#{priceerror}" />
+			<p th:if="${priceerror == true}" class="error-paragraph" th:text="#{priceerror}" />
 			<br th:if="${priceerror == true}">
-			<p th:if="${pricesignerror == true}" th:text="#{pricesignerror}" />
+			<p th:if="${pricesignerror == true}" class="error-paragraph" th:text="#{pricesignerror}" />
 			<br th:if="${pricesignerror == true}">
-			<input id="price" type="hidden" name="quotation" th:value="${quotation.quotationId}" />
-			<input id="submitprice" type="submit" th:value="#{submit}" />
+			<input id="price" class="field" type="hidden" name="quotation" th:value="${quotation.quotationId}" />
+			<input id="submitprice" type="submit" class="submit button" th:value="#{submit}" />
 		</form>	
 	</div>
 

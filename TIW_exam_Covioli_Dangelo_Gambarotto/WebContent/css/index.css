@@ -1,15 +1,7 @@
-.bodybase{
-	color : white;
-	margin: 50;
-	padding: 50;
-	font-family:Verdana,sans-serif
-}
+@import "base.css";
 
 .indexpage{
 	background-image:linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.2)), url("./resources/bentleym.jpg");
- 	background-repeat : no-repeat;
- 	background-size : cover;
- 	background-attachment : fixed;
 }
 
 
@@ -25,62 +17,13 @@
 
 .formbox{
 	position: absolute;
-  	right: 120px;
-	color : white;
-	border : 2px black;
-	border-radius : 20px;
-	text-align : center;
 	padding : 30px;
-  	width: 240px;
-  	margin: 0 auto;
-  	background-color : rgba(0, 0, 0, 0.8);/*rgba(204, 163, 0, 0.5);*/
-  	transition : .3s;
 }
 
 .loginfield{
-	color : white;
-	text-align : center;
-	border-radius : 7px;
-	font-size : 17pt;
-	margin-bottom : 5px;
 	width : 200px;
-	height : 30px;
-	border : 2px solid rgba(204, 163, 0, 0.5);
-	background-color : rgba(255, 255, 255, 0.03);
-}
-:-ms-input-placeholder { /* Internet Explorer 10+ */
-    color: GrayText;
-}
-::-webkit-input-placeholder { /* WebKit browsers */
-     color: GrayText;
 }
 
-.button{
-	color: white;
-	border:none;
-	padding: 12px 27px;
-	text-align: center;
-	text-decoration: none;
-	display: inline-block;
-	font-size: 16px;
-	margin: 4px 2px;
-	cursor: pointer;
-	background-color: #e6b800;
-	color : black;
-	font-size : large;
-	transition : .3s;
-	border-radius : 7px;
-}
-
-.button:hover{
-	transform : scale(1.09);
-}
-
-.error{
-	padding: 12px 27px;
-	color : #1a0000;
-	background-color : rgba(204, 0, 0, 0.7);
-}
 
 .registerLabel{
 	color : #e6b800;

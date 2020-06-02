@@ -4,18 +4,18 @@
 <meta charset="ISO-8859-1">
 <link rel="icon" type="image/png" th:href="${#servletContext.getInitParameter('favicon_path')}" />
 <link rel="stylesheet" type="text/css" media="all"
-	href="./css/mystyle.css" th:href="@{/css/mystyle.css}" />
+	href="./css/index.css" th:href="@{/css/index.css}" />
 <title>QuotationManager Homepage</title>
 </head>
-<body class="bodybase indexpage">
+<body class="indexpage">
 
 	<img class="logo" src="./images/logo.png">
 	
-	<div class="formbox">
+	<div class="formbox box">
 		<form action="Login" method="POST">
-			<input class="loginfield" type="text" name="username" th:placeholder="#{username}">
+			<input class="loginfield field" type="text" name="username" th:placeholder="#{username}">
 			<br>
-			<input class="loginfield" type="password" name="pwd" th:placeholder="#{password}">
+			<input class="loginfield field" type="password" name="pwd" th:placeholder="#{password}">
 			<br>
 			<input class="login button" type="submit" th:value="#{login}">
 			<p th:if="${userpasserror} == true" class="error" th:text="#{userpasserror}">Non ci sono stati errori</p>

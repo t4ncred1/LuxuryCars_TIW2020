@@ -2,7 +2,7 @@
  ************ TOP BAR NAVIGATION *************
  *********************************************/
  
-ul {
+ul#topbar {
   list-style-type: none;
   margin: 0;
   padding: 0;
@@ -11,11 +11,11 @@ ul {
 }
 
 
-li {
+ul#topbar>li {
   float: right;
 }
 
-li a {
+ul#topbar>li>a {
   display: block;
   color: white;
   text-align: center;
@@ -23,7 +23,7 @@ li a {
   text-decoration: none;
 }
 
-li a:hover {
+ul#topbar>li>a:hover {
   background-color: #e6b800;
   cursor: pointer;
   color: black;
@@ -31,13 +31,13 @@ li a:hover {
   
 }
 
-li:first-child
+ul#topbar>li:first-child
 {
     float:left;
 }
 
-.sticky{
+/*.sticky{
   	position : fixed;
 	top: 5px;
 	width : 100%;
-}
+}*/

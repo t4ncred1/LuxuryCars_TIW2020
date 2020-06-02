@@ -4,9 +4,9 @@
 <link rel="icon" type="image/png" th:href="${#servletContext.getInitParameter('favicon_path')}" />
 <meta charset="ISO-8859-1">
 <title th:text='#{title}'>Worker assignment to project</title>
-<link rel="stylesheet" type="text/css" media="all" href="../CSS/mystyle.css" th:href="@{/css/mystyle.css}" />
+<link rel="stylesheet" type="text/css" media="all" href="../CSS/worker.css" th:href="@{/css/worker.css}" />
 </head>
-<body class="bodybase workerpage">
+<body class="workerpage">
 	<ul id="topbar">
 		<li><a th:href="@{/Logout}" th:text="#{logout}">Esci</a></li>
 	</ul>
@@ -15,7 +15,7 @@
 
 	<h2 th:text="#{priced}">Preventivi già prezzati</h2>
 	<div>
-		<table class="workertable">
+		<table class="table">
 			<thead>
 				<tr>
 					<th th:text="#{id}">ID</th>
@@ -37,7 +37,7 @@
 
 	<h2 th:text="#{toPrice}">Preventivi ancora da prezzare</h2>
 	<div>
-		<table class="workertable">
+		<table class="table">
 			<thead>
 				<tr>
 					<th th:text="#{id}">ID</th>

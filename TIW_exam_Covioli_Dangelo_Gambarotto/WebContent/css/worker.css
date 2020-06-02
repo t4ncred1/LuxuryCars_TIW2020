@@ -1,31 +1,7 @@
+@import "base.css";
+
 .workerpage{
 	background-image:linear-gradient(rgba(0,0,0,0.0), rgba(0,0,0,0.6)), url("./resources/ferrari_enzo.jpg");
- 	background-repeat : no-repeat;
- 	background-size : cover;
- 	background-attachment : fixed;
-}
-
-.workertable {
-  border-collapse: collapse;
-  border-color: transparent;
-  width: 600px;
-  background-color : rgba(0, 0, 0, 0.8);
-}
-
-.workertable td, .workertable th {
-  padding: 4px;
-}
-
-.workertable tr:nth-child(even){
-	background-color: rgba(255, 255, 255, 0.1);
-}
-
-.workertable th {
-  padding-top: 6px;
-  padding-bottom: 6px;
-  text-align: left;
-  background-color: #d1ad03;
-  color: black;
 }
 
 #productcell{
@@ -43,19 +19,7 @@
 }
 
 #priceinsertion{
-	color : white;
-	border : 2px black;
-	border-radius : 20px;
 	padding : 15px;
-  	width: 240px;
-  	background-color : rgba(0, 0, 0, 0.8);/*rgba(204, 163, 0, 0.5);*/
-  	transition : .3s;
-	background-color : black;
-}
-
-#priceinsertion p{
-	color : red;
-	text-width : bold;
 }
 
 #priceinsertion label{
@@ -63,34 +27,5 @@
 }
 
 #price{
-	color : white;
-	text-align : center;
-	border-radius : 7px;
-	font-size : 17pt;
-	margin-bottom : 5px;
 	width : 230px;
-	height : 30px;
-	border : 2px solid rgba(204, 163, 0, 0.5);
-	background-color : rgba(255, 255, 255, 0.03);
-}
-
-#submitprice{
-	color: white;
-	border:none;
-	padding: 12px 27px;
-	text-align: center;
-	text-decoration: none;
-	display: inline-block;
-	font-size: 16px;
-	margin: 4px 2px;
-	cursor: pointer;
-	background-color: #e6b800;
-	color : black;
-	font-size : large;
-	transition : .3s;
-	border-radius : 7px;
-}
-
-#submitprice:hover{
-	transform : scale(1.09);
 }

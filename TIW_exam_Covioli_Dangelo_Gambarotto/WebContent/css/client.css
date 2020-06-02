@@ -1,31 +1,7 @@
+@import "base.css";
+
 .clientpage{
 	background-image:linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.8)), url("./resources/ferrari.jpg");
- 	background-repeat : no-repeat;
- 	background-size : cover;
- 	background-attachment : fixed;
-}
-
-#pastable {
-  border-collapse: collapse;
-  border-color: transparent;
-  width: 600px;
-  background-color : rgba(0, 0, 0, 0.8);
-}
-
-#pastable td, #pastable th {
-  padding: 4px;
-}
-
-#pastable tr:nth-child(even){
-	background-color: rgba(255, 255, 255, 0.1);
-}
-
-#pastable th {
-  padding-top: 6px;
-  padding-bottom: 6px;
-  text-align: left;
-  background-color: #d1ad03;
-  color: black;
 }
 
 #imageslist a{
@@ -46,7 +22,7 @@
 	cursor:pointer;
 }
 
-.carSelection{
+.carSelection {
 	margin-left : 2%;
 	margin-right : 2%;
 	background-color : rgba(0, 0, 0, 0.8);
@@ -72,23 +48,11 @@
 	text-align : center;
 }
 
-.carName{
+.carName {
 	font-size : 20pt;
 }
 
 .right {
 	margin-top : 100px;
 	display : inline-block;
-}
-
-.errorLabel{
-	padding: 12px 27px;
-	color : black;
-	background-color : rgba(204, 0, 0, 0.4);
-}
-
-.successLabel{
-	padding: 12px 27px;
-	color : black;
-	background-color : rgba(36, 206, 72, 0.4);
 }
