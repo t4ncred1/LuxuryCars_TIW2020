@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<link rel="icon" type="image/png"/>
+<link rel="stylesheet" type="text/css" media="all" href="./css/index.css"/>
+<title>LuxuryCars Homepage</title>
+<script src="utils.js" charset="utf-8" defer></script>
+<script src="loginManagement.js" charset="utf-8" defer></script>
+
+</head>
+<body class="indexpage">
+
+	<img class="logo" src="./images/logo.png">
+	
+	<div class="formbox box">
+		<form action="#">
+			<input class="loginfield field" type="text" name="username" placeholder="nome utente" required>
+			<br>
+			<input class="loginfield field" type="password" name="pwd" placeholder="password" required>
+			<br>
+			<input class="login button" id="loginbutton" type="button" value="Login">		
+		</form>
+		<br>
+			<div id="errorbox" class="invisible">
+				<button id="xbutton" class="close">X</button>
+				<span id="text"></span>
+			</div>	
+		<br>
+		<label class="registerLabel">Nuovo qui? Registrati</label><br>
+		<button	class="register button" id="registerbutton">Registrati</button>
+	</div>
+	<br>
+</body>
+</html>

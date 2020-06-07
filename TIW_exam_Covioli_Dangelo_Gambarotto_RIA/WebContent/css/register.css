@@ -1,0 +1,22 @@
+@import "base.css";
+
+.registerpage{
+	background-image:linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.3)), url("./resources/maseratim.jpg");
+}
+
+.registerbox{
+	position: center;
+	padding : 40px;
+  	margin-top: 50px;
+}
+
+.registerlogo{
+	margin : 30px;
+	margin-left: 14px;
+	width: 200px;
+	transition : .3s;
+}
+
+.registerfield{
+	width : 230px;
+}

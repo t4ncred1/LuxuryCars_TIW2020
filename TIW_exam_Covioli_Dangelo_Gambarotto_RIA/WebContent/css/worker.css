@@ -1,0 +1,31 @@
+@import "base.css";
+
+.workerpage{
+	background-image:linear-gradient(rgba(0,0,0,0.0), rgba(0,0,0,0.6)), url("./resources/ferrari_enzo.jpg");
+}
+
+#productcell{
+	text-align: right;
+	background-color: #d1ad03;
+	font-weight : bold;
+	color: black;
+}
+
+#clientcell{
+	text-align: right;
+	background-color: #d1ad03;
+	font-weight : bold;
+	color: black;
+}
+
+#priceinsertion{
+	padding : 15px;
+}
+
+#priceinsertion label{
+	font-size : 15pt;
+}
+
+#price{
+	width : 230px;
+}

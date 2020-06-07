@@ -1,0 +1,30 @@
+@import "base.css";
+
+.indexpage{
+	background-image:linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.2)), url("./resources/bentleym.jpg");
+}
+
+
+.logo{
+	margin : 30px;
+	width: 350px;
+	transition : .3s;
+}
+
+.logo:hover{
+	transform : scale(1.1);
+}
+
+.formbox{
+	position: absolute;
+	padding : 30px;
+}
+
+.loginfield{
+	width : 200px;
+}
+
+
+.registerLabel{
+	color : #e6b800;
+}
