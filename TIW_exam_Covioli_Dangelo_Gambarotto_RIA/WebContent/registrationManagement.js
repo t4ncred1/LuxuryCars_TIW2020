@@ -11,9 +11,14 @@ document.getElementById("registerbutton").addEventListener('click', (e) => {
 	
 	form.checkrole = function (){
 		var role = this.elements.namedItem("role").value;
-		console.log(role);
 		return (role.match("client") || role.match("worker"));
 	}
+	
+//	form.checkemail = function (){
+//		var mail = this.elements.namedItem("mail").value;
+//		var pattern = "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$";
+//		return (mail.match(pattern));
+//	}
 	
 	if (form.checkValidity() && form.checkpwd() && form.checkrole()) {
 	makeCall("POST", 'Registration', e.target.closest("form"),
