@@ -2,12 +2,20 @@
 
 document.getElementById("registerbutton").addEventListener('click', (e) => {
 	var form = e.target.closest("form");
+	
 	form.checkpwd = function (){
 		var pwd1 = this.elements.namedItem("pwd1").value;
 		var pwd2 = this.elements.namedItem("pwd2").value;
 		return pwd1 == pwd2;
 	}
-	if (form.checkValidity() && form.checkpwd()) {
+	
+	form.checkrole = function (){
+		var role = this.elements.namedItem("role").value;
+		console.log(role);
+		return (role.match("client") || role.match("worker"));
+	}
+	
+	if (form.checkValidity() && form.checkpwd() && form.checkrole()) {
 	makeCall("POST", 'Registration', e.target.closest("form"),
 		function(req) {
 			if (req.readyState == XMLHttpRequest.DONE) {
@@ -35,7 +43,12 @@ document.getElementById("registerbutton").addEventListener('click', (e) => {
 		 form.reportValidity();
 	}
 	else if (!form.checkpwd()){
-		document.getElementById("text").textContent = "Le passwrod non coincidono";
+		document.getElementById("text").textContent = "Le password inserite non combaciano";
+		document.getElementById("errorbox").setAttribute("class", "error");
+		document.getElementById("xbutton").setAttribute("class", "close");
+	}
+	else if (!form.checkrole()){
+		document.getElementById("text").textContent = "Seleziona un ruolo corretto!";
 		document.getElementById("errorbox").setAttribute("class", "error");
 		document.getElementById("xbutton").setAttribute("class", "close");
 	}
