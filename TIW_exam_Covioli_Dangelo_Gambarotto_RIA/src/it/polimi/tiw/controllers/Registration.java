@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 //import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
@@ -23,6 +24,7 @@ import it.polimi.tiw.DAO.UserDAO;
 //import it.polimi.tiw.utils.SharedPropertyMessageResolver;
 
 @WebServlet("/Registration")
+@MultipartConfig
 public class Registration extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection = null;
@@ -130,7 +132,7 @@ public class Registration extends HttpServlet {
 //				response.addCookie(error);
 //				response.sendRedirect(getServletContext().getContextPath() + "/Registration");
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-				response.getWriter().println("Seleziona un Ruolo corretto!");
+				response.getWriter().println("Seleziona un ruolo corretto!");
 				return;
 			}
 			if(!password1.equals(password2)) {
