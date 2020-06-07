@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.util.regex.Pattern;
+
 //import org.thymeleaf.TemplateEngine;
 //import org.thymeleaf.context.WebContext;
 //import org.thymeleaf.templatemode.TemplateMode;
@@ -28,7 +30,7 @@ import it.polimi.tiw.DAO.UserDAO;
 public class Registration extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection = null;
-	//private TemplateEngine templateEngine;
+	// private TemplateEngine templateEngine;
 
 	public Registration() {
 		super();
@@ -104,6 +106,7 @@ public class Registration extends HttpServlet {
 		String firstName = request.getParameter("firstName");
 		String lastName = request.getParameter("lastName");
 		String username = request.getParameter("username");
+		String mail = request.getParameter("mail");
 		String password1 = request.getParameter("pwd1");
 		String password2 = request.getParameter("pwd2");
 		String role = request.getParameter("role");
@@ -111,7 +114,8 @@ public class Registration extends HttpServlet {
 		UserDAO uDao = new UserDAO(connection);
 
 		try {
-			if (firstName == "" || lastName == "" || username == "" || password1 == "" || password2 == "" || role == "") {
+			if (firstName == "" || lastName == "" || username == "" || mail == "" || password1 == "" || password2 == ""
+					|| role == "") {
 //				Cookie error = new Cookie("registrationError", "emptyField");
 //				response.addCookie(error);
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -135,12 +139,17 @@ public class Registration extends HttpServlet {
 				response.getWriter().println("Seleziona un ruolo corretto!");
 				return;
 			}
-			if(!password1.equals(password2)) {
+			if (!password1.equals(password2)) {
 //				Cookie error = new Cookie("registrationError", "wrongPassword");
 //				response.addCookie(error);
 //				response.sendRedirect(getServletContext().getContextPath() + "/Registration");
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-				response.getWriter().println("Le passwords inserite non combaciano");
+				response.getWriter().println("Le password inserite non combaciano");
+				return;
+			}
+			if(!Pattern.matches(mail, "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\\\.[A-Za-z]{2,6}$")) {
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.getWriter().println("La mail inserita non rispetta il pattern");
 				return;
 			}
 			
