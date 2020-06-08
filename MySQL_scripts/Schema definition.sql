@@ -36,10 +36,10 @@ CREATE TABLE `worker` (
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost`
 SQL SECURITY DEFINER VIEW `tiw_examdb`.`users` AS
-	select `tiw_examdb`.`worker`.`idworker` AS `userid`,`tiw_examdb`.`worker`.`username` AS `username`,`tiw_examdb`.`worker`.`password` AS `password`,`tiw_examdb`.`worker`.`name` AS `name`,`tiw_examdb`.`worker`.`surname` AS `surname`,'worker' AS `role`
+	select `tiw_examdb`.`worker`.`idworker` AS `userid`,`tiw_examdb`.`worker`.`username` AS `username`,`tiw_examdb`.`worker`.`password` AS `password`,`tiw_examdb`.`worker`.`name` AS `name`,`tiw_examdb`.`worker`.`surname` AS `surname`,'worker' AS `role`,`tiw_examdb`.`worker`.`email` AS `email`
     from `tiw_examdb`.`worker`
     union
-    select `tiw_examdb`.`client`.`idclient` AS `userid`,`tiw_examdb`.`client`.`username` AS `username`,`tiw_examdb`.`client`.`password` AS `password`,`tiw_examdb`.`client`.`name` AS `name`,`tiw_examdb`.`client`.`surname` AS `surname`,'client' AS `role`
+    select `tiw_examdb`.`client`.`idclient` AS `userid`,`tiw_examdb`.`client`.`username` AS `username`,`tiw_examdb`.`client`.`password` AS `password`,`tiw_examdb`.`client`.`name` AS `name`,`tiw_examdb`.`client`.`surname` AS `surname`,'client' AS `role`,`tiw_examdb`.`client`.`email` AS `email`
     from `tiw_examdb`.`client`;
 
 CREATE TABLE `product` (
