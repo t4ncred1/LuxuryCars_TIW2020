@@ -1,6 +1,7 @@
 (function() {
 
 document.getElementById("registerbutton").addEventListener('click', (e) => {
+	
 	var form = e.target.closest("form");
 	
 	form.checkpwd = function (){
@@ -34,6 +35,11 @@ document.getElementById("registerbutton").addEventListener('click', (e) => {
 		window.location.href = "index.html";
 	}
 	
+	document.getElementById("errorbox").setAttribute("class", "invisible");
+	document.getElementById("text").textContent="";
+	document.getElementById("mail").setAttribute("class", "registerfield field");
+	document.getElementById("pwd1").setAttribute("class", "registerfield field");
+	document.getElementById("pwd2").setAttribute("class", "registerfield field");
 	if (form.checkValidity() && form.checkpwd() && form.checkrole() && form.checkemail()) {
 	makeCall("POST", 'Registration', e.target.closest("form"),
 		function(req) {
