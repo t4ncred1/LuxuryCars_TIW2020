@@ -19,6 +19,10 @@
 		<p th:if=" ${errorMsg!=null && errorMsg=='usedUsername'}" class="error" th:text="#{usedUsername}">username già utilizzato</p>
 		<p th:if=" ${errorMsg!=null && errorMsg=='wrongRole'}" class="error" th:text="#{wrongRole}">ruolo inserito sbagliato</p>
 		<p th:if=" ${errorMsg!=null && errorMsg=='wrongPassword'}" class="error" th:text="#{wrongPassword}">ruolo inserito sbagliato</p>
+		<p th:if=" ${errorMsg!=null && errorMsg=='wrongEmail'}" class="error" th:text="#{wrongEmail}">ruolo inserito sbagliato</p>
+		<p th:if=" ${errorMsg!=null && errorMsg=='success'}" class="success" th:text="#{success}">ruolo inserito sbagliato</p>
+		
+		
 		<form action="Registration" method="POST">
 			<input class="registerfield field" type="text" name="firstName" th:placeholder="#{firstName}" required>
 			<br>
@@ -26,11 +30,13 @@
 			<br>
 			<input class="registerfield field" type="text" name="username" th:placeholder="#{username}" required>
 			<br>
+			<input class="registerfield field" type="text" name="mail" th:placeholder="#{mail}" required>
+			<br>
 			<input class="registerfield field" type="password" name="pwd1" th:placeholder="#{password}" required>
 			<br>
 			<input class="registerfield field" type="password" name="pwd2" th:placeholder="#{password2}" required>
 			<br>
-			
+
 	
 			<input class="checkmark" type="radio" name="role" value="client" checked>
 			<label th:text="#{client}">cliente</label> <br>

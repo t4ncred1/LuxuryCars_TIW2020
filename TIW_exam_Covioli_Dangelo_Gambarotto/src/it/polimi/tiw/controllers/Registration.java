@@ -20,6 +20,7 @@ import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import it.polimi.tiw.DAO.UserDAO;
+import it.polimi.tiw.utils.RegexpChecker;
 import it.polimi.tiw.utils.SharedPropertyMessageResolver;
 
 @WebServlet("/Registration")
@@ -36,7 +37,6 @@ public class Registration extends HttpServlet {
 		ServletContext servletContext = getServletContext();
 		ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
 		templateResolver.setTemplateMode(TemplateMode.HTML);
-		templateResolver.setCacheable(false);
 		this.templateEngine = new TemplateEngine();
 		this.templateEngine.setTemplateResolver(templateResolver);
 		this.templateEngine
@@ -78,6 +78,12 @@ public class Registration extends HttpServlet {
 					case "wrongPassword": 
 						ctx.setVariable("errorMsg", "wrongPassword");
 						break;
+					case "wrongEmail": 
+						ctx.setVariable("errorMsg", "wrongEmail");
+						break;
+					case "success": 
+						ctx.setVariable("errorMsg", "success");
+						break;
 					default:
 						System.out.println("The user tried to tamper with the cookie \"errorMsg\"");
 					}
@@ -104,11 +110,12 @@ public class Registration extends HttpServlet {
 		String password1 = request.getParameter("pwd1");
 		String password2 = request.getParameter("pwd2");
 		String role = request.getParameter("role");
+		String mail = request.getParameter("mail");
 
 		UserDAO uDao = new UserDAO(connection);
 
 		try {
-			if (firstName == "" || lastName == "" || username == "" || password1 == "" || password2 == "" || role == "") {
+			if (firstName == "" || lastName == "" || username == "" || password1 == "" || password2 == "" || role == "" || mail == "") {
 				Cookie error = new Cookie("registrationError", "emptyField");
 				response.addCookie(error);
 				response.sendRedirect(getServletContext().getContextPath() + "/Registration");
@@ -132,9 +139,17 @@ public class Registration extends HttpServlet {
 				response.sendRedirect(getServletContext().getContextPath() + "/Registration");
 				return;
 			}
+			if(!RegexpChecker.checkExpression(RegexpChecker.EMAIL, mail)) {
+				Cookie error = new Cookie("registrationError", "wrongEmail");
+				response.addCookie(error);
+				response.sendRedirect(getServletContext().getContextPath() + "/Registration");
+				return;
+			}
 			
-			uDao.registerUser(username, password1, firstName, lastName, role);
-			response.sendRedirect(getServletContext().getContextPath() + "/");
+			uDao.registerUser(username, password1, firstName, lastName, role, mail);
+			Cookie success = new Cookie("registrationError", "success");
+			response.addCookie(success);
+			response.sendRedirect(getServletContext().getContextPath() + "/Registration");
 			return;
 		} catch (SQLException e) {
 			response.sendError(500, "Database access failed");

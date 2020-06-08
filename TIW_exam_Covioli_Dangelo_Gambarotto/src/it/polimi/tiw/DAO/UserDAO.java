@@ -15,7 +15,7 @@ public class UserDAO {
 	}
 
 	public UserBean checkCredentials(String usrn, String pwd) throws SQLException {
-		String query = "SELECT  userid, username, role, name, surname FROM users  WHERE username = ? AND password =?";
+		String query = "SELECT  userid, username, role, name, surname, email FROM users  WHERE username = ? AND password =?";
 		try (PreparedStatement pstatement = con.prepareStatement(query);) {
 			pstatement.setString(1, usrn);
 			pstatement.setString(2, pwd);
@@ -31,6 +31,7 @@ public class UserDAO {
 					user.setUsername(result.getString("username"));
 					user.setName(result.getString("name"));
 					user.setSurname(result.getString("surname"));
+					user.setEmail(result.getString("email"));
 					closeConnection(result, pstatement);
 					return user;
 				}
@@ -88,15 +89,16 @@ public class UserDAO {
 		}
 	}
 
-	public void registerUser(String usrn, String pwd, String firstName, String lastName, String role)
+	public void registerUser(String usrn, String pwd, String firstName, String lastName, String role, String email)
 			throws SQLException {
-		String query = "INSERT INTO " + role + " (username, password, name, surname) VALUES (?, ?, ?, ?)";
+		String query = "INSERT INTO " + role + " (username, password, name, surname, email) VALUES (?, ?, ?, ?, ?)";
 
 		PreparedStatement pStatement = con.prepareStatement(query);
 		pStatement.setString(1, usrn);
 		pStatement.setString(2, pwd);
 		pStatement.setString(3, firstName);
 		pStatement.setString(4, lastName);
+		pStatement.setString(5, email);
 		pStatement.execute();
 
 		closeConnection(pStatement);
