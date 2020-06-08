@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `tiw_examdb` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `tiw_examdb`;
 -- MySQL dump 10.13  Distrib 8.0.19, for Win64 (x86_64)
 --
 -- Host: localhost    Database: tiw_examdb
@@ -28,8 +26,9 @@ CREATE TABLE `worker` (
   `idworker` int NOT NULL AUTO_INCREMENT,
   `username` varchar(45) NOT NULL,
   `password` varchar(45) NOT NULL,
-  `name` varchar(45) DEFAULT NULL,
-  `surname` varchar(45) DEFAULT NULL,
+  `name` varchar(45) NOT NULL,
+  `surname` varchar(45) NOT NULL,
+  `email` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`idworker`),
   UNIQUE KEY `idworker_UNIQUE` (`idworker`),
   UNIQUE KEY `username_UNIQUE` (`username`)
@@ -42,7 +41,7 @@ CREATE TABLE `worker` (
 
 LOCK TABLES `worker` WRITE;
 /*!40000 ALTER TABLE `worker` DISABLE KEYS */;
-INSERT INTO `worker` VALUES (1,'tancredi','tancredi','Tancredi','Covioli'),(2,'alle','alle','Alessandro','Dangelo'),(3,'gamba','gamba','Luca','Gambarotto');
+INSERT INTO `worker` VALUES (1,'tancredi','tancredi','Tancredi','Covioli','tancredi.covioli@mail.polimi.it'),(2,'alle','alle','Alessandro','Dangelo','alessandro3.dangelo@mail.polimi.it'),(3,'gamba','gamba','Luca','Gambarotto','luca.gambarotto@mail.polimi.it');
 /*!40000 ALTER TABLE `worker` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -78,4 +77,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-05-24  8:59:56
+-- Dump completed on 2020-06-07 17:53:07

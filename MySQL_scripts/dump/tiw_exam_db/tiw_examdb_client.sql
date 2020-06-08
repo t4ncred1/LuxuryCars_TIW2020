@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `tiw_examdb` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `tiw_examdb`;
 -- MySQL dump 10.13  Distrib 8.0.19, for Win64 (x86_64)
 --
 -- Host: localhost    Database: tiw_examdb
@@ -30,6 +28,7 @@ CREATE TABLE `client` (
   `password` varchar(45) NOT NULL,
   `name` varchar(45) NOT NULL,
   `surname` varchar(45) NOT NULL,
+  `email` varchar(45) NOT NULL,
   PRIMARY KEY (`idclient`),
   UNIQUE KEY `idclient_UNIQUE` (`idclient`),
   UNIQUE KEY `username_UNIQUE` (`username`)
@@ -42,7 +41,7 @@ CREATE TABLE `client` (
 
 LOCK TABLES `client` WRITE;
 /*!40000 ALTER TABLE `client` DISABLE KEYS */;
-INSERT INTO `client` VALUES (1,'mario.rossi','rossipwd','Mario','Rossi'),(2,'luigi.giallini','giallinipwd','Luigi','Giallini'),(3,'giovanna.sala','salapwd','Giovanna','Sala'),(4,'stefano.armellin','armellinpwd','Stefano','Armellin'),(5,'gabiele.bolamperti','bolapwd','Gabriele','Bolamperti');
+INSERT INTO `client` VALUES (1,'mario.rossi','rossipwd','Mario','Rossi','mario.rossi@gmail.com'),(2,'luigi.giallini','giallinipwd','Luigi','Giallini','luigi.giallini@libero.it'),(3,'giovanna.sala','salapwd','Giovanna','Sala','giovanna.sala@hotmail.it'),(4,'stefano.armellin','armellinpwd','Stefano','Armellin','ermecasillas@hotmail.com'),(5,'gabiele.bolamperti','bolapwd','Gabriele','Bolamperti','bolla96@libero.it');
 /*!40000 ALTER TABLE `client` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -78,4 +77,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-05-24  8:59:56
+-- Dump completed on 2020-06-07 17:53:07

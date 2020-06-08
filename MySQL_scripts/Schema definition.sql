@@ -16,6 +16,7 @@ CREATE TABLE `client` (
   `password` varchar(45) NOT NULL,
   `name` varchar(45) NOT NULL,
   `surname` varchar(45) NOT NULL,
+  `email` varchar(45) NOT NULL,
   PRIMARY KEY (`idclient`),
   UNIQUE KEY `idclient_UNIQUE` (`idclient`),
   UNIQUE KEY `username_UNIQUE` (`username`)
@@ -25,8 +26,9 @@ CREATE TABLE `worker` (
   `idworker` int NOT NULL AUTO_INCREMENT,
   `username` varchar(45) NOT NULL,
   `password` varchar(45) NOT NULL,
-  `name` varchar(45) DEFAULT NULL,
-  `surname` varchar(45) DEFAULT NULL,
+  `name` varchar(45) NOT NULL,
+  `surname` varchar(45) NOT NULL,
+  `email` varchar(45) NOT NULL,
   PRIMARY KEY (`idworker`),
   UNIQUE KEY `idworker_UNIQUE` (`idworker`),
   UNIQUE KEY `username_UNIQUE` (`username`)

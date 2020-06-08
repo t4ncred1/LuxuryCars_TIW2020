@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `tiw_examdb` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `tiw_examdb`;
 -- MySQL dump 10.13  Distrib 8.0.19, for Win64 (x86_64)
 --
 -- Host: localhost    Database: tiw_examdb
@@ -40,7 +38,7 @@ CREATE TABLE `quotation_option` (
 
 LOCK TABLES `quotation_option` WRITE;
 /*!40000 ALTER TABLE `quotation_option` DISABLE KEYS */;
-INSERT INTO `quotation_option` VALUES (1,2),(2,1),(2,3),(3,6),(3,7),(4,8),(5,7),(6,6),(6,7);
+INSERT INTO `quotation_option` VALUES (2,1),(2,3),(6,6),(6,7),(14,4),(14,5),(15,9),(16,6),(17,11),(18,10),(18,11),(19,7);
 /*!40000 ALTER TABLE `quotation_option` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -81,4 +79,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-05-24  8:59:56
+-- Dump completed on 2020-06-07 17:53:07
