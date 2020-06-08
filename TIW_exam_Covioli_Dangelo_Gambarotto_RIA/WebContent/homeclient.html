@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Worker assignment to project</title>
+<link rel="stylesheet" type="text/css" media="all" href="./CSS/client.css"/>
+</head>
+<body class="clientpage">
+
+
+	<!-- Top bar -->
+	<ul id="topbar">
+		<li><a href="/Logout}">Esci</a></li>
+	</ul>
+
+
+	<!-- Error/Success message -->
+	<br>
+	<div id="errorbox" class="error">
+		<button id="xbutton" class="close close_banner">X</button>
+		<span id="text">Errore generico</span>
+	</div>
+
+	
+	<!-- Welcome message -->
+	<h1>Bentornato <span id="user_name">Mario</span></h1>
+
+
+	<!-- Requests table -->
+	<h2>Le tue richieste</h2>
+	<div>
+		<table id="requests_table" class="table">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Prodotto</th>
+					<th>Data</th>
+					<th>Prezzo</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>1</td>
+					<td>Toyota Aygo</td>
+					<td>17/02/1996</td>
+					<td>100E</td>
+				</tr>
+				<tr>
+					<td>2</td>
+					<td>Toyota Aygo</td>
+					<td>17/02/1996</td>
+					<td>100E</td>
+				</tr>
+				<tr>
+					<td>3</td>
+					<td>Toyota Aygo</td>
+					<td>17/02/1996</td>
+					<td>100E</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+
+	<!-- Available products -->
+	<h2>Prodotti disponibili</h2>
+	<div id="imageslist">
+		<a>
+			<img src="./images/samples/thumbnail_aygo.png" width="200"><br>
+			<span>Toyota Aygo</span>
+		</a>			
+		<a>
+			<img src="./images/samples/thumbnail_aygo.png" width="200"><br>
+			<span>Toyota Aygo</span>
+		</a>
+		<a>
+			<img src="./images/samples/thumbnail_aygo.png" width="200"><br>
+			<span>Toyota Aygo</span>
+		</a>	
+		<a>
+			<img src="./images/samples/thumbnail_aygo.png" width="200"><br>
+			<span>Toyota Aygo</span>
+		</a>	
+		<a>
+			<img src="./images/samples/thumbnail_aygo.png" width="200"><br>
+			<span>Toyota Aygo</span>
+		</a>	
+		<a>
+			<img src="./images/samples/thumbnail_aygo.png" width="200"><br>
+			<span>Toyota Aygo</span>
+		</a>	
+		<a>
+			<img src="./images/samples/thumbnail_aygo.png" width="200"><br>
+			<span>Toyota Aygo</span>
+		</a>	
+		<a>
+			<img src="./images/samples/thumbnail_aygo.png" width="200"><br>
+			<span>Toyota Aygo</span>
+		</a>	
+		<a>
+			<img src="./images/samples/thumbnail_aygo.png" width="200"><br>
+			<span>Toyota Aygo</span>
+		</a>	
+		<a>
+			<img src="./images/samples/thumbnail_aygo.png" width="200"><br>
+			<span>Toyota Aygo</span>
+		</a>	
+		<a>
+			<img src="./images/samples/thumbnail_aygo.png" width="200"><br>
+			<span>Toyota Aygo</span>
+		</a>	
+		<a>
+			<img src="./images/samples/thumbnail_aygo.png" width="200"><br>
+			<span>Toyota Aygo</span>
+		</a>				
+		<br>
+	</div>
+	<br>
+	<br>
+
+	
+	<div class="carSelection">
+		<div class="left">
+					<img src="./images/samples/aygo.png" width="600">
+		</div>
+		<div class="right">
+					<span class="carName">Toyota Aygo</span><br><br>
+					<form action="#">
+						<input type="hidden" name="productId" required="required" value="1" />
+						<div>
+							<input type="checkbox" id="1" name="options" value="1">
+							<label for="Sedili riscaldati">Sedili riscaldati</label><br>
+						</div>
+						<div>
+							<input type="checkbox" id="2" name="options" value="2">
+							<label for="Motore 1.6 turbo">Motore 1.6 turbo</label><br>
+						</div>
+						<div>
+							<input type="checkbox" id="3" name="options" value="3">
+							<label for="Fendinebbia">Fendinebbia</label><br>
+						</div>
+						<br>
+						<input class="button" type="submit" value="Submit">
+					</form>
+		</div>
+	</div>
+	
+</body>
+</html>

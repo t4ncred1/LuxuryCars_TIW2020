@@ -20,3 +20,18 @@
 .registerfield{
 	width : 230px;
 }
+
+.errorfield{
+	color : white;
+	text-align : center;
+	border-radius : 7px;
+	font-size : 15pt;
+	margin-bottom : 5px;
+	height : 30px;
+	border : 2px solid rgba(203, 0, 0, 0.5);
+	background-color : rgba(255, 255, 255, 0.03);
+}
+
+.success:hover{
+	cursor: pointer;
+}

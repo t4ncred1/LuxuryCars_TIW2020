@@ -10,42 +10,25 @@ import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
-//import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import java.util.regex.Pattern;
-
-//import org.thymeleaf.TemplateEngine;
-//import org.thymeleaf.context.WebContext;
-//import org.thymeleaf.templatemode.TemplateMode;
-//import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import it.polimi.tiw.DAO.UserDAO;
-//import it.polimi.tiw.utils.SharedPropertyMessageResolver;
+import it.polimi.tiw.utils.RegexpChecker;
 
 @WebServlet("/Registration")
 @MultipartConfig
 public class Registration extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection = null;
-	// private TemplateEngine templateEngine;
 
 	public Registration() {
 		super();
 	}
 
 	public void init() throws ServletException {
-//		ServletContext servletContext = getServletContext();
-//		ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
-//		templateResolver.setTemplateMode(TemplateMode.HTML);
-//		templateResolver.setCacheable(false);
-//		this.templateEngine = new TemplateEngine();
-//		this.templateEngine.setTemplateResolver(templateResolver);
-//		this.templateEngine
-//				.setMessageResolver(new SharedPropertyMessageResolver(servletContext, "i18n", "registration"));
-//		templateResolver.setSuffix(".html");
 		try {
 			ServletContext context = getServletContext();
 			String driver = context.getInitParameter("dbDriver");
@@ -62,44 +45,6 @@ public class Registration extends HttpServlet {
 		}
 	}
 
-//	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-//			throws ServletException, IOException {
-//		ServletContext servletContext = getServletContext();
-//		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-//		if (request.getCookies() != null) {
-//			for (Cookie c : request.getCookies()) {
-//				if (c.getName().equals("registrationError")) {
-//					switch(c.getValue()) {
-//					case "emptyField": 
-//						ctx.setVariable("errorMsg", "emptyField");
-//						break;
-//					case "usedUsername": 
-//						ctx.setVariable("errorMsg", "usedUsername");
-//						break;
-//					case "wrongRole": 
-//						ctx.setVariable("errorMsg", "wrongRole");
-//						break;
-//					case "wrongPassword": 
-//						ctx.setVariable("errorMsg", "wrongPassword");
-//						break;
-//					default:
-//						System.out.println("The user tried to tamper with the cookie \"errorMsg\"");
-//					}
-//					
-//					Cookie eliminate = new Cookie("registrationError", "");
-//					eliminate.setMaxAge(0);
-//					response.addCookie(eliminate);
-//				}
-//			}
-//		}
-//		try {
-//			String path = "/registration.html";
-//			templateEngine.process(path, ctx, response.getWriter());
-//			
-//		} catch (IOException e) {
-//			response.sendError(555, "I/O Exception: cannot load response.getWriter()");
-//		}
-//	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
@@ -116,57 +61,42 @@ public class Registration extends HttpServlet {
 		try {
 			if (firstName == "" || lastName == "" || username == "" || mail == "" || password1 == "" || password2 == ""
 					|| role == "") {
-//				Cookie error = new Cookie("registrationError", "emptyField");
-//				response.addCookie(error);
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-//				response.sendRedirect(getServletContext().getContextPath() + "/Registration");
 				response.getWriter().println("Inserire credenziali");
 				return;
 			}
 			if (uDao.existsUser(username)) {
-//				Cookie error = new Cookie("registrationError", "usedUsername");
-//				response.addCookie(error);
-//				response.sendRedirect(getServletContext().getContextPath() + "/Registration");
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-				response.getWriter().println("L'username è già stato preso");
+				response.getWriter().println("Lo username e' gia' in uso!");
 				return;
 			}
 			if (!role.equals("client") && !role.equals("worker")) {
-//				Cookie error = new Cookie("registrationError", "wrongRole");
-//				response.addCookie(error);
-//				response.sendRedirect(getServletContext().getContextPath() + "/Registration");
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				response.getWriter().println("Seleziona un ruolo corretto!");
 				return;
 			}
 			if (!password1.equals(password2)) {
-//				Cookie error = new Cookie("registrationError", "wrongPassword");
-//				response.addCookie(error);
-//				response.sendRedirect(getServletContext().getContextPath() + "/Registration");
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-				response.getWriter().println("Le password inserite non combaciano");
+				response.getWriter().println("Le password inserite non combaciano!");
 				return;
 			}
-			if(!Pattern.matches(mail, "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\\\.[A-Za-z]{2,6}$")) {
+			if(!RegexpChecker.checkExpression(RegexpChecker.EMAIL, mail)) {
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-				response.getWriter().println("La mail inserita non rispetta il pattern");
+				response.getWriter().println("La mail inserita non e' valida!");
 				return;
 			}
 			
-			uDao.registerUser(username, password1, firstName, lastName, role);
-//			response.sendRedirect(getServletContext().getContextPath() + "/");
+			uDao.registerUser(username, password1, firstName, lastName, role, mail);
 			response.setStatus(HttpServletResponse.SC_OK);
-			response.getWriter().println("index.html");
+			response.getWriter().println("Utente inserito correttamente. Premi qui per tornare alla pagina di login.");
 			return;
 		} catch (SQLException e) {
-//			response.sendError(500, "Database access failed");
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			response.getWriter().println("Errore interno del server.");
 			e.printStackTrace();
 		} catch (IOException e) {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			response.getWriter().println("Errore interno del server.");
-//			response.sendError(555, "I/O Exception: cannot load response.getWriter()");
 		}
 	}
 

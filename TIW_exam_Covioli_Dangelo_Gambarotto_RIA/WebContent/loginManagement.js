@@ -44,4 +44,9 @@
 	  document.getElementById("text").textContent="";
   });
 
+  document.getElementById("registerbutton").addEventListener('click', (e) => {
+	  console.log("Prova per vedere se va");
+	  window.location.href = "registration.html";
+  });
+  
 })();
