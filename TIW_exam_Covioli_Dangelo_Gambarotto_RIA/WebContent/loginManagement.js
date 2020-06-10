@@ -1,5 +1,17 @@
 (function() {
 
+	function hideErrors(){
+		document.getElementById("errorbox").setAttribute("class", "invisible");
+		document.getElementById("text").textContent="";
+		document.getElementById("mail").setAttribute("class", "registerfield field");
+		document.getElementById("pwd1").setAttribute("class", "registerfield field");
+		document.getElementById("pwd2").setAttribute("class", "registerfield field");
+		document.getElementById("username").setAttribute("class", "registerfield field");
+		document.getElementById("errorbox").addEventListener('click', (e) => {
+			return;
+		});	
+	}	
+	
   document.getElementById("loginbutton").addEventListener('click', (e) => {
     var form = e.target.closest("form");
     if (form.checkValidity()) {
@@ -40,13 +52,16 @@
   });
   
   document.getElementById("xbutton").addEventListener('click', (e) => {
-	  document.getElementById("errorbox").setAttribute("class", "invisible");
+	  document.getElementById("errorbox").setAttribute("class", "hidden");
 	  document.getElementById("text").textContent="";
   });
 
-  document.getElementById("registerbutton").addEventListener('click', (e) => {
-	  console.log("Prova per vedere se va");
-	  window.location.href = "registration.html";
+  document.getElementById("toregister").addEventListener('click', (e) => {
+	  hideErrors();
+	  document.getElementById("loginform").reset();
+      document.getElementById("pagebody").setAttribute("class", "registerpage");
+      document.getElementById("loginview").setAttribute("class", "hidden");
+      document.getElementById("registerview").setAttribute("class", "");
   });
   
 })();

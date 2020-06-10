@@ -106,27 +106,22 @@ public class UserDAO {
 	}
 
 	private void closeConnection(PreparedStatement pStatement) throws SQLException {
-		System.out.println("Colpa mia");
 		try {
 			pStatement.close();
 		} catch (SQLException e) {
-			System.out.println("Colpa mia 3");
 			throw new SQLException("Cannot close statement");
 		}
 	}
 
 	private void closeConnection(ResultSet res, PreparedStatement pStatement) throws SQLException {
-		System.out.println("Colpa mia 2");
 		try {
 			res.close();
 		} catch (SQLException e) {
-			System.out.println("Colpa mia 4");
 			throw new SQLException("Cannot close result");
 		}
 		try {
 			pStatement.close();
 		} catch (SQLException e) {
-			System.out.println("Colpa mia 5");
 			throw new SQLException("Cannot close statement");
 		}
 	}

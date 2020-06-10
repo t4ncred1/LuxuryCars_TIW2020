@@ -1,7 +1,9 @@
 @charset "UTF-8";
 @import"navigation_bar.css";
 
-
+.hidden{
+	display : none;
+}
 
 :-ms-input-placeholder { /* Internet Explorer 10+ */
     color: GrayText;

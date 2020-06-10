@@ -1,9 +1,21 @@
 (function() {
 
+function hideErrors(){
+	document.getElementById("errorboxregister").setAttribute("class", "invisible");
+	document.getElementById("textregister").textContent="";
+	document.getElementById("mail").setAttribute("class", "registerfield field");
+	document.getElementById("pwd1").setAttribute("class", "registerfield field");
+	document.getElementById("pwd2").setAttribute("class", "registerfield field");
+	document.getElementById("username").setAttribute("class", "registerfield field");
+	document.getElementById("errorboxregister").addEventListener('click', (e) => {
+		return;
+	});	
+}	
+	
 document.getElementById("registerbutton").addEventListener('click', (e) => {
 	
-	var form = e.target.closest("form");
-	
+    var form = e.target.closest("form");
+	 
 	form.checkpwd = function (){
 		var pwd1 = this.elements.namedItem("pwd1").value;
 		var pwd2 = this.elements.namedItem("pwd2").value;
@@ -32,14 +44,12 @@ document.getElementById("registerbutton").addEventListener('click', (e) => {
 	}
 	
 	function goBackToLogin(){
-		window.location.href = "index.html";
+	      document.getElementById("pagebody").setAttribute("class", "indexpage");
+	      document.getElementById("registerview").setAttribute("class", "hidden");
+	      document.getElementById("loginview").setAttribute("class", "");
 	}
 	
-	document.getElementById("errorbox").setAttribute("class", "invisible");
-	document.getElementById("text").textContent="";
-	document.getElementById("mail").setAttribute("class", "registerfield field");
-	document.getElementById("pwd1").setAttribute("class", "registerfield field");
-	document.getElementById("pwd2").setAttribute("class", "registerfield field");
+	hideErrors();
 	if (form.checkValidity() && form.checkpwd() && form.checkrole() && form.checkemail()) {
 	makeCall("POST", 'Registration', e.target.closest("form"),
 		function(req) {
@@ -47,22 +57,26 @@ document.getElementById("registerbutton").addEventListener('click', (e) => {
 				var message = req.responseText;
 				switch (req.status) {
 					case 200:
-						document.getElementById("text").textContent = message;
-						document.getElementById("errorbox").setAttribute("class", "success");
-						document.getElementById("xbutton").setAttribute("class", "close");
-						document.getElementById("errorbox").addEventListener('click', (e) => {
-							window.location.href = "index.html";
+						document.getElementById("textregister").textContent = message;
+						document.getElementById("errorboxregister").setAttribute("class", "success");
+						document.getElementById("xbuttonregister").setAttribute("class", "close");
+						document.getElementById("errorboxregister").addEventListener('click', (e) => {
+						      document.getElementById("pagebody").setAttribute("class", "indexpage");
+						      document.getElementById("registerview").setAttribute("class", "hidden");
+						      document.getElementById("loginview").setAttribute("class", "");
+						      hideErrors();
 						}, false);
 						break;
 					case 400:
-						document.getElementById("text").textContent = message;
-						document.getElementById("errorbox").setAttribute("class", "error");
-						document.getElementById("xbutton").setAttribute("class", "close");
+						document.getElementById("textregister").textContent = message;
+						document.getElementById("errorboxregister").setAttribute("class", "error");
+						document.getElementById("xbuttonregister").setAttribute("class", "close");
+						document.getElementById("username").setAttribute("class", "registerfield errorfield");
 						break;
 					case 500:
-						document.getElementById("text").textContent = message;
-						document.getElementById("errorbox").setAttribute("class", "error");
-						document.getElementById("xbutton").setAttribute("class", "close");
+						document.getElementById("textregister").textContent = message;
+						document.getElementById("errorboxregister").setAttribute("class", "error");
+						document.getElementById("xbuttonregister").setAttribute("class", "close");
 						break;
 				}
 			}
@@ -73,48 +87,45 @@ document.getElementById("registerbutton").addEventListener('click', (e) => {
 		 form.reportValidity();
 	}
 	else if (!form.checkpwd()){
-		document.getElementById("text").textContent = "Le password inserite non combaciano";
-		document.getElementById("errorbox").setAttribute("class", "error");
-		document.getElementById("xbutton").setAttribute("class", "close");
-		document.getElementById("errorbox").addEventListener('click', (e) => {
+		document.getElementById("textregister").textContent = "Le password inserite non combaciano";
+		document.getElementById("errorboxregister").setAttribute("class", "error");
+		document.getElementById("xbuttonregister").setAttribute("class", "close");
+		document.getElementById("errorboxregister").addEventListener('click', (e) => {
 			return;
 		});
 		highlightErrors(form);
 	}
 	else if (!form.checkemail()){
-		document.getElementById("text").textContent = "La mail inserita non e' valida";
-		document.getElementById("errorbox").setAttribute("class", "error");
-		document.getElementById("xbutton").setAttribute("class", "close");
-		document.getElementById("errorbox").addEventListener('click', (e) => {
+		document.getElementById("textregister").textContent = "La mail inserita non e' valida";
+		document.getElementById("errorboxregister").setAttribute("class", "error");
+		document.getElementById("xbuttonregister").setAttribute("class", "close");
+		document.getElementById("errorboxregister").addEventListener('click', (e) => {
 			// This function acts as a removeEventListener
 			return;
 		});
 		highlightErrors(form);
 	}
 	else if (!form.checkrole()){
-		document.getElementById("text").textContent = "Seleziona un ruolo corretto!";
-		document.getElementById("errorbox").setAttribute("class", "error");
-		document.getElementById("xbutton").setAttribute("class", "close");
-		document.getElementById("errorbox").addEventListener('click', (e) => {
+		document.getElementById("textregister").textContent = "Seleziona un ruolo corretto!";
+		document.getElementById("errorboxregister").setAttribute("class", "error");
+		document.getElementById("xbuttonregister").setAttribute("class", "close");
+		document.getElementById("errorboxregister").addEventListener('click', (e) => {
 			return;
 		});
 	}
 });
 
-document.getElementById("xbutton").addEventListener('click', (e) => {
+document.getElementById("xbuttonregister").addEventListener('click', (e) => {
 	e.stopPropagation();
-	document.getElementById("errorbox").setAttribute("class", "invisible");
-	document.getElementById("text").textContent="";
-	document.getElementById("mail").setAttribute("class", "registerfield field");
-	document.getElementById("pwd1").setAttribute("class", "registerfield field");
-	document.getElementById("pwd2").setAttribute("class", "registerfield field");
-	document.getElementById("errorbox").addEventListener('click', (e) => {
-		return;
-	});
+	hideErrors();
 });
 
 document.getElementById("back").addEventListener('click', (e) => {
-	window.location.href = "index.html";
+	hideErrors();
+	document.getElementById("registerform").reset();
+    document.getElementById("pagebody").setAttribute("class", "indexpage");
+    document.getElementById("loginview").setAttribute("class", "");
+    document.getElementById("registerview").setAttribute("class", "hidden");
 });
 
 })();

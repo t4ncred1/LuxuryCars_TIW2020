@@ -4,32 +4,70 @@
 <meta charset="ISO-8859-1">
 <link rel="icon" type="image/png"/>
 <link rel="stylesheet" type="text/css" media="all" href="./css/index.css"/>
+<link rel="stylesheet" type="text/css" media="all" href="./css/register.css"/>
 <title>LuxuryCars Homepage</title>
 <script src="utils.js" charset="utf-8" defer></script>
 <script src="loginManagement.js" charset="utf-8" defer></script>
+<script src="registrationManagement.js" charset="utf-8" defer></script>
 
 </head>
-<body class="indexpage">
+<body id="pagebody" class="indexpage">
 
-	<img class="logo" src="./images/logo.png">
-	
-	<div class="formbox box">
-		<form action="#">
-			<input class="loginfield field" type="text" name="username" placeholder="nome utente" required>
-			<br>
-			<input class="loginfield field" type="password" name="pwd" placeholder="password" required>
-			<br>
-			<input class="login button" id="loginbutton" type="button" value="Login">		
-		</form>
-		<br>
-			<div id="errorbox" class="invisible">
-				<button id="xbutton" class="close">X</button>
-				<span id="text"></span>
-			</div>	
-		<br>
-		<label class="registerLabel">Nuovo qui? Registrati</label><br>
-		<button	class="register button" id="registerbutton">Registrati</button>
+	<div id="loginview">
+				<img class="logo" src="./images/logo.png">
+				
+				<div class="formbox box">
+					<form id="loginform" action="#">
+						<input class="loginfield field" type="text" name="username" placeholder="nome utente" required>
+						<br>
+						<input class="loginfield field" type="password" name="pwd" placeholder="password" required>
+						<br>
+						<input class="login button" id="loginbutton" type="button" value="Login">		
+					</form>
+					<br>
+						<div id="errorbox" class="invisible">
+							<button id="xbutton" class="close">X</button>
+							<span id="text"></span>
+						</div>	
+					<br>
+					<label class="registerLabel">Nuovo qui? Registrati</label><br>
+					<button	class="register button" id="toregister">Registrati</button>
+				</div>
+				<br>
 	</div>
-	<br>
+	
+	<div id="registerview" class="hidden">
+				<ul id="topbar">
+					<li id="back"><a>Indietro</a></li>
+				</ul>
+				<div class="registerbox box">
+					<img class="registerlogo" src="./images/logo.png">
+					<div id="errorboxregister" class="invisible">
+						<button id="xbuttonregister" class="close">X</button>
+						<span id="textregister"></span>
+					</div>
+					<br>
+					<form id="registerform" action="#">
+						<input class="registerfield field" type="text" name="firstName" placeholder="Nome" required>
+						<br>
+						<input class="registerfield field" type="text" name="lastName" placeholder="Cognome" required>
+						<br>
+						<input class="registerfield field" type="text" id="username" name="username" placeholder="Username" required>
+						<br>
+						<input class="registerfield field" type="text" id="mail" name="mail" placeholder="Email" required>
+						<br>
+						<input class="registerfield field" type="password" id="pwd1" name="pwd1" placeholder="Password" required>
+						<br>
+						<input class="registerfield field" type="password" id="pwd2" name="pwd2" placeholder="Reinserisci Password" required>
+						<br>
+						<input class="checkmark" type="radio" id="role" name="role" value="client" checked>
+						<label>Cliente</label> <br>
+						<input class="checkmark" type="radio" id="role" name="role" value="worker">
+						<label>Lavoratore</label> <br> <br>
+						<input class="button" id="registerbutton" type="button" value="Registrati">
+					</form>
+				</div>
+	</div>
+	
 </body>
 </html>
