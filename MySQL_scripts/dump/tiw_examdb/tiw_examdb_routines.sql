@@ -29,6 +29,7 @@ SET @saved_cs_client     = @@character_set_client;
  1 AS `password`,
  1 AS `name`,
  1 AS `surname`,
+ 1 AS `email`,
  1 AS `role`*/;
 SET character_set_client = @saved_cs_client;
 
@@ -45,7 +46,7 @@ SET character_set_client = @saved_cs_client;
 /*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `users` AS select `worker`.`idworker` AS `userid`,`worker`.`username` AS `username`,`worker`.`password` AS `password`,`worker`.`name` AS `name`,`worker`.`surname` AS `surname`,'worker' AS `role` from `worker` union select `client`.`idclient` AS `userid`,`client`.`username` AS `username`,`client`.`password` AS `password`,`client`.`name` AS `name`,`client`.`surname` AS `surname`,'client' AS `role` from `client` */;
+/*!50001 VIEW `users` AS select `worker`.`idworker` AS `userid`,`worker`.`username` AS `username`,`worker`.`password` AS `password`,`worker`.`name` AS `name`,`worker`.`surname` AS `surname`,`worker`.`email` AS `email`,'worker' AS `role` from `worker` union select `client`.`idclient` AS `userid`,`client`.`username` AS `username`,`client`.`password` AS `password`,`client`.`name` AS `name`,`client`.`surname` AS `surname`,`client`.`email` AS `email`,'client' AS `role` from `client` */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -67,4 +68,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-06-07 17:53:08
+-- Dump completed on 2020-06-12 17:52:11

@@ -16,33 +16,30 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `worker`
+-- Table structure for table `quotation_option`
 --
 
-DROP TABLE IF EXISTS `worker`;
+DROP TABLE IF EXISTS `quotation_option`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `worker` (
-  `idworker` int NOT NULL AUTO_INCREMENT,
-  `username` varchar(45) NOT NULL,
-  `password` varchar(45) NOT NULL,
-  `name` varchar(45) NOT NULL,
-  `surname` varchar(45) NOT NULL,
-  `email` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`idworker`),
-  UNIQUE KEY `idworker_UNIQUE` (`idworker`),
-  UNIQUE KEY `username_UNIQUE` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `quotation_option` (
+  `quotationId` int NOT NULL,
+  `optionId` int NOT NULL,
+  PRIMARY KEY (`optionId`,`quotationId`),
+  KEY `quotationId` (`quotationId`),
+  CONSTRAINT `quotation_option_ibfk_1` FOREIGN KEY (`quotationId`) REFERENCES `quotation` (`quotationId`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `quotation_option_ibfk_2` FOREIGN KEY (`optionId`) REFERENCES `option` (`optionId`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `worker`
+-- Dumping data for table `quotation_option`
 --
 
-LOCK TABLES `worker` WRITE;
-/*!40000 ALTER TABLE `worker` DISABLE KEYS */;
-INSERT INTO `worker` VALUES (1,'tancredi','tancredi','Tancredi','Covioli','tancredi.covioli@mail.polimi.it'),(2,'alle','alle','Alessandro','Dangelo','alessandro3.dangelo@mail.polimi.it'),(3,'gamba','gamba','Luca','Gambarotto','luca.gambarotto@mail.polimi.it');
-/*!40000 ALTER TABLE `worker` ENABLE KEYS */;
+LOCK TABLES `quotation_option` WRITE;
+/*!40000 ALTER TABLE `quotation_option` DISABLE KEYS */;
+INSERT INTO `quotation_option` VALUES (2,1),(2,3),(6,6),(6,7),(14,4),(14,5),(15,9),(16,6),(17,11),(18,10),(18,11),(19,7);
+/*!40000 ALTER TABLE `quotation_option` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -53,13 +50,18 @@ UNLOCK TABLES;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `no_double_username_2` BEFORE INSERT ON `worker` FOR EACH ROW BEGIN
-	if(new.username
-        IN
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `no_unavailable_options` BEFORE INSERT ON `quotation_option` FOR EACH ROW BEGIN
+	if((
+			SELECT ProductId
+            FROM `quotation`
+            WHERE quotationId = new.quotationId
+		)
+        NOT IN
         (
-			SELECT username
-            FROM `client`
-        )) then signal sqlstate '45000' set message_text = "Username yet in use";
+			SELECT productId
+            FROM `option`
+            WHERE optionid = new.optionId
+        )) then signal sqlstate '45000' set message_text = "Option not valid!";
 	end if; 
 END */;;
 DELIMITER ;
@@ -77,4 +79,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-06-07 17:53:07
+-- Dump completed on 2020-06-12 17:52:10

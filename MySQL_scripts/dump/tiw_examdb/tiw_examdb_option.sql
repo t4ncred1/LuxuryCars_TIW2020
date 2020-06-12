@@ -16,30 +16,33 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `quotation_option`
+-- Table structure for table `option`
 --
 
-DROP TABLE IF EXISTS `quotation_option`;
+DROP TABLE IF EXISTS `option`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `quotation_option` (
-  `quotationId` int NOT NULL,
-  `optionId` int NOT NULL,
-  PRIMARY KEY (`optionId`,`quotationId`),
-  KEY `quotationId` (`quotationId`),
-  CONSTRAINT `quotation_option_ibfk_1` FOREIGN KEY (`quotationId`) REFERENCES `quotation` (`quotationId`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `quotation_option_ibfk_2` FOREIGN KEY (`optionId`) REFERENCES `option` (`optionId`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `option` (
+  `optionId` int NOT NULL AUTO_INCREMENT,
+  `productId` int NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `name_it` varchar(255) NOT NULL,
+  `Stato` enum('normale','in offerta') DEFAULT 'normale',
+  PRIMARY KEY (`optionId`,`productId`),
+  UNIQUE KEY `optionId_UNIQUE` (`optionId`),
+  KEY `productId` (`productId`),
+  CONSTRAINT `option_ibfk_1` FOREIGN KEY (`productId`) REFERENCES `product` (`productId`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `quotation_option`
+-- Dumping data for table `option`
 --
 
-LOCK TABLES `quotation_option` WRITE;
-/*!40000 ALTER TABLE `quotation_option` DISABLE KEYS */;
-INSERT INTO `quotation_option` VALUES (2,1),(2,3),(6,6),(6,7),(14,4),(14,5),(15,9),(16,6),(17,11),(18,10),(18,11),(19,7);
-/*!40000 ALTER TABLE `quotation_option` ENABLE KEYS */;
+LOCK TABLES `option` WRITE;
+/*!40000 ALTER TABLE `option` DISABLE KEYS */;
+INSERT INTO `option` VALUES (1,1,'1.6 TURBO Engine','Motore 1.6 TURBO','in offerta'),(2,1,'Fog lights','Fendinebbia','normale'),(3,1,'Heated seats','Sedili riscaldati','normale'),(4,2,'Alloy rims','Cerchi in lega','normale'),(5,2,'Led lights','Luci a led','in offerta'),(6,3,'6-points seatbelts','Cinture a 6 punti','in offerta'),(7,3,'High-downforce rear wing','Ala posteriore ad alto carico','normale'),(8,4,'6-points seatbelts','Cinture 6 punti','in offerta'),(9,4,'Oversized-turbo','Turbo maggiorato','normale'),(10,5,'Gravel suspensions','Sospensioni da sterrato','normale'),(11,5,'Improved brake pads','Pastiglie freno migliorate','in offerta');
+/*!40000 ALTER TABLE `option` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -50,18 +53,11 @@ UNLOCK TABLES;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `no_unavailable_options` BEFORE INSERT ON `quotation_option` FOR EACH ROW BEGIN
-	if((
-			SELECT ProductId
-            FROM `quotation`
-            WHERE quotationId = new.quotationId
-		)
-        NOT IN
-        (
-			SELECT productId
-            FROM `option`
-            WHERE optionid = new.optionId
-        )) then signal sqlstate '45000' set message_text = "Option not valid!";
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `no_double_options` BEFORE INSERT ON `option` FOR EACH ROW BEGIN
+	if(EXISTS (SELECT name, productId
+		FROM `option` AS O
+        WHERE name=new.name AND productId=new.productId)
+		 ) then signal sqlstate '45000' set message_text = "Option still in the DB!";
 	end if; 
 END */;;
 DELIMITER ;
@@ -79,4 +75,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-06-07 17:53:07
+-- Dump completed on 2020-06-12 17:52:11
