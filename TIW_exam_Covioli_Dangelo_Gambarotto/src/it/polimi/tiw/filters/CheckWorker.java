@@ -47,7 +47,17 @@ public class CheckWorker implements Filter {
 		
 		try {
 			UserBean uBean = (UserBean) request.getSession(false).getAttribute("user");
-
+			System.out.println("checkWorker Filter log");
+			
+			//in casi molto particolari, si può avere in questo momento una sessione attiva, ma vuota.
+			// Per questo motivo, prima di controllare qualsiasi campo, controlliamo che l'utente sia salvato nella sessione attuale.
+			
+			if(uBean == null) {
+				response.setCharacterEncoding("UTF-8");
+				response.sendRedirect(req.getServletContext().getContextPath());
+				return;
+			}
+			
 			if (!uBean.getRole().equals("worker")) {
 				response.setCharacterEncoding("UTF-8");
 				switch (uBean.getRole()) {
