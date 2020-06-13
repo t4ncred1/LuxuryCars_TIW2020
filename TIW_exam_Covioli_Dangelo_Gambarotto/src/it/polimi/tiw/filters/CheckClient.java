@@ -43,6 +43,7 @@ public class CheckClient implements Filter {
 
 			if (!uBean.getRole().equals("client")) {
 				System.out.println("checkClient Filter log");
+				response.setCharacterEncoding("UTF-8");
 				switch (uBean.getRole()) {
 				case "worker":
 					response.sendRedirect(req.getServletContext().getContextPath() + "/HomeWorker");
@@ -57,6 +58,7 @@ public class CheckClient implements Filter {
 
 			if (!uDao.existsClient(uBean.getUsername())) {
 				System.out.println("checkClient Filter log");
+				response.setCharacterEncoding("UTF-8");
 				switch (uBean.getRole()) {
 				case "worker":
 					response.sendRedirect(req.getServletContext().getContextPath() + "/HomeWorker");
@@ -68,10 +70,14 @@ public class CheckClient implements Filter {
 			}
 			chain.doFilter(request, response);
 		} catch (SQLException e) {
+			response.setCharacterEncoding("UTF-8");
 			response.sendError(500, "Database access failed");
+			return;
 		} catch (IOException e) {
+			response.setCharacterEncoding("UTF-8");
 			response.sendError(555, "I/O Exception: Something wrong in filter chain");
 			e.printStackTrace();
+			return;
 		}
 	}
 

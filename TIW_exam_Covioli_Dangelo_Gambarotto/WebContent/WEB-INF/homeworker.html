@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <link rel="icon" type="image/png" th:href="${#servletContext.getInitParameter('favicon_path')}" />
-<meta charset="ISO-8859-1">
+<meta th:charset="UTF-8">
 <title th:text='#{title}'>Worker assignment to project</title>
 <link rel="stylesheet" type="text/css" media="all" href="../CSS/worker.css" th:href="@{/css/worker.css}" />
 </head>
@@ -13,7 +13,7 @@
 
 	<h1 th:text="#{welcome}">Bentornato</h1>
 
-	<h2 th:text="#{priced}">Preventivi già prezzati</h2>
+	<h2 th:text="#{priced}">Preventivi giÃ  prezzati</h2>
 	<div>
 		<table class="table">
 			<thead>

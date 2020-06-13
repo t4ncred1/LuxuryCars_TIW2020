@@ -48,6 +48,7 @@ public class ManageQuotation extends HttpServlet {
 		ServletContext servletContext = getServletContext();
 		ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
 		templateResolver.setTemplateMode(TemplateMode.HTML);
+		templateResolver.setCharacterEncoding("UTF-8");
 		this.templateEngine = new TemplateEngine();
 		this.templateEngine.setTemplateResolver(templateResolver);
 		this.templateEngine.setMessageResolver(new SharedPropertyMessageResolver(servletContext, "i18n", "managequotation"));
@@ -86,6 +87,7 @@ public class ManageQuotation extends HttpServlet {
 		} catch(NumberFormatException|NullPointerException e) {
 			//error handling: non è stato passato un id o 
 			// l'id passato non è un numero
+			response.setCharacterEncoding("UTF-8");
 			response.sendError(422, "The passed ID is not a number");
 			e.printStackTrace();
 			return;
@@ -96,10 +98,12 @@ public class ManageQuotation extends HttpServlet {
 					.map(id -> id.getQuotationId())
 					.collect(Collectors.toList());
 			if(!freeIDs.contains(qID)) {
+				response.setCharacterEncoding("UTF-8");
 				response.sendError(422, "The passed ID is not in the list of free IDs");
 				return;
 			}
 		} catch (SQLException e) {
+			response.setCharacterEncoding("UTF-8");
 			response.sendError(503, "The database in not currently working.");
 			return;
 		}
@@ -134,11 +138,14 @@ public class ManageQuotation extends HttpServlet {
 		} catch (SQLException e) {
 			// TODO error handling: SQLException
 //			e.printStackTrace();
+			response.setCharacterEncoding("UTF-8");
 			response.sendError(503, "The database in not currently working.");
 			return;
 		}
 		String path = "/WEB-INF/managequotation.html";
+		response.setCharacterEncoding("UTF-8");
 		templateEngine.process(path, ctx, response.getWriter());
+		return;
 		//DONE check if the user is logged in (supposedly done via filter)
 	}
 
@@ -166,6 +173,7 @@ public class ManageQuotation extends HttpServlet {
 				qID = Integer.parseInt(request.getParameter("quotation"));
 			else throw new NullPointerException();
 		} catch(NumberFormatException|NullPointerException e) {
+			response.setCharacterEncoding("UTF-8");
 			response.sendError(422, "The passed id is not a valid number.");
 			e.printStackTrace();
 			return;
@@ -179,6 +187,7 @@ public class ManageQuotation extends HttpServlet {
 		} catch(NumberFormatException|NullPointerException e) {
 			Cookie error = new Cookie("priceerror","true");
 			response.addCookie(error);
+			response.setCharacterEncoding("UTF-8");
 			response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/ManageQuotation?quotation="+qID));
 			return;
 		}
@@ -189,12 +198,14 @@ public class ManageQuotation extends HttpServlet {
 					.map(id -> id.getQuotationId())
 					.collect(Collectors.toList());
 			if(!freeIDs.contains(qID)) {
+				response.setCharacterEncoding("UTF-8");
 				response.sendError(422, "The passed ID is not in the list of free IDs");
 				return;
 			}
 		} catch (SQLException e) {
 			// TODO error handling: SQLException
 			e.printStackTrace();
+			response.setCharacterEncoding("UTF-8");
 			response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE, "Database Not Working.");
 			return;
 			
@@ -205,6 +216,7 @@ public class ManageQuotation extends HttpServlet {
 			System.out.println("error while checking the sign of the element " + Double.parseDouble(request.getParameter("price")));
 			Cookie error = new Cookie("pricesignerror","true");
 			response.addCookie(error);
+			response.setCharacterEncoding("UTF-8");
 			response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/ManageQuotation?quotation="+qID));
 			return;
 		}
@@ -214,6 +226,7 @@ public class ManageQuotation extends HttpServlet {
 			System.out.println("error while checking the scale of the element " + Double.parseDouble(request.getParameter("price")));
 			Cookie error = new Cookie("priceerror","true");
 			response.addCookie(error);
+			response.setCharacterEncoding("UTF-8");
 			response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath() + "/ManageQuotation?quotation="+qID));
 			return;
 		}
@@ -224,12 +237,15 @@ public class ManageQuotation extends HttpServlet {
 		try {
 			qDAO.setQuotationPrice(qID, intPrice, u.getUserid());
 		} catch (SQLException e) {
+			response.setCharacterEncoding("UTF-8");
 			response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE, "The database is currently not working.");
 			e.printStackTrace();
 			return;
 			
 		}
+		response.setCharacterEncoding("UTF-8");
 		response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath()+"/HomeWorker"));
+		return;
 	}
 	
 	public void destroy() {

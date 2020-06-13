@@ -53,14 +53,6 @@ public class SubmitRequest extends HttpServlet {
 			throw new UnavailableException("Couldn't get db connection");
 		}
 	}
-    
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
@@ -83,6 +75,7 @@ public class SubmitRequest extends HttpServlet {
 			if(selectedOptions==null) {
 				Cookie success = new Cookie("success","false");
 				response.addCookie(success);
+				response.setCharacterEncoding("UTF-8");
 				response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath()+"/HomeClient"));
 				return;
 			}
@@ -93,6 +86,7 @@ public class SubmitRequest extends HttpServlet {
 			if(options.size()==0) {
 				Cookie success = new Cookie("success","false");
 				response.addCookie(success);
+				response.setCharacterEncoding("UTF-8");
 				response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath()+"/HomeClient"));
 				return;
 			}
@@ -104,6 +98,7 @@ public class SubmitRequest extends HttpServlet {
 		}
 		Cookie success = new Cookie("success","true");
 		response.addCookie(success);
+		response.setCharacterEncoding("UTF-8");
 		response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath()+"/HomeClient"));
 		return;
 		

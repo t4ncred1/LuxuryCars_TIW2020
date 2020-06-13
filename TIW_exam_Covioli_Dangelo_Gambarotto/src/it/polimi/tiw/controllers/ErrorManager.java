@@ -90,7 +90,9 @@ public class ErrorManager extends HttpServlet {
 		
 		
 		String path = "/WEB-INF/error.html";
+		response.setCharacterEncoding("UTF-8");
 		templateEngine.process(path, ctx, response.getWriter());
+		return;
 	}
 	
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		      

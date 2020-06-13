@@ -44,12 +44,12 @@ public class CheckWorker implements Filter {
 			throws ServletException, IOException {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
-
+		
 		try {
 			UserBean uBean = (UserBean) request.getSession(false).getAttribute("user");
 
 			if (!uBean.getRole().equals("worker")) {
-				System.out.println("checkWorker Filter log");
+				response.setCharacterEncoding("UTF-8");
 				switch (uBean.getRole()) {
 				case "client":
 					response.sendRedirect(req.getServletContext().getContextPath() + "/HomeClient");
@@ -64,6 +64,7 @@ public class CheckWorker implements Filter {
 
 			if (!uDao.existsWorker(uBean.getUsername())) {
 				System.out.println("checkWorker Filter log");
+				response.setCharacterEncoding("UTF-8");
 				switch (uBean.getRole()) {
 				case "client":
 					response.sendRedirect(req.getServletContext().getContextPath() + "/HomeClient");
@@ -75,10 +76,17 @@ public class CheckWorker implements Filter {
 			}
 			chain.doFilter(request, response);
 		} catch (SQLException e) {
+			response.setCharacterEncoding("UTF-8");
 			response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE, "Database access failed");
 			e.printStackTrace();
 			return;
 		} catch (IOException e) {
+			response.setCharacterEncoding("UTF-8");
+			response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE, "I/O Exception: Something wrong in filter chain");
+			e.printStackTrace();
+			return;
+		} catch (NullPointerException e) {
+			response.setCharacterEncoding("UTF-8");
 			response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE, "I/O Exception: Something wrong in filter chain");
 			e.printStackTrace();
 			return;

@@ -46,6 +46,7 @@ public class HomeClient extends HttpServlet {
 		ServletContext servletContext = getServletContext();
 		ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
 		templateResolver.setTemplateMode(TemplateMode.HTML);
+		templateResolver.setCharacterEncoding("UTF-8");
 		this.templateEngine = new TemplateEngine();
 		this.templateEngine.setTemplateResolver(templateResolver);
 		this.templateEngine.setMessageResolver(new SharedPropertyMessageResolver(servletContext, "i18n", "homeclient"));
@@ -83,7 +84,9 @@ public class HomeClient extends HttpServlet {
 			clientQuotations = qDAO.getClientQuotations(u.getUserid(), language);
 		} catch (SQLException e1) {
 			e1.printStackTrace();
+			response.setCharacterEncoding("UTF-8");
 			response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE,"The database encountered an error.");
+			return;
 		}
 		
 		String prod = request.getParameter("product");
@@ -125,10 +128,12 @@ public class HomeClient extends HttpServlet {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			response.setCharacterEncoding("UTF-8");
 			response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE, "The database encountered an error.");
 			return;
 		}
 		String path = "/WEB-INF/homeclient.html";
+		response.setCharacterEncoding("UTF-8");
 		templateEngine.process(path, ctx, response.getWriter());
 	}
 

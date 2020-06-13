@@ -37,6 +37,7 @@ public class Registration extends HttpServlet {
 		ServletContext servletContext = getServletContext();
 		ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
 		templateResolver.setTemplateMode(TemplateMode.HTML);
+		templateResolver.setCharacterEncoding("UTF-8");
 		this.templateEngine = new TemplateEngine();
 		this.templateEngine.setTemplateResolver(templateResolver);
 		this.templateEngine
@@ -96,10 +97,12 @@ public class Registration extends HttpServlet {
 		}
 		try {
 			String path = "/WEB-INF/registration.html";
+			response.setCharacterEncoding("UTF-8");
 			templateEngine.process(path, ctx, response.getWriter());
 		} catch (IOException e) {
 			response.sendError(555, "I/O Exception: cannot load response.getWriter()");
 		}
+		return;
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -118,30 +121,35 @@ public class Registration extends HttpServlet {
 			if (firstName == "" || lastName == "" || username == "" || password1 == "" || password2 == "" || role == "" || mail == "") {
 				Cookie error = new Cookie("registrationError", "emptyField");
 				response.addCookie(error);
+				response.setCharacterEncoding("UTF-8");
 				response.sendRedirect(getServletContext().getContextPath() + "/Registration");
 				return;
 			}
 			if (uDao.existsUser(username)) {
 				Cookie error = new Cookie("registrationError", "usedUsername");
 				response.addCookie(error);
+				response.setCharacterEncoding("UTF-8");
 				response.sendRedirect(getServletContext().getContextPath() + "/Registration");
 				return;
 			}
 			if (!role.equals("client") && !role.equals("worker")) {
 				Cookie error = new Cookie("registrationError", "wrongRole");
 				response.addCookie(error);
+				response.setCharacterEncoding("UTF-8");
 				response.sendRedirect(getServletContext().getContextPath() + "/Registration");
 				return;
 			}
 			if(!password1.equals(password2)) {
 				Cookie error = new Cookie("registrationError", "wrongPassword");
 				response.addCookie(error);
+				response.setCharacterEncoding("UTF-8");
 				response.sendRedirect(getServletContext().getContextPath() + "/Registration");
 				return;
 			}
 			if(!RegexpChecker.checkExpression(RegexpChecker.EMAIL, mail)) {
 				Cookie error = new Cookie("registrationError", "wrongEmail");
 				response.addCookie(error);
+				response.setCharacterEncoding("UTF-8");
 				response.sendRedirect(getServletContext().getContextPath() + "/Registration");
 				return;
 			}
@@ -149,13 +157,18 @@ public class Registration extends HttpServlet {
 			uDao.registerUser(username, password1, firstName, lastName, role, mail);
 			Cookie success = new Cookie("registrationError", "success");
 			response.addCookie(success);
+			response.setCharacterEncoding("UTF-8");
 			response.sendRedirect(getServletContext().getContextPath() + "/Registration");
 			return;
 		} catch (SQLException e) {
+			response.setCharacterEncoding("UTF-8");
 			response.sendError(500, "Database access failed");
 			e.printStackTrace();
+			return;
 		} catch (IOException e) {
+			response.setCharacterEncoding("UTF-8");
 			response.sendError(555, "I/O Exception: cannot load response.getWriter()");
+			return;
 		}
 	}
 

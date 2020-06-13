@@ -26,17 +26,19 @@ public class CheckSessionTime implements Filter {
 			throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
+		System.out.println("checkSessionTime Filter log");
 		try {
 			if (request.getSession(false) == null) {
-				System.out.println("checkSessionTime Filter log");
+				response.setCharacterEncoding("UTF-8");
 				response.sendRedirect(req.getServletContext().getContextPath());
 				return;
 			}
 
 			chain.doFilter(request, response);
 		} catch (IOException e) {
+			response.setCharacterEncoding("UTF-8");
 			response.sendError(555, "I/O Exception: Something wrong in filter chain");
-
+			return;
 		}
 	}
 

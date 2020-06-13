@@ -28,6 +28,7 @@ public class Logout extends HttpServlet {
 		ServletContext servletContext = getServletContext();
 		ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
 		templateResolver.setTemplateMode(TemplateMode.HTML);
+		templateResolver.setCharacterEncoding("UTF-8");
 		this.templateEngine = new TemplateEngine();
 		this.templateEngine.setTemplateResolver(templateResolver);
 //		this.templateEngine.setMessageResolver(new SharedPropertyMessageResolver(servletContext, "i18n", "logout"));
@@ -37,11 +38,14 @@ public class Logout extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		response.setCharacterEncoding("UTF-8");
 		try {
 			request.getSession(false).invalidate();
 			response.sendRedirect(getServletContext().getContextPath());
+			return;
 		} catch (IOException e) {
 			response.sendError(555, "Something wrong in redirecting from logout");
+			return;
 
 		}
 	}

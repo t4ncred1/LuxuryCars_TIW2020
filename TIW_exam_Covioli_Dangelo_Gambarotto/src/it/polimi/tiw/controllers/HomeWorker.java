@@ -42,6 +42,7 @@ public class HomeWorker extends HttpServlet {
 		ServletContext servletContext = getServletContext();
 		ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
 		templateResolver.setTemplateMode(TemplateMode.HTML);
+		templateResolver.setCharacterEncoding("UTF-8");
 		this.templateEngine = new TemplateEngine();
 		this.templateEngine.setTemplateResolver(templateResolver);
 		this.templateEngine.setMessageResolver(new SharedPropertyMessageResolver(servletContext, "i18n", "homeworker"));
@@ -84,10 +85,12 @@ public class HomeWorker extends HttpServlet {
 			ctx.setVariable("name", u.getName());
 		} catch (SQLException e) {
 			e.printStackTrace();
+			response.setCharacterEncoding("UTF-8");
 			response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE, "Database access failed");
 			return;
 		}
 		String path = "/WEB-INF/homeworker.html";
+		response.setCharacterEncoding("UTF-8");
 		templateEngine.process(path, ctx, response.getWriter());
 	}
 

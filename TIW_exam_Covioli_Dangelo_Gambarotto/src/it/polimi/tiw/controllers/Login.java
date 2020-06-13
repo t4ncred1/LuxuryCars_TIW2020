@@ -62,18 +62,23 @@ public class Login extends HttpServlet {
 		} catch (SQLException e) {
 			// throw new ServletException(e);
 			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Failure in database credential checking");
+			return;
 		}
 		String path = getServletContext().getContextPath();
 		if (u == null) {
 			Cookie error = new Cookie("userpasserror", "true");
 			response.addCookie(error);
+			response.setCharacterEncoding("UTF-8");
 			response.sendRedirect(path+"/Index");
+			return;
 		} else {
 			request.getSession().setAttribute("user", u);
 //			request.getSession(false).setMaxInactiveInterval(15);								TODO
 			String target = (u.getRole().equals("worker")) ? "/HomeWorker" : "/HomeClient";
 			path = path + target;
+			response.setCharacterEncoding("UTF-8");
 			response.sendRedirect(path);
+			return;
 		}
 		/*
 		 * This servlet does not send back a webpage but redirect the user
