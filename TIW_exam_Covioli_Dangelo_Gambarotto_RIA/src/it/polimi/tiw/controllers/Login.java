@@ -83,8 +83,8 @@ public class Login extends HttpServlet {
 			personal.addAttribute("name", user.getName());
 			personal.addAttribute("role", user.getRole());
 			if(user.getRole().equals("worker"))
-				personal.addAttribute("page", "homeworker.html");
-			else personal.addAttribute("page", "homeclient.html");
+				personal.addAttribute("page", "Worker");
+			else personal.addAttribute("page", "Client");
 			String json = personal.getJsonString();
 			System.out.println(json);
 			response.getWriter().write(json);
