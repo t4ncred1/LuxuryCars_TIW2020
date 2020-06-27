@@ -49,15 +49,6 @@
 	 <url-pattern>/HomeWorker</url-pattern>
 	 <url-pattern>/ManageQuotation</url-pattern>
 	</filter-mapping>
-	
-	<!-- Error Pages -->
-	<error-page>
-	 	<location>/Error</location>
-	</error-page>
-	<error-page>
-	   <exception-type>java.lang.Throwable</exception-type >
-	   <location>/Error</location>
-	</error-page>
 		
 	<!-- Other Settings -->
 	<session-config>
