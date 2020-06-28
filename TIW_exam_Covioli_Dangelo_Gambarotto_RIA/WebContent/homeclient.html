@@ -2,8 +2,10 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Worker assignment to project</title>
+<title>LuxuryCars - client page</title>
 <link rel="stylesheet" type="text/css" media="all" href="./css/client.css"/>
+<script src="utils.js" charset="utf-8" defer></script>
+<script src="clientManagement.js" charset="utf-8" defer></script>
 </head>
 <body class="clientpage">
 
@@ -18,7 +20,7 @@
 	<br>
 	<div id="errorbox" class="error">
 		<button id="xbutton" class="close close_banner">X</button>
-		<span id="text">Errore generico</span>
+		<span id="errortext">Errore generico</span>
 	</div>
 
 	
@@ -27,9 +29,11 @@
 
 
 	<!-- Requests table -->
-	<h2>Le tue richieste</h2>
-	<div>
-		<table id="requests_table" class="table">
+	
+	<span id="norequests" class="">Richiedi il tuo primo preventivo!</span>
+	<div id="requests" class="invisible">
+		<h2>Le tue richieste</h2>
+		<table id="requestsTable" class="table">
 			<thead>
 				<tr>
 					<th>ID</th>
@@ -38,7 +42,7 @@
 					<th>Prezzo</th>
 				</tr>
 			</thead>
-			<tbody>
+			<tbody id="requestsTableBody">
 				<tr>
 					<td>1</td>
 					<td>Toyota Aygo</td>
@@ -61,8 +65,8 @@
 		</table>
 	</div>
 
-
-	<!-- Available products -->
+	
+	<!--
 	<h2>Prodotti disponibili</h2>
 	<div id="imageslist">
 		<a>
@@ -144,6 +148,7 @@
 					</form>
 		</div>
 	</div>
+	-->
 	
 </body>
 </html>
