@@ -1,6 +1,6 @@
 (function() {
 
-    var errorBox, reqTable, pageOrchestrator = new PageOrchestrator();
+    var errorBox, reqTable, carForm, pageOrchestrator = new PageOrchestrator();
 
     window.addEventListener("load", () => {
         pageOrchestrator.start();
@@ -53,13 +53,13 @@
 		this.norequestsBox = _norequests;
 		
 		this.show = function(orchestrator){
-			self = this;
+			selfTable = this;
 	        makeCall("GET", "GetClientRequests", null,
 	          function(req) {
 	            if (req.readyState == 4) {
 	              var message = req.responseText;
 	              if (req.status == 200) {
-	                self.update(JSON.parse(req.responseText)); 
+	                selfTable.update(JSON.parse(req.responseText)); 
 	              } else {
 	                orchestrator.setError(message);
 	              }
@@ -118,6 +118,76 @@
 		}
 	}
 	
+	/*
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 */
+	
+	function RequestForm(_productsList){
+		this.productsList = _productsList;
+		
+		this.show = function(orchestrator){
+			selfForm = this;
+	        makeCall("GET", "GetAvailableProducts", null,
+	          function(req) {
+	            if (req.readyState == 4) {
+	              var message = req.responseText;
+	              if (req.status == 200) {
+	                selfForm.updateProds(JSON.parse(req.responseText)); 
+	              } else {
+	                orchestrator.setError(message);
+	              }
+	            }
+	          }
+	        );
+		}
+		
+		this.updateProds = function(prodArray){
+			console.log(prodArray.length);
+			var qId, pName, qDate, qPrice;
+			this.productsList.innerHTML = "";
+			var self = this;
+			prodArray.forEach(function(product) {
+				// MAIN DIV
+				pButton = document.createElement("div");
+				// FORM RADIO INPUT
+				carInput = document.createElement("input");
+				carInput.setAttribute("type", "radio");
+				carInput.setAttribute("name", "car");
+				carInput.setAttribute("value", product.id);
+				carInput.setAttribute("id", product.id);
+				pButton.appendChild(carInput);
+				// FORM LABEL
+				carLabel = document.createElement("label");
+				carLabel.setAttribute("for", product.id);
+				carThumb = document.createElement("img");
+				carThumb.setAttribute("src", "ProductImage?product=" + product.id + "&thumbnail=true");
+				carThumb.setAttribute("width", "200");
+				carLabel.appendChild(carThumb);
+				pButton.appendChild(carLabel);
+				pButton.appendChild(document.createElement("br"));
+				//CAR NAME;
+				carName = document.createElement("span");
+				carName.textContent = product.name;
+				pButton.appendChild(carName);
+				self.productsList.appendChild(pButton);
+	      });
+		}
+		
+	}
+	
+	/*
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 */
 	
     function PageOrchestrator(){
 
@@ -135,6 +205,7 @@
 													document.getElementById("requests"),
 													document.getElementById("norequests")
 												);
+					carForm = new RequestForm(document.getElementById("imageslist"));
         	}
         	else window.location.href = "index.html";
         };
@@ -143,6 +214,7 @@
         	errorBox.hide();
         	namefield.show();        	
         	reqTable.show(this);
+        	carForm.show(this);
         };
         
         this.showError = function(message){

@@ -10,7 +10,7 @@
     right: 7px;
 }
 
-#imageslist a{
+#imageslist div{
 	color : white;
 	text-align : center;
 	margin : 6px;
@@ -26,6 +26,15 @@
 #imageslist img:hover{
 	transform : scale(1.09);
 	cursor:pointer;
+}
+
+input[type="radio"] {
+    display: none;
+}
+
+input[type=radio]:checked + label > img{
+    border : 4px solid #e6b800;
+    width : 187px;
 }
 
 .carSelection {
