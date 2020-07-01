@@ -37,6 +37,10 @@
 	  <filter-name>CheckWorker</filter-name>
 	  <filter-class>it.polimi.tiw.filters.CheckWorker</filter-class>
  	</filter>
+ 	<filter>
+		<filter-name>CharsetFilter</filter-name>
+		<filter-class>it.polimi.tiw.filters.CharsetFilter</filter-class>	
+	</filter>
 	<filter-mapping>
 	 <filter-name>CheckSessionTime</filter-name>
 	 <url-pattern>/HomeClient</url-pattern>
@@ -48,6 +52,10 @@
 	 <filter-name>CheckWorker</filter-name>
 	 <url-pattern>/HomeWorker</url-pattern>
 	 <url-pattern>/ManageQuotation</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>CharsetFilter</filter-name>
+		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 		
 	<!-- Other Settings -->
