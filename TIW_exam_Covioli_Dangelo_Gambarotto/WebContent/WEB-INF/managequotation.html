@@ -60,7 +60,7 @@
 			<br th:if="${priceerror == true}">
 			<p th:if="${pricesignerror == true}" class="error-paragraph" th:text="#{pricesignerror}" />
 			<br th:if="${pricesignerror == true}">
-			<input id="price" class="field" type="hidden" name="quotation" th:value="${quotation.quotationId}" />
+			<input id="quotation" class="field" type="hidden" name="quotation" th:value="${quotation.quotationId}" />
 			<input id="submitprice" type="submit" class="submit button" th:value="#{submit}" />
 		</form>	
 	</div>
