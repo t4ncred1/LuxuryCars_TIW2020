@@ -127,8 +127,10 @@
 	 * 
 	 */
 	
-	function RequestForm(_productsList){
+	function RequestForm(_productsList, _optionsSelection){
 		this.productsList = _productsList;
+		this.optionSelection = _optionsSelection;
+		this.products;
 		
 		this.show = function(orchestrator){
 			selfForm = this;
@@ -137,7 +139,8 @@
 	            if (req.readyState == 4) {
 	              var message = req.responseText;
 	              if (req.status == 200) {
-	                selfForm.updateProds(JSON.parse(req.responseText)); 
+	            	selfForm.products = JSON.parse(req.responseText);
+	                selfForm.updateProds(selfForm.products); 
 	              } else {
 	                orchestrator.setError(message);
 	              }
@@ -160,6 +163,9 @@
 				carInput.setAttribute("name", "car");
 				carInput.setAttribute("value", product.id);
 				carInput.setAttribute("id", product.id);
+				carInput.addEventListener('click', (e) => {
+					self.showDetails(product.id);
+				});	
 				pButton.appendChild(carInput);
 				// FORM LABEL
 				carLabel = document.createElement("label");
@@ -175,7 +181,68 @@
 				carName.textContent = product.name;
 				pButton.appendChild(carName);
 				self.productsList.appendChild(pButton);
+				self.optionSelection.mainBox.setAttribute("class", "invisible");
 	      });
+		}
+		
+		this.showDetails = function(id){
+			selfDet = this;
+			this.products.forEach(function(product){
+				if(product.id==id){
+					selfDet.optionSelection.prodId.setAttribute("value", product.id);
+					selfDet.optionSelection.mainBox.setAttribute("class", "carSelection");
+					selfDet.optionSelection.carName.textContent = product.name;
+					selfDet.optionSelection.carImage.setAttribute("src", "ProductImage?product=" + id);
+					selfDet.optionSelection.options.innerHTML = "";
+					product.options.forEach(function(option){
+						opt = document.createElement("div");
+						input = document.createElement("input");
+						input.setAttribute("type", "checkbox");
+						input.setAttribute("id", option.id);
+						input.setAttribute("name", "options");
+						input.setAttribute("value", option.id);
+						opt.appendChild(input);
+						text = document.createElement("label");
+						text.setAttribute("for", option.id);
+						text.textContent = option.name;
+						if(option.inOffer==true){
+							text.textContent = text.textContent + " (OFFERTA SPECIALE!)"
+						}
+						opt.appendChild(text);
+						selfDet.optionSelection.options.appendChild(opt);
+					});
+				}
+			})
+		}
+		
+		
+		this.registerEvents = function(orchestrator){
+			this.optionSelection.submitButton.addEventListener('click', (e) => {
+				var form = event.target.closest("form");
+				var opts = form.querySelectorAll("input[type='checkbox']");
+				var numSel = 0;
+				opts.forEach(function(o){
+					if(o.checked==true) numSel++;
+				})
+				if(numSel < 1) orchestrator.showError("Seleziona almeno una opzione!");
+				else{
+					// makecall passando il form
+					makeCall("POST", 'SubmitRequest', form,
+					          function(req) {
+					            if (req.readyState == 4) {
+						          var message = req.responseText;
+					              if (req.status == 200) {
+					                orchestrator.refresh();
+					                orchestrator.showSuccess("Richiesta inviata correttamente");
+					              } else {
+					                orchestrator.showError(message);
+					              }
+					            }
+					          }
+					        );
+					
+				}
+			});
 		}
 		
 	}
@@ -205,7 +272,17 @@
 													document.getElementById("requests"),
 													document.getElementById("norequests")
 												);
-					carForm = new RequestForm(document.getElementById("imageslist"));
+					carForm = new RequestForm(document.getElementById("imageslist"),
+												{
+													mainBox : document.getElementById("optionSelection"),
+													carImage : document.getElementById("bigImage"),
+													carName : document.getElementById("prodName"),
+													options : document.getElementById("options"),
+													prodId : document.getElementById("productId"),
+													submitButton : document.getElementById("submitRequest")
+												}
+												);
+					carForm.registerEvents(this);
         	}
         	else window.location.href = "index.html";
         };
@@ -218,11 +295,13 @@
         };
         
         this.showError = function(message){
-        	this.errorBox.setError(message);
+        	errorBox.setError(message);
+        	window.scrollTo(0,0);
         }
         
         this.showSuccess = function(message){
-        	this.errorBox.setSuccess(message);
+        	errorBox.setSuccess(message);
+        	window.scrollTo(0,0);
         }
 
     }

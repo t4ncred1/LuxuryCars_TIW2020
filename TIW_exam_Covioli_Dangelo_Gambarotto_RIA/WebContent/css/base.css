@@ -124,6 +124,7 @@ a:link, a:visited{
 
 .invisible{
 	visibility : hidden;
+	display : none;
 }
 
 .button{

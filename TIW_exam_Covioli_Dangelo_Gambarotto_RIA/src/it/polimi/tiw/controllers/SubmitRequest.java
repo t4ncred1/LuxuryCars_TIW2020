@@ -10,8 +10,8 @@ import java.util.List;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,6 +26,7 @@ import it.polimi.tiw.beans.UserBean;
  * Servlet implementation class SubmitQuotation
  */
 @WebServlet("/SubmitRequest")
+@MultipartConfig
 public class SubmitRequest extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	Connection connection;
@@ -70,7 +71,7 @@ public class SubmitRequest extends HttpServlet {
 		UserBean u = null;
 		HttpSession s = request.getSession(false);
 		u = (UserBean) s.getAttribute("user");
-		
+
 		int productId = Integer.parseInt(request.getParameter("productId"));
 		
 		ProductDAO pDAO = new ProductDAO(connection);
@@ -81,9 +82,8 @@ public class SubmitRequest extends HttpServlet {
 			List<Integer> options = new ArrayList<>();
 			String[] selectedOptions = request.getParameterValues("options");
 			if(selectedOptions==null) {
-				Cookie success = new Cookie("success","false");
-				response.addCookie(success);
-				response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath()+"/HomeClient"));
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.getWriter().println("Seleziona almeno una opzione");
 				return;
 			}
 			for(String o : selectedOptions) {
@@ -91,20 +91,18 @@ public class SubmitRequest extends HttpServlet {
 				if(product.isAValidOption(oId)) options.add(oId);
 			}
 			if(options.size()==0) {
-				Cookie success = new Cookie("success","false");
-				response.addCookie(success);
-				response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath()+"/HomeClient"));
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.getWriter().println("Seleziona almeno una opzione");
 				return;
 			}
 			qDAO.addQuotation(u.getUserid(), productId, options);
 		} catch (SQLException e) {
-			e.printStackTrace();
-			response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE, "The database encountered an error.");
+			response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+			response.getWriter().println("Errore del server");
 			return;
 		}
-		Cookie success = new Cookie("success","true");
-		response.addCookie(success);
-		response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath()+"/HomeClient"));
+		response.setStatus(HttpServletResponse.SC_OK);
+		response.getWriter().println("Richiesta inserita correttamente");
 		return;
 		
 

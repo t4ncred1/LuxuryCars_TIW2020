@@ -70,4 +70,9 @@ input[type=radio]:checked + label > img{
 .right {
 	margin-top : 100px;
 	display : inline-block;
+	font-size : 14pt;
+}
+
+.noborder{
+	border : none;
 }
