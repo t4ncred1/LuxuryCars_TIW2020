@@ -10,8 +10,8 @@
 
   window.addEventListener("load", () => {
       pageOrchestrator.start(); // initialize the components
-      pageOrchestrator.refresh();
-      pageOrchestrator.show();
+      pageOrchestrator.refresh(); //reset the components to empty and invisible
+      pageOrchestrator.show();	//show the interested components
   }, false);
 
   function ErrorBox(_errorbox, _xbutton, _errormessage){
@@ -20,15 +20,15 @@
 		this.errormessage = _errormessage;
 		
 		this.hide = function(){
-			this.errorbox.setAttribute("class", "invisible");
+			this.errorbox.classList.add("invisible");
 		}
 		
 		this.setError = function(message){
 			self = this;
-			this.errorbox.setAttribute("class", "error")
+			this.errorbox.setAttribute("class", "error");
 			this.errormessage.textContent = message;
 			this.xbutton.addEventListener('click', (e) => {
-				self.errorbox.setAttribute("class", "invisible");
+				self.errorbox.classList.add("invisible");
 				self.errormessage.textContent="";
 			});	
 		}
@@ -38,7 +38,7 @@
 			this.errorbox.setAttribute("class", "success");
 			this.errormessage.textContent = message;
 			this.xbutton.addEventListener('click', (e) => {
-				self.errorbox.setAttribute("class", "invisible");
+				self.errorbox.classList.add("invisible");
 				self.errormessage.textContent="";
 			});	
 		}
@@ -59,10 +59,10 @@
 	  var error = _div_tabella.getElementsByClassName("error")[0];
 	  
 	  this.reset = function(){
-		  tabella.setAttribute("class","table invisible");
-		  error.setAttribute("class","error invisible");
+		  tabella.classList.add("invisible");
+		  error.classList.add("invisible");
 		  body.innerHTML = ""; //empty the body of the table.
-		  _div_tabella.setAttribute("class","invisible");
+		  _div_tabella.classList.add("invisible");
 	  };
 	  this.show = function(){
 		  var self=this;
@@ -77,19 +77,19 @@
 					  break;
 				  case 503:
 					  error.textContent = message;
-					  error.setAttribute("class","error");
+					  error.classList.remove("invisible");
 					  break;
 				  case 411:
 					  
 				  default:
 					  error.textContent = 
 						  "È avvenuto un errore (Servlet non disponibile)";
-				  	  error.setAttribute("class","error");
+				  	  error.classList.remove("invisible");
 				  }
 			  }
 		  }
 		  );
-		  _div_tabella.setAttribute("class","");
+		  _div_tabella.classList.remove("invisible");;
 	  };
 
 	  this.update = function(quotation_array){
@@ -98,7 +98,7 @@
 		  if(quotation_array.length == 0){
 			  error.textContent = 
 				  "Non è stata fatta ancora alcuna quotazione.";
-			  error.setAttribute("class","error");
+			  error.classList.remove("invisible");;
 		  }
 		  else{
 			  quotation_array.forEach(item => {
@@ -116,7 +116,7 @@
 				  	v4cell.textContent = item.value + " €";
 				  	row.appendChild(v4cell);
 				  	body.appendChild(row);
-				  	tabella.setAttribute("class","table");
+				  	tabella.classList.remove("invisible");
 				  }  	
 			  )
 		  }
@@ -131,10 +131,10 @@
 	  
 	  
 	  this.reset = function(){
-		  tabella.setAttribute("class","table invisible");
-		  error.setAttribute("class","error invisible");
+		  tabella.classList.add("invisible");;
+		  error.classList.add("invisible");;
 		  body.innerHTML = ""; //empty the body of the table.
-		  _div_tabella.setAttribute("class","invisible");
+		  _div_tabella.classList.add("invisible");;
 	  };
 	  
 	  this.show = function(){
@@ -150,17 +150,17 @@
 					  break;
 				  case 503:
 					  error.textContent = message;
-					  error.setAttribute("class","error");
+					  error.classList.remove("invisible");
 					  break;
 				  default:
 					  error.textContent = 
 						  "È avvenuto un errore (Servlet non disponibile)";
-				  	  error.setAttribute("class","error");
+				  	  error.classList.remove("invisible");
 				  }
 			  }
 		  }
 		  );
-		  _div_tabella.setAttribute("class","");
+		  _div_tabella.classList.remove("invisible");
 	  };
 	  
 	  this.update = function(free_array){
@@ -168,7 +168,7 @@
 		  if(free_array.length == 0){
 			  error.textContent = 
 				  "Non ci sono quotazioni libere.";
-		  	  error.setAttribute("class","error");
+		  	  error.classList.remove("invisible");
 		  }
 		  else{
 			  free_array.forEach(item => {
@@ -199,7 +199,7 @@
 				  	body.appendChild(row);
 				  } 
 			  )
-			  tabella.setAttribute("class","table");
+			  tabella.classList.remove("invisible");
 			  
 		  }
 	  };
@@ -215,15 +215,16 @@
 		  self = this;
 		  optiontablebody.innerHTML = ""; //empty the body of the table.
 		  if(item.options.length == 0){
-		  		optiontable.setAttribute("class","workertable table hidden");
-		  		optionerror.textContent="Non sono disponibili opzioni per questo prodotto."
-		  		optionerror.setAttribute("class","error");
+		  		optiontable.classList.add("invisible");
+		  		optionerror.textContent="Non sono disponibili opzioni " +
+		  								"per questo prodotto."
+		  		optionerror.classList.remove("invisible");
 		  }
 		  else{
-			optiontable.setAttribute("class","workertable table");
+			optiontable.classList.remove("invisible");
 	  		self.update(item);
 	  	  }
-		  _optionTab.setAttribute("class","");
+		  _optionTab.classList.remove("invisible");
 	  }
 	  this.update = function(item){
 		  item.options.forEach(option =>{
@@ -238,8 +239,8 @@
 		  });
 	  }
 	  this.reset = function(){
-		  _optionTab.setAttribute("class","hidden");
-		  optionerror.setAttribute("class","error invisible");
+		  _optionTab.classList.add("invisible");
+		  optionerror.classList.add("invisible");
 	  }
   
   }
@@ -251,14 +252,14 @@
 	  var priceerror = document.getElementById("priceerror");
 	  
 	  this.reset = function(){
-		  _div_price.setAttribute("class","box invisible");
-		  priceerror.setAttribute("class","error-paragraph invisible");
+		  _div_price.classList.add("invisible");
+		  priceerror.classList.add("invisible");
 		  inputQuotation.setAttribute("value","default");
 	  }
 	  
 	  this.show = function(item){
 		  self = this;
-		  _div_price.setAttribute("class","box");
+		  _div_price.classList.remove("invisible");
 		  self.update(item);
 	  }
 	  
@@ -271,21 +272,23 @@
 		  inputButton = inputButton_new;
 		  
 		  inputButton.addEventListener('click', (e) => {
-			  priceerror.setAttribute("class","error-paragraph invisible");
+			  priceerror.classList.add("invisible");
 			  
 			  var price = inputPrice.value;
 			  var form = e.target.closest("form");
 			  if(form.checkValidity()){
 				  if (price <= 0){
-					  var errormessage="Il prezzo inserito deve essere maggiore di 0";
+					  var errormessage="Il prezzo inserito deve essere " +
+					  					"maggiore di 0";
 					  priceerror.textContent = errormessage;
-					  priceerror.setAttribute("class","error-paragraph");
+					  priceerror.classList.remove("invisible");
 				  }
 				  else if (price.toString().indexOf('.') != -1 
 					  && price.toString().split('.')[1].length > 2){
-					  var errormessage = "Si prega di inserire un prezzo valido che rispetti il formato visualizzato";
+					  var errormessage = "Si prega di inserire un prezzo " +
+					  			"valido che rispetti il formato visualizzato";
 					  priceerror.textContent = errormessage;
-					  priceerror.setAttribute("class","error-paragraph");
+					  priceerror.classList.remove("invisible");
 				  }
 				  
 				  else{
@@ -297,18 +300,14 @@
 			            	var message = req.responseText; // error message or message response.
 			                
 			                if (req.status == 200) {
-			                	pageOrchestrator.refresh();
-			                    pageOrchestrator.show();
-			                    errorBox.setSuccess(message);
+			                	pageOrchestrator.showSuccess(message);
 			                } 
 			                else if (req.status == 503){
-			                	pageOrchestrator.refresh();
-			                    pageOrchestrator.show();
-			                	errorBox.setError(message);
+			                	pageOrchestrator.showError(message);
 			                }
 			                else{
 			                  priceerror.textContent = message;
-			  				  priceerror.setAttribute("class","error-paragraph");
+			  				  priceerror.classList.remove("invisible");
 			                }
 			              }
 			            }
@@ -335,8 +334,8 @@
 	  var productEntry = document.getElementById("productname");
 	  var clientEntry = document.getElementById("clientname");
 	  this.reset = function(){
-		  _div_info.setAttribute("class","invisible");
-		  infoTab.setAttribute("class","invisible");
+		  _div_info.classList.add("invisible");
+		  infoTab.classList.add("invisible");
 		  optionsTable.reset();
 		  priceForm.reset();
 	  };
@@ -345,8 +344,8 @@
 		  this.update(item);
 		  optionsTable.show(item);
 		  priceForm.show(item);
-		  infoTab.setAttribute("class","");
-		  _div_info.setAttribute("class","");
+		  infoTab.classList.remove("invisible");
+		  _div_info.classList.remove("invisible");
 	  }
 	  
 	  this.update = function(item){
@@ -383,18 +382,33 @@
 	};
 	
 	this.show = function(){
+		namefield.show();
 		quotationtable.show();
 		freetable.show();
 	}
 	
-	this.refresh = function(){
+	this.refresh = function(){	//gets the page to a default hidden status
 		namefield.show();
 		quotationtable.reset();
 		freetable.reset();
 		pricediv.reset();
 		errorBox.hide();
 	};
+	
+	this.showSuccess = function(message){
+		pageOrchestrator.refresh();
+		pageOrchestrator.show();
+		errorBox.setSuccess(message);
+		window.scrollTo(0.0);
+	};
+	this.showError = function(message){
+		pageOrchestrator.refresh();
+		pageOrchestrator.show();
+		errorBox.setError(message);
+		window.scrollTo(0.0);
+	};
 
   }
+
 
 })();
