@@ -5,8 +5,7 @@
 (function() {
 
 // page components
-  var quotationtable, freetable, pricediv, success,
-  servererror,
+  var quotationtable, freetable, pricediv, errorBox, namefield,
     pageOrchestrator = new PageOrchestrator(); // main controller
 
   window.addEventListener("load", () => {
@@ -15,6 +14,44 @@
       pageOrchestrator.show();
   }, false);
 
+  function ErrorBox(_errorbox, _xbutton, _errormessage){
+		this.errorbox = _errorbox;
+		this.xbutton = _xbutton;
+		this.errormessage = _errormessage;
+		
+		this.hide = function(){
+			this.errorbox.setAttribute("class", "invisible");
+		}
+		
+		this.setError = function(message){
+			self = this;
+			this.errorbox.setAttribute("class", "error")
+			this.errormessage.textContent = message;
+			this.xbutton.addEventListener('click', (e) => {
+				self.errorbox.setAttribute("class", "invisible");
+				self.errormessage.textContent="";
+			});	
+		}
+		
+		this.setSuccess = function(message){
+			self = this;
+			this.errorbox.setAttribute("class", "success");
+			this.errormessage.textContent = message;
+			this.xbutton.addEventListener('click', (e) => {
+				self.errorbox.setAttribute("class", "invisible");
+				self.errormessage.textContent="";
+			});	
+		}
+		
+	}
+  
+  function NameField(_name, namecontainer){
+		this.name = _name;
+		this.show = function(){
+			namecontainer.textContent = this.name;
+		}
+	}
+  
   function QuotationTable(_div_tabella){ 
 	  
 	  var tabella = _div_tabella.getElementsByTagName("table")[0];
@@ -22,14 +59,11 @@
 	  var error = _div_tabella.getElementsByClassName("error")[0];
 	  
 	  this.reset = function(){
-		  tabella.style.visibility = "hidden";
-		  tabella.style.display = "none";
-		  error.style.visibility = "hidden";
-		  error.style.display = "none";
+		  tabella.setAttribute("class","table invisible");
+		  error.setAttribute("class","error invisible");
 		  body.innerHTML = ""; //empty the body of the table.
-		  _div_tabella.style.display = "none";
+		  _div_tabella.setAttribute("class","invisible");
 	  };
-
 	  this.show = function(){
 		  var self=this;
 		  makeCall("GET", "ManagedQuotations", null,
@@ -43,21 +77,19 @@
 					  break;
 				  case 503:
 					  error.textContent = message;
-					  error.style.visibility = "visible";
-					  error.style.display = "";
+					  error.setAttribute("class","error");
 					  break;
 				  case 411:
 					  
 				  default:
 					  error.textContent = 
 						  "È avvenuto un errore (Servlet non disponibile)";
-				  	  error.style.visibility = "visible";
-				  	  error.style.display = "";
+				  	  error.setAttribute("class","error");
 				  }
 			  }
 		  }
 		  );
-		  _div_tabella.style.display = "";
+		  _div_tabella.setAttribute("class","");
 	  };
 
 	  this.update = function(quotation_array){
@@ -66,8 +98,7 @@
 		  if(quotation_array.length == 0){
 			  error.textContent = 
 				  "Non è stata fatta ancora alcuna quotazione.";
-		  	  error.style.visibility = "visible";
-		  	  error.style.display = "";
+			  error.setAttribute("class","error");
 		  }
 		  else{
 			  quotation_array.forEach(item => {
@@ -82,11 +113,10 @@
 				  	v3cell.textContent = item.clientUsername;
 				  	row.appendChild(v3cell);
 				  	var v4cell = document.createElement("td");
-				  	v4cell.textContent = item.value;
+				  	v4cell.textContent = item.value + " €";
 				  	row.appendChild(v4cell);
 				  	body.appendChild(row);
-				  	tabella.style.visibility = "visible";
-				  	tabella.style.display = "";
+				  	tabella.setAttribute("class","table");
 				  }  	
 			  )
 		  }
@@ -101,12 +131,10 @@
 	  
 	  
 	  this.reset = function(){
-		  tabella.style.visibility = "hidden";
-		  tabella.style.display = "none";
-		  error.style.visibility = "hidden";
-		  error.style.display = "none";
+		  tabella.setAttribute("class","table invisible");
+		  error.setAttribute("class","error invisible");
 		  body.innerHTML = ""; //empty the body of the table.
-		  _div_tabella.style.display="none";
+		  _div_tabella.setAttribute("class","invisible");
 	  };
 	  
 	  this.show = function(){
@@ -122,19 +150,17 @@
 					  break;
 				  case 503:
 					  error.textContent = message;
-					  error.style.visibility = "visible";
-					  error.style.display = "";
+					  error.setAttribute("class","error");
 					  break;
 				  default:
 					  error.textContent = 
 						  "È avvenuto un errore (Servlet non disponibile)";
-				  	  error.style.visibility = "visible";
-				  	  error.style.display = "";
+				  	  error.setAttribute("class","error");
 				  }
 			  }
 		  }
 		  );
-		  _div_tabella.style.display="";
+		  _div_tabella.setAttribute("class","");
 	  };
 	  
 	  this.update = function(free_array){
@@ -142,8 +168,7 @@
 		  if(free_array.length == 0){
 			  error.textContent = 
 				  "Non ci sono quotazioni libere.";
-		  	  error.style.visibility = "visible";
-		  	  error.style.display = "";
+		  	  error.setAttribute("class","error");
 		  }
 		  else{
 			  free_array.forEach(item => {
@@ -174,8 +199,7 @@
 				  	body.appendChild(row);
 				  } 
 			  )
-			  tabella.style.visibility = "visible";
-			  tabella.style.display = "";
+			  tabella.setAttribute("class","table");
 			  
 		  }
 	  };
@@ -191,17 +215,15 @@
 		  self = this;
 		  optiontablebody.innerHTML = ""; //empty the body of the table.
 		  if(item.options.length == 0){
-		  		optiontable.style.display = "none";
+		  		optiontable.setAttribute("class","workertable table hidden");
 		  		optionerror.textContent="Non sono disponibili opzioni per questo prodotto."
-		  		optionerror.style.visibility = "visible";
+		  		optionerror.setAttribute("class","error");
 		  }
 		  else{
-			optiontable.style.display = "";
-			optiontable.style.visibility = "visible"
+			optiontable.setAttribute("class","workertable table");
 	  		self.update(item);
 	  	  }
-		  _optionTab.style.display = "";
-		  _optionTab.style.visibility = "visible";
+		  _optionTab.setAttribute("class","");
 	  }
 	  this.update = function(item){
 		  item.options.forEach(option =>{
@@ -216,8 +238,8 @@
 		  });
 	  }
 	  this.reset = function(){
-		  _optionTab.style.display = "none";
-		  optionerror.style.visibility = "hidden";
+		  _optionTab.setAttribute("class","hidden");
+		  optionerror.setAttribute("class","error invisible");
 	  }
   
   }
@@ -229,16 +251,14 @@
 	  var priceerror = document.getElementById("priceerror");
 	  
 	  this.reset = function(){
-		  _div_price.style.display = "none";
-		  priceerror.style.display = "none";
-		  priceerror.style.visibility = "hidden";
+		  _div_price.setAttribute("class","box invisible");
+		  priceerror.setAttribute("class","error-paragraph invisible");
 		  inputQuotation.setAttribute("value","default");
 	  }
 	  
 	  this.show = function(item){
 		  self = this;
-		  _div_price.style.display = "";
-		  _div_price.style.visibility = "visible";
+		  _div_price.setAttribute("class","box");
 		  self.update(item);
 	  }
 	  
@@ -251,8 +271,7 @@
 		  inputButton = inputButton_new;
 		  
 		  inputButton.addEventListener('click', (e) => {
-			  priceerror.style.display = "none";
-			  priceerror.style.visibility = "hidden";
+			  priceerror.setAttribute("class","error-paragraph invisible");
 			  
 			  var price = inputPrice.value;
 			  var form = e.target.closest("form");
@@ -260,15 +279,13 @@
 				  if (price <= 0){
 					  var errormessage="Il prezzo inserito deve essere maggiore di 0";
 					  priceerror.textContent = errormessage;
-					  priceerror.style.display = "";
-					  priceerror.style.visibility = "visible";
+					  priceerror.setAttribute("class","error-paragraph");
 				  }
 				  else if (price.toString().indexOf('.') != -1 
 					  && price.toString().split('.')[1].length > 2){
 					  var errormessage = "Si prega di inserire un prezzo valido che rispetti il formato visualizzato";
 					  priceerror.textContent = errormessage;
-					  priceerror.style.display = "";
-					  priceerror.style.visibility = "visible";
+					  priceerror.setAttribute("class","error-paragraph");
 				  }
 				  
 				  else{
@@ -282,21 +299,16 @@
 			                if (req.status == 200) {
 			                	pageOrchestrator.refresh();
 			                    pageOrchestrator.show();
-			                    success.textContent = message;
-			                    success.style.display = "";
-			                    success.style.visibility = "visible"
+			                    errorBox.setSuccess(message);
 			                } 
 			                else if (req.status == 503){
 			                	pageOrchestrator.refresh();
 			                    pageOrchestrator.show();
-			                	servererror.textContent = message;
-			                	servererror.style.display = "";
-			                	servererror.style.visibility = "visible"
+			                	errorBox.setError(message);
 			                }
 			                else{
 			                  priceerror.textContent = message;
-			  				  priceerror.style.display = "";
-			  				  priceerror.style.visibility = "visible";
+			  				  priceerror.setAttribute("class","error-paragraph");
 			                }
 			              }
 			            }
@@ -323,8 +335,8 @@
 	  var productEntry = document.getElementById("productname");
 	  var clientEntry = document.getElementById("clientname");
 	  this.reset = function(){
-		  _div_info.style.display = "none";
-		  infoTab.style.visibility = "hidden";
+		  _div_info.setAttribute("class","invisible");
+		  infoTab.setAttribute("class","invisible");
 		  optionsTable.reset();
 		  priceForm.reset();
 	  };
@@ -333,9 +345,8 @@
 		  this.update(item);
 		  optionsTable.show(item);
 		  priceForm.show(item);
-		  infoTab.style.visibility = "visible";
-		  _div_info.style.display= "";
-		  _div_info.style.visibility= "visible";
+		  infoTab.setAttribute("class","");
+		  _div_info.setAttribute("class","");
 	  }
 	  
 	  this.update = function(item){
@@ -348,17 +359,27 @@
   function PageOrchestrator(){
 
 	this.start = function(){
-		var priceQuot = document.getElementById("pricequotation");
-		pricediv = new PriceQuotation(priceQuot);
-		
-	    var quotTab = document.getElementById("quotationtable");
-	    quotationtable = new QuotationTable(quotTab);
-	    
-	    var freeTab = document.getElementById("freetable");
-	    freetable = new FreeTable(freeTab);
-	    
-	    success = document.getElementById("success");
-	    servererror = document.getElementById("servererror");
+		if(sessionStorage.getItem('role')!="worker"){
+			window.location.href = "index.html";
+		}
+		else{
+			namefield = new NameField(sessionStorage.getItem('name'),
+					document.getElementById('user_name')
+				  );
+			errorBox = new ErrorBox(document.getElementById("errorbox"),
+					document.getElementById("xbutton"),
+					document.getElementById("errortext")
+			);
+			
+			var priceQuot = document.getElementById("pricequotation");
+			pricediv = new PriceQuotation(priceQuot);
+			
+		    var quotTab = document.getElementById("quotationtable");
+		    quotationtable = new QuotationTable(quotTab);
+		    
+		    var freeTab = document.getElementById("freetable");
+		    freetable = new FreeTable(freeTab);
+		}
 	};
 	
 	this.show = function(){
@@ -367,13 +388,11 @@
 	}
 	
 	this.refresh = function(){
+		namefield.show();
 		quotationtable.reset();
 		freetable.reset();
 		pricediv.reset();
-		success.style.display = "none";
-		success.textContent = "Il prezzo è stato inserito correttamente.";
-		servererror.style.display = "none";
-		servererror.textContent = "È stato riscontrato un errore lato server.";
+		errorBox.hide();
 	};
 
   }
