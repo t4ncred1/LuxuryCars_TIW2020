@@ -122,6 +122,12 @@ a:link, a:visited{
 	outline : 0;
 }
 
+.close_banner{
+	font-size : 15pt;
+    top: 9px;
+    right: 7px;
+}
+
 .invisible{
 	visibility : hidden;
 	display : none;
