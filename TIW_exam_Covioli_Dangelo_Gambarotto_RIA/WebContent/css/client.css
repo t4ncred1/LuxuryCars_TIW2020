@@ -70,3 +70,35 @@ input[type=radio]:checked + label > img{
 .noborder{
 	border : none;
 }
+
+.grid{
+	display : grid;
+	grid-gap: 30px;
+	grid-template-columns: repeat(auto-fit, 600px);
+}
+
+.detailBox{
+	padding : 25px;
+	background-color : rgba(0, 0, 0, 0.8);
+	text-align : center;
+	border : 2px black;
+	border-radius : 20px;
+	width : 500px;
+	height : 500px;
+}
+
+#productName{
+	margin : 23px;
+	font-size : 20pt;
+}
+
+.bold{
+	font-weight: bold;
+	color : #e6b800;
+	font-size : 15pt;
+}
+
+
+#price{
+	position : right;
+}

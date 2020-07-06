@@ -1,6 +1,6 @@
 (function() {
 
-    var errorBox, reqTable, carForm, pageOrchestrator = new PageOrchestrator();
+    var errorBox, reqTable, carForm, quotationDetails, pageOrchestrator = new PageOrchestrator();
 
     window.addEventListener("load", () => {
         pageOrchestrator.start();
@@ -112,10 +112,48 @@
 					}
 					else qPrice.textContent = price + " €";
 					row.appendChild(qPrice);
+					row.addEventListener('click', (e) => {
+						quotationDetails.showInv(request.quotationId);
+					});	
 					self.body.appendChild(row);
 		      });
 			}
 		}
+	}
+	
+	
+	
+	function QuotationDetails(_detailBox, _details){
+		this.detailBox = _detailBox;
+		this.details = _details;
+		this.currentQuotation = 0;
+		
+		this.showInv = function(quotationId){
+			if(quotationId == this.currentQuotation){
+				this.hide();
+				this.currentQuotation = 0;
+			}
+			else{
+				this.currentQuotation = quotationId;
+				this.show(quotationId);
+			}
+		}
+		
+		this.show = function(quotationId){
+			console.log("Mostro la " + quotationId);
+			return
+		}
+		
+		this.update = function(quotation){
+			
+		}
+		
+		this.hide = function(){
+			console.log("Nascondo il box");
+			return;
+		}
+		
+		
 	}
 	
 	/*
@@ -247,14 +285,6 @@
 		
 	}
 	
-	/*
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 */
 	
     function PageOrchestrator(){
 
@@ -282,6 +312,14 @@
 													submitButton : document.getElementById("submitRequest")
 												}
 												);
+					quotationDetails = new QuotationDetails(document.getElementById("detailBox"),
+															{
+																productName : document.getElementById("productName"),
+																productImage : document.getElementById("productImage"),
+																date : document.getElementById("date"),
+																selectedOptions : document.getElementById("selectedOptions"),
+																price : document.getElementById("price")
+															})
 					carForm.registerEvents(this);
         	}
         	else window.location.href = "index.html";

@@ -29,31 +29,53 @@
 
 
 	<!-- Requests table -->
-	
 	<span id="norequests" class="">Richiedi il tuo primo preventivo!</span>
 	<div id="requests" class="invisible">
 		<h2>Le tue richieste</h2>
-		<table id="requestsTable" class="table">
-			<thead>
-				<tr>
-					<th>ID</th>
-					<th>Prodotto</th>
-					<th>Data</th>
-					<th>Prezzo</th>
-				</tr>
-			</thead>
-			<tbody id="requestsTableBody">
-				<tr>
-					<td>1</td>
-					<td>Toyota Aygo</td>
-					<td>17/02/1996</td>
-					<td>100E</td>
-				</tr>
-			</tbody>
-		</table>
+		
+		<div class="grid">
+		
+			<table id="requestsTable" class="table">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>Prodotto</th>
+						<th>Data</th>
+						<th>Prezzo</th>
+					</tr>
+				</thead>
+				<tbody id="requestsTableBody">
+					<tr>
+						<td>1</td>
+						<td>Toyota Aygo</td>
+						<td>17/02/1996</td>
+						<td>100E</td>
+					</tr>
+				</tbody>
+			</table>
+			
+			<div class="detailBox">
+				<span id="productName">Toyota Aygo</span><br><br>
+				<img id="productImage" src="./images/samples/thumbnail_aygo.png" width="230"><br><br>
+				<span class="bold">Data richiesta</span><br><span id="date">25 giugno</span><br><br>
+				<span class="bold">Optional scelti</span><br>
+				<div id="selectedOptions">
+					<span>Optional1</span><br>
+					<span>Optional1</span><br>
+					<span>Optional1</span><br>
+					<span>Optional1</span><br>
+					<span>Optional1</span><br>
+				</div>
+				<br><br>
+				<span class="bold">Prezzo proposto</span><br><span id="price">128E</span>
+			</div>
+		
+		
+		</div>
+		
 	</div>
-
 	
+		
 	<h2>Prodotti disponibili</h2>
 	<form>
 		<fieldset class="noborder">
