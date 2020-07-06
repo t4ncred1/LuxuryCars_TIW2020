@@ -98,6 +98,9 @@ input[type=radio]:checked + label > img{
 	font-size : 15pt;
 }
 
+#productImage{
+		border-radius : 15px;
+}
 
 #price{
 	position : right;
