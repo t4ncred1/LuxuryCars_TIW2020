@@ -61,7 +61,7 @@
 	              if (req.status == 200) {
 	                selfTable.update(JSON.parse(req.responseText)); 
 	              } else {
-	                orchestrator.setError(message);
+	                pageOrchestrator.showError(message);
 	              }
 	            }
 	          }
@@ -139,31 +139,50 @@
 			}
 		}
 		
-		this.show = function(quotationId){
-			console.log("Mostro la " + quotationId);
-			return
+		this.show = function(quotationId, orchestrator){
+			selfDet = this;
+	        makeCall("GET", "GetQuotation?id=" + quotationId, null,
+	          function(req, orchestrator) {
+	            if (req.readyState == 4) {
+	              var message = req.responseText;
+	              if (req.status == 200) {
+	                selfDet.update(JSON.parse(req.responseText)); 
+	              } else {
+	                pageOrchestrator.showError(message);
+	              }
+	            }
+	          }
+	        );
 		}
 		
 		this.update = function(quotation){
-			
+			this.detailBox.setAttribute("class", "detailBox");
+			this.details.productName.textContent = quotation.productName;
+			this.details.productImage.setAttribute("src", "ProductImage?product=" + quotation.productId);
+			this.details.date.textContent = quotation.date;
+			this.details.selectedOptions.innerHTML = "";
+			selfdet = this;
+			quotation.options.forEach(function(option) {
+				opt = document.createElement("span");
+				opt.textContent = option.name;
+				selfdet.details.selectedOptions.appendChild(opt);
+				selfdet.details.selectedOptions.appendChild(document.createElement("br"));
+			});
+			if(quotation.value == undefined){
+				this.details.price.textContent = "In attesa"
+			}
+			else this.details.price.textContent = quotation.value + " €";
 		}
 		
 		this.hide = function(){
 			console.log("Nascondo il box");
+			this.detailBox.setAttribute("class", "invisible");
 			return;
 		}
 		
 		
 	}
 	
-	/*
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 */
 	
 	function RequestForm(_productsList, _optionsSelection){
 		this.productsList = _productsList;
@@ -321,6 +340,7 @@
 																price : document.getElementById("price")
 															})
 					carForm.registerEvents(this);
+					quotationDetails.hide();
         	}
         	else window.location.href = "index.html";
         };
