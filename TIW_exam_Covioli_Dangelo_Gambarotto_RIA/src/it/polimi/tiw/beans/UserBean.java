@@ -1,3 +1,24 @@
+/*  _______ _______          __                                    
+ * |__   __|_   _\ \        / /                                    
+ *    | |    | |  \ \  /\  / /                                     
+ *    | |    | |   \ \/  \/ /                                      
+ *    | |   _| |_   \  /\  /                                       
+ *    |_|  |_____|   \/  \/   
+ * 
+ * exam project - a.y. 2019-2020
+ * Politecnico di Milano
+ * 
+ * Tancredi Covioli   mat. 944834
+ * Alessandro Dangelo mat. 945149
+ * Gambarotto Luca    mat. 928094
+ */
+
+
+/* UserBean class
+ * This class represents an user of the application,
+ * storing all its personal data.
+ */
+
 package it.polimi.tiw.beans;
 
 public class UserBean {

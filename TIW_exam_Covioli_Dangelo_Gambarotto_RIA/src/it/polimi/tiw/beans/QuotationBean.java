@@ -1,3 +1,24 @@
+/*  _______ _______          __                                    
+ * |__   __|_   _\ \        / /                                    
+ *    | |    | |  \ \  /\  / /                                     
+ *    | |    | |   \ \/  \/ /                                      
+ *    | |   _| |_   \  /\  /                                       
+ *    |_|  |_____|   \/  \/   
+ * 
+ * exam project - a.y. 2019-2020
+ * Politecnico di Milano
+ * 
+ * Tancredi Covioli   mat. 944834
+ * Alessandro Dangelo mat. 945149
+ * Gambarotto Luca    mat. 928094
+ */
+
+/* QuotationBean class
+ * This class represents a single quotation
+ * stored in the DB.
+ */
+
+
 package it.polimi.tiw.beans;
 
 import java.util.List;
@@ -12,6 +33,10 @@ public class QuotationBean {
 	private String date;
 	private int productId;
 	private String productName;
+	/* the following list contains all the
+	 * OptionBeans associated to option selected
+	 * in the quotation this class is referred to
+	 */
 	private List<OptionBean> options;
 	private Double value;
 	
