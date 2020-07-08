@@ -1,3 +1,18 @@
+/*  _______ _______          __                                    
+ * |__   __|_   _\ \        / /                                    
+ *    | |    | |  \ \  /\  / /                                     
+ *    | |    | |   \ \/  \/ /                                      
+ *    | |   _| |_   \  /\  /                                       
+ *    |_|  |_____|   \/  \/   
+ * 
+ * exam project - a.y. 2019-2020
+ * Politecnico di Milano
+ * 
+ * Tancredi Covioli   mat. 944834
+ * Alessandro Dangelo mat. 945149
+ * Luca Gambarotto    mat. 928094
+*/
+
 package it.polimi.tiw.controllers;
 
 import java.io.IOException;
@@ -22,18 +37,15 @@ import it.polimi.tiw.DAO.QuotationDAO;
 import it.polimi.tiw.beans.ProductBean;
 import it.polimi.tiw.beans.UserBean;
 
-/**
- * Servlet implementation class SubmitQuotation
- */
+
+
 @WebServlet("/SubmitRequest")
 @MultipartConfig
 public class SubmitRequest extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	Connection connection;
        
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
+
     public SubmitRequest() {
         super();
     }
@@ -55,32 +67,51 @@ public class SubmitRequest extends HttpServlet {
 		}
 	}
     
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		UserBean u = null;
-		HttpSession s = request.getSession(false);
+		HttpSession s = null;
+		
+		/* Check if the user is authenticated */
+		try {
+			s = request.getSession(false);
+		} catch(NullPointerException e) {
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			response.getWriter().println("Utente non autenticato");
+			return;
+		}
 		u = (UserBean) s.getAttribute("user");
 
-		int productId = Integer.parseInt(request.getParameter("productId"));
+		int productId = 0;
+		/* Check if the productId is not null and if it is a valid number */
+		try {
+			productId = Integer.parseInt(request.getParameter("productId"));
+		} catch(NumberFormatException e) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.getWriter().println("Id prodotto non valido");
+			return;
+		}
 		
 		ProductDAO pDAO = new ProductDAO(connection);
 		QuotationDAO qDAO = new QuotationDAO(connection);
 		ProductBean product;
 		try {
 			product = pDAO.getProductById(productId, "");
+			/* Check if exists a product with the specified productId */
+			if(product == null) {
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.getWriter().println("Il prodotto richiesto non esiste");
+				return;
+			}
 			List<Integer> options = new ArrayList<>();
 			String[] selectedOptions = request.getParameterValues("options");
+			/* Check if the user specified a list of options */
 			if(selectedOptions==null) {
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				response.getWriter().println("Seleziona almeno una opzione");
@@ -90,6 +121,7 @@ public class SubmitRequest extends HttpServlet {
 				int oId = Integer.parseInt(o);
 				if(product.isAValidOption(oId)) options.add(oId);
 			}
+			/* Check if the size of the list of valid options selected is != 0;*/
 			if(options.size()==0) {
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 				response.getWriter().println("Seleziona almeno una opzione");

@@ -1,3 +1,18 @@
+/*  _______ _______          __                                    
+ * |__   __|_   _\ \        / /                                    
+ *    | |    | |  \ \  /\  / /                                     
+ *    | |    | |   \ \/  \/ /                                      
+ *    | |   _| |_   \  /\  /                                       
+ *    |_|  |_____|   \/  \/   
+ * 
+ * exam project - a.y. 2019-2020
+ * Politecnico di Milano
+ * 
+ * Tancredi Covioli   mat. 944834
+ * Alessandro Dangelo mat. 945149
+ * Luca Gambarotto    mat. 928094
+ */
+
 package it.polimi.tiw.controllers;
 
 import java.io.IOException;
@@ -19,19 +34,15 @@ import com.google.gson.Gson;
 import it.polimi.tiw.DAO.QuotationDAO;
 import it.polimi.tiw.beans.QuotationBean;
 
-/**
- * Servlet implementation class FreeQuotations
- */
+
 @WebServlet("/FreeQuotations")
 public class FreeQuotations extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection = null;
 	private Gson gson;
        
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public FreeQuotations() {
+
+	public FreeQuotations() {
         super();
     }
     
@@ -53,9 +64,7 @@ public class FreeQuotations extends HttpServlet {
 		gson = new Gson();
     }
     
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
+
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		QuotationDAO qDAO = new QuotationDAO(connection);
 		List<QuotationBean> qlist = null;
@@ -64,7 +73,7 @@ public class FreeQuotations extends HttpServlet {
 		try{
 			qlist = qDAO.getFreeQuotations(language);
 		} catch (SQLException e){
-			String errormessage = "È stato riscontrato un errore cercando di ottenere dei risultati dal database.";
+			String errormessage = "E' stato riscontrato un errore cercando di ottenere dei risultati dal database.";
 			response.setStatus(503);
 			response.getWriter().write(errormessage);
 		}
@@ -73,9 +82,7 @@ public class FreeQuotations extends HttpServlet {
 		return;
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}

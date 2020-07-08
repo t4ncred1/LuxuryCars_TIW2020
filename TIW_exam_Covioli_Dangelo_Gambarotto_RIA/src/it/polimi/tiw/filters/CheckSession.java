@@ -46,11 +46,10 @@ public class CheckSession implements Filter {
 		 * This also allows to redirect to the home all the users whose session is
 		 * expired due to count-down end. */
 		try {
-			if (request.getSession(false) == null) {
+			if (request.getSession(false) == null || !request.isRequestedSessionIdValid()) {
 				response.sendRedirect(req.getServletContext().getContextPath());
 				return;
 			}
-
 			chain.doFilter(request, response);
 		} catch (IOException e) {
 			response.sendError(555, "I/O Exception: Something wrong in filter chain");

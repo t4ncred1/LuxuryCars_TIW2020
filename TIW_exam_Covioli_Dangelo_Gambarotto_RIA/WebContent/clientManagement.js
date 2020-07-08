@@ -331,7 +331,7 @@
 				// FORM RADIO INPUT
 				carInput = document.createElement("input");
 				carInput.setAttribute("type", "radio");
-				carInput.setAttribute("name", "car");
+				carInput.setAttribute("name", "productId");
 				carInput.setAttribute("value", product.id);
 				carInput.setAttribute("id", "p" + product.id);
 				carInput.addEventListener('click', (e) => {
@@ -364,7 +364,6 @@
 			selfDet = this;
 			this.products.forEach(function(product){
 				if(product.id==id){
-					selfDet.optionSelection.prodId.setAttribute("value", product.id);
 					selfDet.optionSelection.mainBox.setAttribute("class", "carSelection");
 					selfDet.optionSelection.carName.textContent = product.name;
 					selfDet.optionSelection.carImage.setAttribute("src", "ProductImage?product=" + id);
@@ -454,7 +453,6 @@
 													carImage : document.getElementById("bigImage"),
 													carName : document.getElementById("prodName"),
 													options : document.getElementById("options"),
-													prodId : document.getElementById("productId"),
 													submitButton : document.getElementById("submitRequest")
 												}
 												);

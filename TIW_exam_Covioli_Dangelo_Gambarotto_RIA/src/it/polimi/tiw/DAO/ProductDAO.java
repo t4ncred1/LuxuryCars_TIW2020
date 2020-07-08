@@ -80,12 +80,13 @@ public class ProductDAO {
 	 * the option name must be written.
 	 */
 	public ProductBean getProductById(int productId, String language) throws SQLException{
-		ProductBean product = new ProductBean();
+		ProductBean product = null;
 		String query = "SELECT * FROM product WHERE productId = ?";
 		try (PreparedStatement pstatement = con.prepareStatement(query);) {
 			pstatement.setInt(1, productId);
 			try (ResultSet result = pstatement.executeQuery();) {
 				if(result.next()) {
+					product = new ProductBean();
 					product.setId(result.getInt("productId"));
 					product.setName(result.getString("name"));
 					String subquery = "SELECT * FROM `option` WHERE productId = ?";

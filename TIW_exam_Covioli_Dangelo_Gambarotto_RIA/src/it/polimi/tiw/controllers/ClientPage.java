@@ -35,6 +35,7 @@ public class ClientPage extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		RequestDispatcher rd = request.getRequestDispatcher("/homeclient.html");
+		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate, max-age=0");
 		rd.forward(request, response);
 		return;
 	}
