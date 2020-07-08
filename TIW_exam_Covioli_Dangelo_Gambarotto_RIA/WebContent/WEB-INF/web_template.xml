@@ -28,34 +28,49 @@
 	  <param-value>./images/favicon.png</param-value>
 	</context-param>
 	
-	<!-- Filters -->
+		<!-- Filters -->
 	<filter>
-	  <filter-name>CheckSessionTime</filter-name>
-	  <filter-class>it.polimi.tiw.filters.CheckSessionTime</filter-class>
+	  <filter-name>CheckSession</filter-name>
+	  <filter-class>it.polimi.tiw.filters.CheckSession</filter-class>
+ 	</filter>
+	<filter>
+	  <filter-name>CheckClient</filter-name>
+	  <filter-class>it.polimi.tiw.filters.CheckClient</filter-class>
  	</filter>
  	<filter>
 	  <filter-name>CheckWorker</filter-name>
 	  <filter-class>it.polimi.tiw.filters.CheckWorker</filter-class>
  	</filter>
- 	<filter>
-		<filter-name>CharsetFilter</filter-name>
-		<filter-class>it.polimi.tiw.filters.CharsetFilter</filter-class>	
-	</filter>
+	
 	<filter-mapping>
-	 <filter-name>CheckSessionTime</filter-name>
-	 <url-pattern>/HomeClient</url-pattern>
-	 <url-pattern>/HomeWorker</url-pattern>
-	 <url-pattern>/ManageQuotation</url-pattern>
-	 <url-pattern>/Logout</url-pattern>
+		<filter-name>CheckSession</filter-name>
+		<url-pattern>/Worker</url-pattern>
+		<url-pattern>/Client</url-pattern>
+		<url-pattern>/FreeQuotations</url-pattern>
+		<url-pattern>/ManagedQuotations</url-pattern>
+		<url-pattern>/PricePost</url-pattern>
+		<url-pattern>/GetAvailableProducts</url-pattern>
+		<url-pattern>/GetQuotation</url-pattern>
+		<url-pattern>/ProductImage</url-pattern>
+		<url-pattern>/SubmitRequest</url-pattern>
+		<url-pattern>/GetClientRequests</url-pattern>
+		<url-pattern>/Logout</url-pattern>		
 	</filter-mapping>
 	<filter-mapping>
-	 <filter-name>CheckWorker</filter-name>
-	 <url-pattern>/HomeWorker</url-pattern>
-	 <url-pattern>/ManageQuotation</url-pattern>
+		<filter-name>CheckClient</filter-name>
+		<url-pattern>/Client</url-pattern>
+		<url-pattern>/GetAvailableProducts</url-pattern>
+		<url-pattern>/GetClientRequests</url-pattern>
+		<url-pattern>/GetQuotation</url-pattern>
+		<url-pattern>/ProductImage</url-pattern>
+		<url-pattern>/SubmitRequest</url-pattern>
 	</filter-mapping>
 	<filter-mapping>
-		<filter-name>CharsetFilter</filter-name>
-		<url-pattern>/*</url-pattern>
+		<filter-name>CheckWorker</filter-name>
+		<url-pattern>/Worker</url-pattern>
+		<url-pattern>/FreeQuotations</url-pattern>
+		<url-pattern>/ManagedQuotations</url-pattern>
+		<url-pattern>/PricePost</url-pattern>
 	</filter-mapping>
 		
 	<!-- Other Settings -->

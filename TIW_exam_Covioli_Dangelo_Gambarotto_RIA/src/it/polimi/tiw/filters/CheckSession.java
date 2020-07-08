@@ -1,3 +1,18 @@
+/*  _______ _______          __                                    
+ * |__   __|_   _\ \        / /                                    
+ *    | |    | |  \ \  /\  / /                                     
+ *    | |    | |   \ \/  \/ /                                      
+ *    | |   _| |_   \  /\  /                                       
+ *    |_|  |_____|   \/  \/   
+ * 
+ * exam project - a.y. 2019-2020
+ * Politecnico di Milano
+ * 
+ * Tancredi Covioli   mat. 944834
+ * Alessandro Dangelo mat. 945149
+ * Luca Gambarotto    mat. 928094
+ */
+
 package it.polimi.tiw.filters;
 
 import java.io.IOException;
@@ -11,24 +26,27 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebFilter("/CheckSessionTime")
-public class CheckSessionTime implements Filter {
+@WebFilter("/CheckSession")
+public class CheckSession implements Filter {
 
-	public CheckSessionTime() {
-		// TODO Auto-generated constructor stub
+	public CheckSession() {
+		return;
 	}
 
 	public void destroy() {
-		// TODO Auto-generated method stub
+		return;
 	}
 
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
 			throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
+
+		/* Check if the user is logged in (i.e. an active session is stored in the server)
+		 * This also allows to redirect to the home all the users whose session is
+		 * expired due to count-down end. */
 		try {
 			if (request.getSession(false) == null) {
-				System.out.println("checkSessionTime Filter log");
 				response.sendRedirect(req.getServletContext().getContextPath());
 				return;
 			}
@@ -41,7 +59,7 @@ public class CheckSessionTime implements Filter {
 	}
 
 	public void init(FilterConfig fConfig) throws ServletException {
-		// TODO Auto-generated method stub
+		return;
 	}
 
 }

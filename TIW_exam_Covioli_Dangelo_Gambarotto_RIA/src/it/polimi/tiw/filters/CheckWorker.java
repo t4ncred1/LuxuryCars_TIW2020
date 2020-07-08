@@ -1,72 +1,70 @@
+/*  _______ _______          __                                    
+ * |__   __|_   _\ \        / /                                    
+ *    | |    | |  \ \  /\  / /                                     
+ *    | |    | |   \ \/  \/ /                                      
+ *    | |   _| |_   \  /\  /                                       
+ *    |_|  |_____|   \/  \/   
+ * 
+ * exam project - a.y. 2019-2020
+ * Politecnico di Milano
+ * 
+ * Tancredi Covioli   mat. 944834
+ * Alessandro Dangelo mat. 945149
+ * Luca Gambarotto    mat. 928094
+ */
+
 package it.polimi.tiw.filters;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.UnavailableException;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import it.polimi.tiw.DAO.UserDAO;
 import it.polimi.tiw.beans.UserBean;
 
 @WebFilter("/CheckWorker")
 public class CheckWorker implements Filter {
-	private ServletContext servletContext;
-	private Connection connection = null;
 
 	public CheckWorker() {
-		super();
+		return;
 	}
 
 	public void destroy() {
-		try {
-			if (connection != null) {
-				connection.close();
-			}
-		} catch (SQLException sqle) {
-			sqle.printStackTrace();
-			System.out.println("There was an error while trying to close the connection to the database.");
-		}
+		return;
 	}
 
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
-			throws ServletException, IOException {
+			throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
-
 		try {
-			UserBean uBean = (UserBean) request.getSession(false).getAttribute("user");
-
-			if (!uBean.getRole().equals("worker")) {
-				System.out.println("checkWorker Filter log");
-				switch (uBean.getRole()) {
-				case "client":
-					response.sendRedirect(req.getServletContext().getContextPath() + "/HomeClient");
-					return;
-				default:
-					response.sendRedirect(req.getServletContext().getContextPath());
-					return;
-				}
+			/* Check if the user is logged in or not. If the user is not logged the
+			 * instruction in the try clause will result in a NullPointerException,
+			 * whose effect is to redirect the user to the index page. */
+			UserBean uBean = null;
+			try {
+				uBean = (UserBean) request.getSession(false).getAttribute("user");
 			}
-
-			UserDAO uDao = new UserDAO(connection);
-
-			if (!uDao.existsWorker(uBean.getUsername())) {
-				System.out.println("checkWorker Filter log");
+			catch(NullPointerException e) {
+				response.sendRedirect(req.getServletContext().getContextPath());
+				return;
+			}
+			/* Check if the user is a worker. In case it is not, if it is a worker
+			 * it is automatically redirected to the client page, otherwise is is redirected
+			 * to the index page. This case has been introduced to manage the error even
+			 * in future expansions of the application, speculating the possibility of
+			 * introducing new types of users */
+			if (!uBean.getRole().equals("worker")) {
 				switch (uBean.getRole()) {
 				case "client":
-					response.sendRedirect(req.getServletContext().getContextPath() + "/HomeClient");
+					response.sendRedirect(req.getServletContext().getContextPath() + "/Client");
 					return;
 				default:
 					response.sendRedirect(req.getServletContext().getContextPath());
@@ -74,31 +72,13 @@ public class CheckWorker implements Filter {
 				}
 			}
 			chain.doFilter(request, response);
-		} catch (SQLException e) {
-			response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE, "Database access failed");
-			e.printStackTrace();
-			return;
 		} catch (IOException e) {
-			response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE, "I/O Exception: Something wrong in filter chain");
-			e.printStackTrace();
-			return;
+			response.sendError(555, "I/O Exception: Something wrong in filter chain");
 		}
 	}
 
 	public void init(FilterConfig fConfig) throws ServletException {
-		servletContext = fConfig.getServletContext();
-		try {
-			String driver = servletContext.getInitParameter("dbDriver");
-			String url = servletContext.getInitParameter("dbUrl");
-			String user = servletContext.getInitParameter("dbUser");
-			String password = servletContext.getInitParameter("dbPassword");
-			Class.forName(driver);
-			connection = DriverManager.getConnection(url, user, password);
-		} catch (ClassNotFoundException e) {
-			throw new UnavailableException("Can't load database driver");
-		} catch (SQLException e) {
-			throw new UnavailableException("Couldn't get db connection");
-		}
+		return;
 	}
 
 }
