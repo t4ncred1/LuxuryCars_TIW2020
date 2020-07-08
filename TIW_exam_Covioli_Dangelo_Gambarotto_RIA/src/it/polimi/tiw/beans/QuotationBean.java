@@ -10,7 +10,7 @@
  * 
  * Tancredi Covioli   mat. 944834
  * Alessandro Dangelo mat. 945149
- * Gambarotto Luca    mat. 928094
+ * Luca Gambarotto    mat. 928094
  */
 
 /* QuotationBean class

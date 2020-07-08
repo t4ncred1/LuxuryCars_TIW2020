@@ -1,3 +1,18 @@
+/*  _______ _______          __                                    
+ * |__   __|_   _\ \        / /                                    
+ *    | |    | |  \ \  /\  / /                                     
+ *    | |    | |   \ \/  \/ /                                      
+ *    | |   _| |_   \  /\  /                                       
+ *    |_|  |_____|   \/  \/   
+ * 
+ * exam project - a.y. 2019-2020
+ * Politecnico di Milano
+ * 
+ * Tancredi Covioli   mat. 944834
+ * Alessandro Dangelo mat. 945149
+ * Luca Gambarotto    mat. 928094
+ */
+
 package it.polimi.tiw.controllers;
 
 import java.io.IOException;
@@ -20,16 +35,12 @@ import it.polimi.tiw.DAO.QuotationDAO;
 import it.polimi.tiw.beans.QuotationBean;
 import it.polimi.tiw.beans.UserBean;
 
-/**
- * Servlet implementation class HomeWorker
- */
+
 @WebServlet("/GetQuotation")
 public class GetQuotation extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection = null;
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
+
     public GetQuotation() {
         super();
     }
@@ -54,15 +65,31 @@ public class GetQuotation extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		UserBean user = (UserBean) session.getAttribute("user");
+		
+		if(user==null) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.getWriter().println("Utente non autenticato!");
+			return;
+		}
+		
 		QuotationDAO quotationDAO = new QuotationDAO(connection);
 
 		String qIds = request.getParameter("id");
+		
 		if(qIds==null) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			response.getWriter().println("Richiesta non valida");
 			return;
 		}
-		int qId = Integer.parseInt(request.getParameter("id"));
+		
+		int qId;
+		try {
+			qId = Integer.parseInt(request.getParameter("id"));
+		}
+		catch (NumberFormatException e) {
+			qId = 0;
+		}
+		
 		QuotationBean quotation = null;
 		
 		try {
@@ -74,7 +101,7 @@ public class GetQuotation extends HttpServlet {
 			return;
 		}
 		
-		if(user.getUserid()==quotation.getClientId()) {
+		if(quotation!=null && user.getUserid()==quotation.getClientId()) {
 			Gson gson = new Gson();
 			String json = gson.toJson(quotation);
 			response.setContentType("application/json");

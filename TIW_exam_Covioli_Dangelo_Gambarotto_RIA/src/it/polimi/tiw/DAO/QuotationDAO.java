@@ -100,9 +100,6 @@ public class QuotationDAO {
 	}
 	
 	public QuotationBean getQuotationById(int quotationId, String language) throws SQLException{
-		//NOTA: per la query, sono partito dal presupposto
-		//che ci fosse solo una quotation per quotationId, visto che essa
-		//è chiave nella relativa tabella.
 		String query = "SELECT Q.quotationId, Q.date, Q.productId, P.name, Q.clientId, C.username, Q.price "
 				+ "FROM quotation AS Q, client AS C, product AS P "
 				+ "WHERE Q.productId = P.productId AND C.idclient = Q.clientId AND Q.quotationId = ?";

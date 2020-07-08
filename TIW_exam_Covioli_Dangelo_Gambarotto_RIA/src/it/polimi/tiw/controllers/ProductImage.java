@@ -1,3 +1,19 @@
+/*  _______ _______          __                                    
+ * |__   __|_   _\ \        / /                                    
+ *    | |    | |  \ \  /\  / /                                     
+ *    | |    | |   \ \/  \/ /                                      
+ *    | |   _| |_   \  /\  /                                       
+ *    |_|  |_____|   \/  \/   
+ * 
+ * exam project - a.y. 2019-2020
+ * Politecnico di Milano
+ * 
+ * Tancredi Covioli   mat. 944834
+ * Alessandro Dangelo mat. 945149
+ * Luca Gambarotto    mat. 928094
+ */
+
+
 package it.polimi.tiw.controllers;
 
 import java.io.BufferedInputStream;
@@ -52,7 +68,15 @@ public class ProductImage extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	
-		int productId = Integer.parseInt(request.getParameter("product"));
+		int productId;
+		try {
+			productId = Integer.parseInt(request.getParameter("product"));
+		}
+		catch (NumberFormatException e) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.getWriter().println("L'immagine richiesta non esiste");
+			return;
+		}
 		
 		ProductDAO pDAO = new ProductDAO(connection);
 		
@@ -81,10 +105,16 @@ public class ProductImage extends HttpServlet {
 		        bout.close();
 		        outStream.close();
 		} catch (SQLException e) {
-			//TODO come gestiamo questo errore?
-		
-			e.printStackTrace();
-			return;
+			if(e.getSQLState()!=null) {
+				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+				response.getWriter().println("Errore interno del server");
+				return;
+			}
+			else {
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.getWriter().println("L'immagine richiesta non esiste");
+				return;	
+			}
 		}
 
 	}

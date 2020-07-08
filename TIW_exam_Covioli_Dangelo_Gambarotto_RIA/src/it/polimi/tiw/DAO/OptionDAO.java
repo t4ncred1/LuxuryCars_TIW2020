@@ -1,3 +1,18 @@
+/*  _______ _______          __                                    
+ * |__   __|_   _\ \        / /                                    
+ *    | |    | |  \ \  /\  / /                                     
+ *    | |    | |   \ \/  \/ /                                      
+ *    | |   _| |_   \  /\  /                                       
+ *    |_|  |_____|   \/  \/   
+ * 
+ * exam project - a.y. 2019-2020
+ * Politecnico di Milano
+ * 
+ * Tancredi Covioli   mat. 944834
+ * Alessandro Dangelo mat. 945149
+ * Luca Gambarotto    mat. 928094
+ */
+
 package it.polimi.tiw.DAO;
 
 import java.sql.Connection;
@@ -15,6 +30,10 @@ public class OptionDAO {
 		this.con = connection;
 	}
 	
+	/* This function returns all the options associated to a given quotation.
+	 * The string language specifies the language in which the names of the options
+	 * should be saved.
+	 */
 	public List<OptionBean> getOptionByQuotation(int qID, String language) throws SQLException{
 		String query = "SELECT O.name, O.name_it, O.optionId, O.Stato, O.productId "
 				+ "FROM `option` AS O, quotation_option AS QO, quotation AS Q "
