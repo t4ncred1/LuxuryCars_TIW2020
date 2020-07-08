@@ -1,3 +1,18 @@
+/*  _______ _______          __                                    
+ * |__   __|_   _\ \        / /                                    
+ *    | |    | |  \ \  /\  / /                                     
+ *    | |    | |   \ \/  \/ /                                      
+ *    | |   _| |_   \  /\  /                                       
+ *    |_|  |_____|   \/  \/   
+ * 
+ * exam project - a.y. 2019-2020
+ * Politecnico di Milano
+ * 
+ * Tancredi Covioli   mat. 944834
+ * Alessandro Dangelo mat. 945149
+ * Luca Gambarotto    mat. 928094
+ */
+
 package it.polimi.tiw.DAO;
 
 import java.sql.Connection;
@@ -14,6 +29,10 @@ public class UserDAO {
 		this.con = connection;
 	}
 
+	/* This function checks if the username and the password passed
+	 * as paramters correspond to a user registered in the system. If the
+	 * credentials are correct the related UserBean is returned, otherwise
+	 * a null object is returned; */
 	public UserBean checkCredentials(String usrn, String pwd) throws SQLException {
 		String query = "SELECT  userid, username, role, name, surname, email FROM users  WHERE username = ? AND password =?";
 		try (PreparedStatement pstatement = con.prepareStatement(query);) {
@@ -39,6 +58,8 @@ public class UserDAO {
 		}
 	}
 
+	/* This function returns true if the username passed as parameter
+	 * corresponds to a GENERIC USER registered in the system. */
 	public boolean existsUser(String usrn) throws SQLException {
 		String query = "SELECT userid FROM users  WHERE username = ?";
 		try (PreparedStatement pstatement = con.prepareStatement(query);) {
@@ -61,6 +82,8 @@ public class UserDAO {
 		}
 	}
 
+	/* This function returns true if the username passed as parameter
+	 * corresponds to a WORKER registered in the system. */
 	public boolean existsWorker(String usrn) throws SQLException {
 		String query = "SELECT idworker FROM worker  WHERE username = ?";
 		PreparedStatement pStatement = con.prepareStatement(query);
@@ -75,6 +98,8 @@ public class UserDAO {
 		}
 	}
 
+	/* This function returns true if the username passed as parameter
+	 * corresponds to a CLIENT registered in the system. */
 	public boolean existsClient(String usrn) throws SQLException {
 		String query = "SELECT idclient FROM client  WHERE username = ?";
 		PreparedStatement pStatement = con.prepareStatement(query);
@@ -89,6 +114,8 @@ public class UserDAO {
 		}
 	}
 
+	/* This function allows to register a new user in the system,
+	 * specifying its personal information and its role. */
 	public void registerUser(String usrn, String pwd, String firstName, String lastName, String role, String email)
 			throws SQLException {
 		String query = "INSERT INTO " + role + " (username, password, name, surname, email) VALUES (?, ?, ?, ?, ?)";
