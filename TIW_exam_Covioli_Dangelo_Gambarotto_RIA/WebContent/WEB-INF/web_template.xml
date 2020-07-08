@@ -66,23 +66,5 @@
     	<welcome-file>Index</welcome-file>
   	</welcome-file-list>
   	
-  	<!-- Redirections -->
- 	<servlet>
-		<servlet-name>WorkerPage</servlet-name>
-		<jsp-file>/homeworker.html</jsp-file>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>WorkerPage</servlet-name>
-		<url-pattern>/Worker</url-pattern>
-	</servlet-mapping>
 	
-	<servlet>
-		<servlet-name>ClientPage</servlet-name>
-		<jsp-file>/homeclient.html</jsp-file>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>ClientPage</servlet-name>
-		<url-pattern>/Client</url-pattern>
-	</servlet-mapping>
-  	
 </web-app>
