@@ -1,3 +1,18 @@
+/*  _______ _______          __                                    
+ * |__   __|_   _\ \        / /                                    
+ *    | |    | |  \ \  /\  / /                                     
+ *    | |    | |   \ \/  \/ /                                      
+ *    | |   _| |_   \  /\  /                                       
+ *    |_|  |_____|   \/  \/   
+ * 
+ * exam project - a.y. 2019-2020
+ * Politecnico di Milano
+ * 
+ * Tancredi Covioli   mat. 944834
+ * Alessandro Dangelo mat. 945149
+ * Luca Gambarotto    mat. 928094
+ */
+
 package it.polimi.tiw.controllers;
 
 import java.io.IOException;
@@ -45,6 +60,12 @@ public class Login extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
+		/* Note about usrn and pwd: if these two parameters are not specified
+		 * in the request these two variables are set to a null value. Once the
+		 * existence of the user will be checked the userDAO will return a null bean,
+		 * whose behavior is managed in the first if branch. This is why usrn and
+		 * pwd are not explicitly checked not to be null. */
 		String usrn = request.getParameter("username");
 		String pwd = request.getParameter("pwd");
 		/*	
@@ -60,7 +81,6 @@ public class Login extends HttpServlet {
 			 */
 			u = usr.checkCredentials(usrn, pwd);
 		} catch (SQLException e) {
-			// throw new ServletException(e);
 			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Failure in database credential checking");
 			return;
 		}
@@ -73,7 +93,6 @@ public class Login extends HttpServlet {
 			return;
 		} else {
 			request.getSession().setAttribute("user", u);
-//			request.getSession(false).setMaxInactiveInterval(15);								TODO
 			String target = (u.getRole().equals("worker")) ? "/HomeWorker" : "/HomeClient";
 			path = path + target;
 			response.setCharacterEncoding("UTF-8");
@@ -94,8 +113,7 @@ public class Login extends HttpServlet {
 				connection.close();
 			}
 		} catch (SQLException sqle) {
-			sqle.printStackTrace();
-			System.out.println("There was an error while trying to close the connection to the database.");
+			System.err.println("There was an error while trying to close the connection to the database.");
 		}
 	}
 }

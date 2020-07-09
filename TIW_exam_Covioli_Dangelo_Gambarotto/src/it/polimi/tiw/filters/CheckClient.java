@@ -1,3 +1,22 @@
+/*  _______ _______          __                                    
+ * |__   __|_   _\ \        / /                                    
+ *    | |    | |  \ \  /\  / /                                     
+ *    | |    | |   \ \/  \/ /                                      
+ *    | |   _| |_   \  /\  /                                       
+ *    |_|  |_____|   \/  \/   
+ * 
+ * exam project - a.y. 2019-2020
+ * Politecnico di Milano
+ * 
+ * Tancredi Covioli   mat. 944834
+ * Alessandro Dangelo mat. 945149
+ * Luca Gambarotto    mat. 928094
+ */
+
+/* OptionBean class
+ * This class represents a single option
+ */
+
 package it.polimi.tiw.filters;
 
 import java.io.IOException;
@@ -26,11 +45,11 @@ public class CheckClient implements Filter {
 	private Connection connection = null;
 
 	public CheckClient() {
-		// TODO Auto-generated constructor stub
+		return;
 	}
 
 	public void destroy() {
-		// TODO Auto-generated method stub
+		return;
 	}
 
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
@@ -42,7 +61,6 @@ public class CheckClient implements Filter {
 			UserBean uBean = (UserBean) request.getSession(false).getAttribute("user");
 
 			if (!uBean.getRole().equals("client")) {
-				System.out.println("checkClient Filter log");
 				response.setCharacterEncoding("UTF-8");
 				switch (uBean.getRole()) {
 				case "worker":
@@ -57,7 +75,6 @@ public class CheckClient implements Filter {
 			UserDAO uDao = new UserDAO(connection);
 
 			if (!uDao.existsClient(uBean.getUsername())) {
-				System.out.println("checkClient Filter log");
 				response.setCharacterEncoding("UTF-8");
 				switch (uBean.getRole()) {
 				case "worker":
@@ -76,7 +93,6 @@ public class CheckClient implements Filter {
 		} catch (IOException e) {
 			response.setCharacterEncoding("UTF-8");
 			response.sendError(555, "I/O Exception: Something wrong in filter chain");
-			e.printStackTrace();
 			return;
 		}
 	}

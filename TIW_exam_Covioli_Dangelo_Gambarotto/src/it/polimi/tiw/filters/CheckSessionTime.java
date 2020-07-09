@@ -1,3 +1,22 @@
+/*  _______ _______          __                                    
+ * |__   __|_   _\ \        / /                                    
+ *    | |    | |  \ \  /\  / /                                     
+ *    | |    | |   \ \/  \/ /                                      
+ *    | |   _| |_   \  /\  /                                       
+ *    |_|  |_____|   \/  \/   
+ * 
+ * exam project - a.y. 2019-2020
+ * Politecnico di Milano
+ * 
+ * Tancredi Covioli   mat. 944834
+ * Alessandro Dangelo mat. 945149
+ * Luca Gambarotto    mat. 928094
+ */
+
+/* OptionBean class
+ * This class represents a single option
+ */
+
 package it.polimi.tiw.filters;
 
 import java.io.IOException;
@@ -15,18 +34,17 @@ import javax.servlet.http.HttpServletResponse;
 public class CheckSessionTime implements Filter {
 
 	public CheckSessionTime() {
-		// TODO Auto-generated constructor stub
+		return;
 	}
 
 	public void destroy() {
-		// TODO Auto-generated method stub
+		return;
 	}
 
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
 			throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
-		System.out.println("checkSessionTime Filter log");
 		try {
 			if (request.getSession(false) == null) {
 				response.setCharacterEncoding("UTF-8");
@@ -43,7 +61,7 @@ public class CheckSessionTime implements Filter {
 	}
 
 	public void init(FilterConfig fConfig) throws ServletException {
-		// TODO Auto-generated method stub
+		return;
 	}
 
 }

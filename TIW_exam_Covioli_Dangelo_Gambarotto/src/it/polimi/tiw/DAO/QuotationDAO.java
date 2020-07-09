@@ -1,3 +1,18 @@
+/*  _______ _______          __                                    
+ * |__   __|_   _\ \        / /                                    
+ *    | |    | |  \ \  /\  / /                                     
+ *    | |    | |   \ \/  \/ /                                      
+ *    | |   _| |_   \  /\  /                                       
+ *    |_|  |_____|   \/  \/   
+ * 
+ * exam project - a.y. 2019-2020
+ * Politecnico di Milano
+ * 
+ * Tancredi Covioli   mat. 944834
+ * Alessandro Dangelo mat. 945149
+ * Luca Gambarotto    mat. 928094
+ */
+
 package it.polimi.tiw.DAO;
 
 import java.sql.Connection;
@@ -16,6 +31,10 @@ public class QuotationDAO {
 		this.con = connection;
 	}
 	
+	
+	/* This function returns a list of quotations that have not
+	 * been priced yet. The language in which the options are written
+	 * is the one specified in the parameter */
 	public List<QuotationBean> getFreeQuotations(String language) throws SQLException {
 		List<QuotationBean> freeQuotations = new ArrayList<>();
 		String query = "SELECT Q.quotationId, Q.date, Q.productId, P.name,	Q.clientId, C.username "
@@ -36,12 +55,15 @@ public class QuotationDAO {
 					quotation.setOptions(opDAO.getOptionByQuotation(qID, language));
 					freeQuotations.add(quotation);
 				}
+				closeConnection(result, pstatement);
 			}
 		}
 		return freeQuotations;
 	}
 	
 	
+	/* This function return a list containing all the quotations that
+	 * have been managed by worker specified as parameter. */
 	public List<QuotationBean> getWorkerQuotations(int workerId, String language) throws SQLException {
 		List<QuotationBean> workerQuotations = new ArrayList<>();
 		String query = "SELECT Q.quotationId, Q.price, Q.date, Q.productId, P.name,	Q.clientId, C.username, Q.workerId, W.username "
@@ -66,15 +88,18 @@ public class QuotationDAO {
 					opDAO.getOptionByQuotation(qID, language);
 					workerQuotations.add(quotation);
 				}
+				closeConnection(result, pstatement);
 			}
 		}
 		return workerQuotations;
 	}
 	
 	
+	/* This function returns a list of all the quotation requests
+	 * submitted by the user specified as parameter */
 	public List<QuotationBean> getClientQuotations(int clientId, String language) throws SQLException {
 		List<QuotationBean> clientQuotations = new ArrayList<>();
-		String query = "SELECT Q.quotationId, Q.price, Q.date, Q.productId, P.name "
+		String query = "SELECT Q.quotationId, Q.price, Q.date, Q.productId, P.name, Q.workerId "
 							+ "FROM quotation AS Q, product AS P "
 							+ "WHERE Q.productId = P.productId AND Q.clientId = ? "
 							+ "ORDER BY Q.date ASC";
@@ -90,20 +115,22 @@ public class QuotationDAO {
 					quotation.setDate(result.getString("Q.Date"));
 					quotation.setProductId(result.getInt("Q.productId"));
 					quotation.setProductName(result.getNString("P.name"));
+					quotation.setWorkerId(result.getInt("Q.workerId"));
 					quotation.setValue(Double.valueOf(result.getInt("Q.price"))/100);
 					opDAO.getOptionByQuotation(qID, language);
 					clientQuotations.add(quotation);
 				}
+				closeConnection(result, pstatement);
 			}
 		}
 		return clientQuotations;
 	}
 	
+	
+	/* This function returns the quotationBean related to the
+	 * quotation whose id is specified in the parameter. */
 	public QuotationBean getQuotationById(int quotationId, String language) throws SQLException{
-		//NOTA: per la query, sono partito dal presupposto
-		//che ci fosse solo una quotation per quotationId, visto che essa
-		//è chiave nella relativa tabella.
-		String query = "SELECT Q.quotationId, Q.date, Q.productId, P.name, Q.clientId, C.username, Q.price "
+		String query = "SELECT Q.quotationId, Q.date, Q.productId, P.name, Q.clientId, C.username, Q.price, Q.workerId "
 				+ "FROM quotation AS Q, client AS C, product AS P "
 				+ "WHERE Q.productId = P.productId AND C.idclient = Q.clientId AND Q.quotationId = ?";
 		OptionDAO opDAO = new OptionDAO(con);
@@ -118,15 +145,21 @@ public class QuotationDAO {
 			quotation.setClientUsername(result.getString("C.username"));
 			quotation.setDate(result.getString("Q.Date"));
 			quotation.setProductId(result.getInt("Q.productId"));
+			quotation.setWorkerId(result.getInt("Q.workerId"));
 			quotation.setProductName(result.getNString("P.name"));
 			if (result.getInt("Q.price") != 0) {
 				quotation.setValue(Double.valueOf(result.getInt("Q.price"))/100);
 			}
 			quotation.setOptions(opDAO.getOptionByQuotation(quotationId, language));
 		}
+		closeConnection(result, pstatement);
 		return quotation;
 	}
 	
+	
+	/* This function allows to set a price to a quotation. It also
+	 * update the workerId field with the id of the worker that submitted the
+	 * quotation price. */
 	public void setQuotationPrice(int quotationId, int price, int workerId) throws SQLException{
 		String query = "UPDATE quotation SET price = ?, workerId = ? WHERE quotationId = ?";
 		try (PreparedStatement pstatement = con.prepareStatement(query);){
@@ -134,10 +167,14 @@ public class QuotationDAO {
 			pstatement.setInt(2, workerId);
 			pstatement.setInt(3, quotationId);
 			pstatement.executeUpdate();
+			closeConnection(pstatement);
 		}
 	}
 	
 	
+	/* This function allows to add a new quotation request, specifying the
+	 * id of the client that submitted it, the id of the product it is related to
+	 * and the list with the options selected by the user. */
 	public void addQuotation(int clientId, int productId, List<Integer> options) throws SQLException{
 		String insertion = "INSERT into quotation (clientId, productId)   VALUES(?, ?)";
 		try (PreparedStatement pstatement = con.prepareStatement(insertion);) {
@@ -153,6 +190,7 @@ public class QuotationDAO {
 				if(result.next()) {
 					id = result.getInt("id");
 				}
+				closeConnection(result, pstatement);
 			}
 		}		
 		
@@ -162,9 +200,33 @@ public class QuotationDAO {
 				pstatement.setInt(1, o);
 				pstatement.setInt(2, id);
 				pstatement.executeUpdate();
+				closeConnection(pstatement);
 			}
 		}
 		
 	}
+	
+	
+	private void closeConnection(PreparedStatement pStatement) throws SQLException {
+		try {
+			pStatement.close();
+		} catch (SQLException e) {
+			throw new SQLException("Cannot close statement");
+		}
+	}
+
+	private void closeConnection(ResultSet res, PreparedStatement pStatement) throws SQLException {
+		try {
+			res.close();
+		} catch (SQLException e) {
+			throw new SQLException("Cannot close result");
+		}
+		try {
+			pStatement.close();
+		} catch (SQLException e) {
+			throw new SQLException("Cannot close statement");
+		}
+	}
+
 	
 }

@@ -1,3 +1,22 @@
+/*  _______ _______          __                                    
+ * |__   __|_   _\ \        / /                                    
+ *    | |    | |  \ \  /\  / /                                     
+ *    | |    | |   \ \/  \/ /                                      
+ *    | |   _| |_   \  /\  /                                       
+ *    |_|  |_____|   \/  \/   
+ * 
+ * exam project - a.y. 2019-2020
+ * Politecnico di Milano
+ * 
+ * Tancredi Covioli   mat. 944834
+ * Alessandro Dangelo mat. 945149
+ * Luca Gambarotto    mat. 928094
+ */
+
+/* OptionBean class
+ * This class represents a single option
+ */
+
 package it.polimi.tiw.filters;
 
 import java.io.IOException;
@@ -35,8 +54,7 @@ public class CheckWorker implements Filter {
 				connection.close();
 			}
 		} catch (SQLException sqle) {
-			sqle.printStackTrace();
-			System.out.println("There was an error while trying to close the connection to the database.");
+			System.err.println("There was an error while trying to close the connection to the database.");
 		}
 	}
 
@@ -47,11 +65,10 @@ public class CheckWorker implements Filter {
 		
 		try {
 			UserBean uBean = (UserBean) request.getSession(false).getAttribute("user");
-			System.out.println("checkWorker Filter log");
 			
-			//in casi molto particolari, si può avere in questo momento una sessione attiva, ma vuota.
-			// Per questo motivo, prima di controllare qualsiasi campo, controlliamo che l'utente sia salvato nella sessione attuale.
-			
+			/* in rare cases there may be an active but empty session.
+			 * For this reason, before checking any field, we check if a user is
+			 * actually stored in the session. */			
 			if(uBean == null) {
 				response.setCharacterEncoding("UTF-8");
 				response.sendRedirect(req.getServletContext().getContextPath());
@@ -73,7 +90,6 @@ public class CheckWorker implements Filter {
 			UserDAO uDao = new UserDAO(connection);
 
 			if (!uDao.existsWorker(uBean.getUsername())) {
-				System.out.println("checkWorker Filter log");
 				response.setCharacterEncoding("UTF-8");
 				switch (uBean.getRole()) {
 				case "client":
@@ -88,17 +104,14 @@ public class CheckWorker implements Filter {
 		} catch (SQLException e) {
 			response.setCharacterEncoding("UTF-8");
 			response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE, "Database access failed");
-			e.printStackTrace();
 			return;
 		} catch (IOException e) {
 			response.setCharacterEncoding("UTF-8");
 			response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE, "I/O Exception: Something wrong in filter chain");
-			e.printStackTrace();
 			return;
 		} catch (NullPointerException e) {
 			response.setCharacterEncoding("UTF-8");
 			response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE, "I/O Exception: Something wrong in filter chain");
-			e.printStackTrace();
 			return;
 		}
 	}

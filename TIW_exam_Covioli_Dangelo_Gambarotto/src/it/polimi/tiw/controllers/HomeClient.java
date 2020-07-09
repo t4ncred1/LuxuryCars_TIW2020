@@ -1,3 +1,18 @@
+/*  _______ _______          __                                    
+ * |__   __|_   _\ \        / /                                    
+ *    | |    | |  \ \  /\  / /                                     
+ *    | |    | |   \ \/  \/ /                                      
+ *    | |   _| |_   \  /\  /                                       
+ *    |_|  |_____|   \/  \/   
+ * 
+ * exam project - a.y. 2019-2020
+ * Politecnico di Milano
+ * 
+ * Tancredi Covioli   mat. 944834
+ * Alessandro Dangelo mat. 945149
+ * Luca Gambarotto    mat. 928094
+*/
+
 package it.polimi.tiw.controllers;
 
 import java.io.IOException;
@@ -27,17 +42,14 @@ import it.polimi.tiw.beans.QuotationBean;
 import it.polimi.tiw.beans.UserBean;
 import it.polimi.tiw.utils.SharedPropertyMessageResolver;
 
-/**
- * Servlet implementation class HomeWorker
- */
+
 @WebServlet("/HomeClient")
 public class HomeClient extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection = null;
 	private TemplateEngine templateEngine;   
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
+
+
     public HomeClient() {
         super();
     }
@@ -67,23 +79,27 @@ public class HomeClient extends HttpServlet {
 		}
     }
     
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
+
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		UserBean u = null;
 		HttpSession s = request.getSession(false);
 		u = (UserBean) s.getAttribute("user");
 
+		/* The default language is english. If the string language is empty all
+		 * the options will be retrieved using this language. If the tag in the locale
+		 * contains it the string is filled with _it". Other languages can be added
+		 * adding a column in the DB and adding the related branches in this part
+		 * of the server code. */
 		String language="";
 		if(request.getLocale().toLanguageTag().contains("it")) language="_it";
 		
 		QuotationDAO qDAO = new QuotationDAO(connection);
+		ProductDAO pDAO = new ProductDAO(connection);
+		
 		List<QuotationBean> clientQuotations = null;
 		try {
 			clientQuotations = qDAO.getClientQuotations(u.getUserid(), language);
 		} catch (SQLException e1) {
-			e1.printStackTrace();
 			response.setCharacterEncoding("UTF-8");
 			response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE,"The database encountered an error.");
 			return;
@@ -92,12 +108,21 @@ public class HomeClient extends HttpServlet {
 		String prod = request.getParameter("product");
 		int selProd = 0;
 		try {
-			if(prod!=null) selProd = Integer.parseInt(prod);
-		} catch (NumberFormatException e) {
+			if(prod!=null) {
+				selProd = Integer.parseInt(prod);
+				/* If the product is not a valid one, the servlet redirects to
+				 * the mail HomeClient page to avoid showing bad parameters in the
+				 * browser address bar. */
+				if(!pDAO.existsProduct(selProd)) {
+					response.sendRedirect(getServletContext().getContextPath() + "/HomeClient");
+					return;
+				}
+			}
+		} catch (NumberFormatException | SQLException e) {
 			response.sendError(422,"The product id inserted is not a valid number.");
 			return;
 		}
-		ProductDAO pDAO = new ProductDAO(connection);
+		
 		
 		ServletContext servletContext = getServletContext();
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
@@ -117,7 +142,6 @@ public class HomeClient extends HttpServlet {
 		try {
 			ctx.setVariable("products", pDAO.getAvailableProducts(language));
 			ctx.setVariable("selProd", selProd);
-			System.out.println(selProd);
 			ctx.setVariable("quotations", clientQuotations);
 			ctx.setVariable("name", " " + u.getName());
 			if(success!=null && success.equals("true")){
@@ -127,7 +151,6 @@ public class HomeClient extends HttpServlet {
 				ctx.setVariable("showErrorMessage", true);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
 			response.setCharacterEncoding("UTF-8");
 			response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE, "The database encountered an error.");
 			return;
@@ -137,9 +160,7 @@ public class HomeClient extends HttpServlet {
 		templateEngine.process(path, ctx, response.getWriter());
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
+
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}
@@ -150,8 +171,7 @@ public class HomeClient extends HttpServlet {
 				connection.close();
 			}
 		} catch (SQLException sqle) {
-			sqle.printStackTrace();
-			System.out.println("There was an error while trying to close the connection to the database.");
+			System.err.println("There was an error while trying to close the connection to the database.");
 		}
 	}
 
