@@ -75,6 +75,8 @@ public class SubmitRequest extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate, max-age=0");
+		
 		UserBean u = null;
 		HttpSession s = null;
 		

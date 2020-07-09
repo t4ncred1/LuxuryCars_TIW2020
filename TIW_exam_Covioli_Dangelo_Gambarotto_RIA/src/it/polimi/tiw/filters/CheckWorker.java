@@ -53,7 +53,8 @@ public class CheckWorker implements Filter {
 				uBean = (UserBean) request.getSession(false).getAttribute("user");
 			}
 			catch(NullPointerException e) {
-				response.sendRedirect(req.getServletContext().getContextPath());
+				response.setStatus(403);
+				response.getWriter().println(req.getServletContext().getContextPath());
 				return;
 			}
 			/* Check if the user is a worker. In case it is not, if it is a worker
@@ -64,10 +65,12 @@ public class CheckWorker implements Filter {
 			if (!uBean.getRole().equals("worker")) {
 				switch (uBean.getRole()) {
 				case "client":
-					response.sendRedirect(req.getServletContext().getContextPath() + "/Client");
+					response.setStatus(403);
+					response.getWriter().println(req.getServletContext().getContextPath() + "/Client");
 					return;
 				default:
-					response.sendRedirect(req.getServletContext().getContextPath());
+					response.setStatus(403);
+					response.getWriter().println(req.getServletContext().getContextPath());
 					return;
 				}
 			}

@@ -117,10 +117,16 @@
 	          function(req) {
 	            if (req.readyState == 4) {
 	              var message = req.responseText;
-	              if (req.status == 200) {
-	                selfTable.update(JSON.parse(req.responseText)); 
-	              } else {
-	                pageOrchestrator.showError(message);
+	              switch (req.status) {
+	              case 200:
+	            	  selfTable.update(JSON.parse(req.responseText));
+	            	  break;
+	              case 403:
+	            	  window.location.href = message;
+	            	  break;
+	              default:
+	            	  orchestrator.showError(message);
+	              	  break;
 	              }
 	            }
 	          }
@@ -172,7 +178,8 @@
 					row.appendChild(qDate);
 					qPrice = document.createElement("td");
 					price = request.value;
-					if(price==0){
+					wId = request.workerId;
+					if(wId==0){
 						qPrice.textContent = "In attesa"
 					}
 					else qPrice.textContent = price + " €";
@@ -230,10 +237,16 @@
 	          function(req, orchestrator) {
 	            if (req.readyState == 4) {
 	              var message = req.responseText;
-	              if (req.status == 200) {
-	                selfDet.update(JSON.parse(req.responseText)); 
-	              } else {
-	                pageOrchestrator.showError(message);
+	              switch (req.status) {
+	              case 200:
+	            	  selfDet.update(JSON.parse(req.responseText));
+	            	  break;
+	              case 403:
+	            	  window.location.href = message;
+	            	  break;
+	              default:
+	            	  orchestrator.showError(message);
+	              	break;
 	              }
 	            }
 	          }
@@ -257,7 +270,7 @@
 				selfdet.details.selectedOptions.appendChild(opt);
 				selfdet.details.selectedOptions.appendChild(document.createElement("br"));
 			});
-			if(quotation.value == undefined){
+			if(quotation.workerId == 0){
 				this.details.price.textContent = "In attesa"
 			}
 			else this.details.price.textContent = quotation.value + " €";
@@ -302,11 +315,17 @@
 	          function(req) {
 	            if (req.readyState == 4) {
 	              var message = req.responseText;
-	              if (req.status == 200) {
-	            	selfForm.products = JSON.parse(req.responseText);
-	                selfForm.updateProds(selfForm.products); 
-	              } else {
-	                orchestrator.setError(message);
+	              switch (req.status) {
+	              case 200:
+	            	  selfForm.products = JSON.parse(req.responseText);
+	            	  selfForm.updateProds(selfForm.products);
+	            	  break;
+	              case 403:
+	            	  window.location.href = message;
+	            	  break;
+	              default:
+	            	  orchestrator.showError(message);
+	              	break;
 	              }
 	            }
 	          }
@@ -321,14 +340,13 @@
 		 * request.
 		 */
 		this.updateProds = function(prodArray){
-			console.log(prodArray.length);
 			var qId, pName, qDate, qPrice;
 			this.productsList.innerHTML = "";
 			var self = this;
 			prodArray.forEach(function(product) {
-				// MAIN DIV
+				// Main div
 				pButton = document.createElement("div");
-				// FORM RADIO INPUT
+				// Form radio input
 				carInput = document.createElement("input");
 				carInput.setAttribute("type", "radio");
 				carInput.setAttribute("name", "productId");
@@ -338,7 +356,7 @@
 					self.showDetails(product.id);
 				});	
 				pButton.appendChild(carInput);
-				// FORM LABEL
+				// Form label
 				carLabel = document.createElement("label");
 				carLabel.setAttribute("for", "p" + product.id);
 				carThumb = document.createElement("img");
@@ -347,7 +365,7 @@
 				carLabel.appendChild(carThumb);
 				pButton.appendChild(carLabel);
 				pButton.appendChild(document.createElement("br"));
-				//CAR NAME;
+				// Product name;
 				carName = document.createElement("span");
 				carName.textContent = product.name;
 				pButton.appendChild(carName);
@@ -413,11 +431,20 @@
 					          function(req) {
 					            if (req.readyState == 4) {
 						          var message = req.responseText;
-					              if (req.status == 200) {
-					                orchestrator.refresh();
-					                orchestrator.showSuccess("Richiesta inviata correttamente");
-					              } else {
-					                orchestrator.showError(message);
+						          switch (req.status) {
+					              case 200:
+					            	  orchestrator.refresh();
+					            	  orchestrator.showSuccess("Richiesta inviata correttamente");
+					            	  break;
+					              case 403:
+					            	  window.location.href = message;
+					            	  break;
+					              case 401:
+					            	  document.getElementById("errormessage").textContent = message;
+					            	  break;
+					              default:
+					            	  orchestrator.showError(message);
+					              	break;
 					              }
 					            }
 					          }

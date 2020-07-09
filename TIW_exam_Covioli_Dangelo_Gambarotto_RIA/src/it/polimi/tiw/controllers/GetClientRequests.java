@@ -65,6 +65,9 @@ public class GetClientRequests extends HttpServlet {
     }
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate, max-age=0");
+		
 		HttpSession session = request.getSession();
 		UserBean user = (UserBean) session.getAttribute("user");
 		
@@ -88,7 +91,6 @@ public class GetClientRequests extends HttpServlet {
 		
 		Gson gson = new Gson();
 		String json = gson.toJson(requests);
-		
 		
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");

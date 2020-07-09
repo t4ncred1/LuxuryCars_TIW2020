@@ -68,6 +68,8 @@ public class ProductImage extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	
+		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate, max-age=0");
+		
 		int productId;
 		try {
 			productId = Integer.parseInt(request.getParameter("product"));

@@ -26,10 +26,10 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebFilter("/CheckSession")
-public class CheckSession implements Filter {
+@WebFilter("/CheckSessionPages")
+public class CheckSessionPages implements Filter {
 
-	public CheckSession() {
+	public CheckSessionPages() {
 		return;
 	}
 
@@ -47,8 +47,7 @@ public class CheckSession implements Filter {
 		 * expired due to count-down end. */
 		try {
 			if (request.getSession(false) == null || !request.isRequestedSessionIdValid()) {
-				response.setStatus(403);
-				response.getWriter().println(req.getServletContext().getContextPath());
+				response.sendRedirect(req.getServletContext().getContextPath());
 				return;
 			}
 			response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate, max-age=0");

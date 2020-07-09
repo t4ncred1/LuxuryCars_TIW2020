@@ -77,7 +77,7 @@ public class GetAvailableProducts extends HttpServlet {
 		Gson gson = new Gson();
 		String json = gson.toJson(products);
 		
-		
+		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate, max-age=0");
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 		response.getWriter().write(json);

@@ -28,7 +28,19 @@
 	  <param-value>./images/favicon.png</param-value>
 	</context-param>
 	
-		<!-- Filters -->
+	<!-- Filters -->
+	<filter>
+	  <filter-name>CheckSessionPages</filter-name>
+	  <filter-class>it.polimi.tiw.filters.CheckSessionPages</filter-class>
+ 	</filter>
+	<filter>
+	  <filter-name>CheckClientPages</filter-name>
+	  <filter-class>it.polimi.tiw.filters.CheckClientPages</filter-class>
+ 	</filter>
+ 	<filter>
+	  <filter-name>CheckWorkerPages</filter-name>
+	  <filter-class>it.polimi.tiw.filters.CheckWorkerPages</filter-class>
+ 	</filter>
 	<filter>
 	  <filter-name>CheckSession</filter-name>
 	  <filter-class>it.polimi.tiw.filters.CheckSession</filter-class>
@@ -43,9 +55,20 @@
  	</filter>
 	
 	<filter-mapping>
-		<filter-name>CheckSession</filter-name>
+		<filter-name>CheckSessionPages</filter-name>
 		<url-pattern>/Worker</url-pattern>
+		<url-pattern>/Client</url-pattern>	
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>CheckClientPages</filter-name>
 		<url-pattern>/Client</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>CheckWorkerPages</filter-name>
+		<url-pattern>/Worker</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>CheckSession</filter-name>
 		<url-pattern>/FreeQuotations</url-pattern>
 		<url-pattern>/ManagedQuotations</url-pattern>
 		<url-pattern>/PricePost</url-pattern>
@@ -58,7 +81,6 @@
 	</filter-mapping>
 	<filter-mapping>
 		<filter-name>CheckClient</filter-name>
-		<url-pattern>/Client</url-pattern>
 		<url-pattern>/GetAvailableProducts</url-pattern>
 		<url-pattern>/GetClientRequests</url-pattern>
 		<url-pattern>/GetQuotation</url-pattern>
@@ -67,7 +89,6 @@
 	</filter-mapping>
 	<filter-mapping>
 		<filter-name>CheckWorker</filter-name>
-		<url-pattern>/Worker</url-pattern>
 		<url-pattern>/FreeQuotations</url-pattern>
 		<url-pattern>/ManagedQuotations</url-pattern>
 		<url-pattern>/PricePost</url-pattern>

@@ -16,6 +16,7 @@
 package it.polimi.tiw.filters;
 
 import java.io.IOException;
+
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -26,10 +27,12 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebFilter("/CheckSession")
-public class CheckSession implements Filter {
+import it.polimi.tiw.beans.UserBean;
 
-	public CheckSession() {
+@WebFilter("/CheckClientPages")
+public class CheckClientPages implements Filter {
+
+	public CheckClientPages() {
 		return;
 	}
 
@@ -39,23 +42,39 @@ public class CheckSession implements Filter {
 
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
 			throws IOException, ServletException {
+			
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
-
-		/* Check if the user is logged in (i.e. an active session is stored in the server)
-		 * This also allows to redirect to the home all the users whose session is
-		 * expired due to count-down end. */
 		try {
-			if (request.getSession(false) == null || !request.isRequestedSessionIdValid()) {
-				response.setStatus(403);
-				response.getWriter().println(req.getServletContext().getContextPath());
+			/* Check if the user is logged in or not. If the user is not logged the
+			 * instruction in the try clause will result in a NullPointerException,
+			 * whose effect is to redirect the user to the index page. */
+			UserBean uBean = null;
+			try {
+				uBean = (UserBean) request.getSession(false).getAttribute("user");
+			}
+			catch(NullPointerException e) {
+				response.sendRedirect(req.getServletContext().getContextPath());
 				return;
 			}
-			response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate, max-age=0");
+			/* Check if the user is a client. In case it is not, if it is a worker
+			 * it is automatically redirected to the worker page, otherwise is is redirected
+			 * to the index page. This case has been introduced to manage the error even
+			 * in future expansions of the application, speculating the possibility of
+			 * introducing new types of users */
+			if (!uBean.getRole().equals("client")) {
+				switch (uBean.getRole()) {
+				case "worker":
+					response.sendRedirect(req.getServletContext().getContextPath() + "/Worker");
+					return;
+				default:
+					response.sendRedirect(req.getServletContext().getContextPath());
+					return;
+				}
+			}
 			chain.doFilter(request, response);
 		} catch (IOException e) {
 			response.sendError(555, "I/O Exception: Something wrong in filter chain");
-
 		}
 	}
 

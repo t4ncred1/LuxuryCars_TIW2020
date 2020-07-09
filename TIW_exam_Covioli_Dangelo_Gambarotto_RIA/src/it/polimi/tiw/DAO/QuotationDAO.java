@@ -99,7 +99,7 @@ public class QuotationDAO {
 	 * submitted by the user specified as parameter */
 	public List<QuotationBean> getClientQuotations(int clientId, String language) throws SQLException {
 		List<QuotationBean> clientQuotations = new ArrayList<>();
-		String query = "SELECT Q.quotationId, Q.price, Q.date, Q.productId, P.name "
+		String query = "SELECT Q.quotationId, Q.price, Q.date, Q.productId, P.name, Q.workerId "
 							+ "FROM quotation AS Q, product AS P "
 							+ "WHERE Q.productId = P.productId AND Q.clientId = ? "
 							+ "ORDER BY Q.date ASC";
@@ -115,6 +115,7 @@ public class QuotationDAO {
 					quotation.setDate(result.getString("Q.Date"));
 					quotation.setProductId(result.getInt("Q.productId"));
 					quotation.setProductName(result.getNString("P.name"));
+					quotation.setWorkerId(result.getInt("Q.workerId"));
 					quotation.setValue(Double.valueOf(result.getInt("Q.price"))/100);
 					opDAO.getOptionByQuotation(qID, language);
 					clientQuotations.add(quotation);
@@ -129,7 +130,7 @@ public class QuotationDAO {
 	/* This function returns the quotationBean related to the
 	 * quotation whose id is specified in the parameter. */
 	public QuotationBean getQuotationById(int quotationId, String language) throws SQLException{
-		String query = "SELECT Q.quotationId, Q.date, Q.productId, P.name, Q.clientId, C.username, Q.price "
+		String query = "SELECT Q.quotationId, Q.date, Q.productId, P.name, Q.clientId, C.username, Q.price, Q.workerId "
 				+ "FROM quotation AS Q, client AS C, product AS P "
 				+ "WHERE Q.productId = P.productId AND C.idclient = Q.clientId AND Q.quotationId = ?";
 		OptionDAO opDAO = new OptionDAO(con);
@@ -144,6 +145,7 @@ public class QuotationDAO {
 			quotation.setClientUsername(result.getString("C.username"));
 			quotation.setDate(result.getString("Q.Date"));
 			quotation.setProductId(result.getInt("Q.productId"));
+			quotation.setWorkerId(result.getInt("Q.workerId"));
 			quotation.setProductName(result.getNString("P.name"));
 			if (result.getInt("Q.price") != 0) {
 				quotation.setValue(Double.valueOf(result.getInt("Q.price"))/100);
