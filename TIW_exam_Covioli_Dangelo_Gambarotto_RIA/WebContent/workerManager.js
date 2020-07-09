@@ -5,7 +5,7 @@
 (function() {
 
 // page components
-  var quotationtable, freetable, pricediv, errorBox, namefield,
+  var quotationtable, freetable, pricediv, errorBox, namefield, body,
     pageOrchestrator = new PageOrchestrator(); // main controller
 
   window.addEventListener("load", () => {
@@ -84,12 +84,15 @@
 					  self.update(list);
 					  break;
 				  case 503: // server error + message.
+					  tabella.classList.add("invisible");
 					  error.textContent = message;
 					  error.classList.remove("invisible");
 					  break;
-				  case 411:
-					  
+				  case 403: //if access is forbidden (like an expired session) a message is sent containing the destination url.
+	            	  window.location.href = message;
+	            	  break;
 				  default: // servlet connection failed, or other errors arose.
+					  tabella.classList.add("invisible");
 					  error.textContent = 
 						  "È avvenuto un errore (Servlet non disponibile)";
 				  	  error.classList.remove("invisible");
@@ -169,6 +172,9 @@
 					  	//inserted because the table could be visible after some manipulation.
 					  error.classList.remove("invisible");
 					  break;
+				  case 403: //if access is forbidden (like an expired session) a message is sent containing the destination url.
+	            	  window.location.href = message;
+	            	  break;
 				  default: // servlet connection failed, or other errors arose.
 					  error.textContent = 
 						  "È avvenuto un errore (Servlet non disponibile)";
@@ -212,9 +218,9 @@
 				  	span.textContent = "Visualizza Richiesta";
 				  	
 				  	visualButton.addEventListener('click', (e) => {
-				  		pricediv.show(item);
-				  		location.hash = "pricequotation"
-				  			// move to the pricing section of the page.
+				  		
+				  		pageOrchestrator.changeToPricePage(item);
+				  			
 				  	})
 				  	visualButton.classList.add("button");
 				  	visualButton.classList.add("visualButton");
@@ -294,6 +300,7 @@
 	  var inputQuotation = document.getElementById("quotation");
 	  var inputButton = document.getElementById("submitprice");
 	  var priceerror = document.getElementById("priceerror");
+	  var backButton = document.getElementById("priceback");
 	  
 	  this.hide = function(){
 		  _div_price.classList.add("invisible");
@@ -347,19 +354,22 @@
 					  inputQuotation.setAttribute("value", item.quotationId);
 					  makeCall("POST", 'PricePost', e.target.closest("form"),
 			            function(req) {
+						  
 			              if (req.readyState == XMLHttpRequest.DONE) {
-			                
 			            	var message = req.responseText; // error message or message response.
-			                
-			                if (req.status == 200) {
+			            	switch (req.status) {
+			            	case 200 :
 			                	//all ok. Insertion went smoothly.
 			                	pageOrchestrator.showSuccess(message);
-			                } 
-			                else if (req.status == 503){
+			                	break;
+			            	case 503:
 			                	//server error
 			                	pageOrchestrator.showError(message);
-			                }
-			                else{
+			                	break;
+			              	case 403: //if access is forbidden (like an expired session) a message is sent containing the destination url.
+			            	  window.location.href = message;
+			            	  break;
+			                default:
 			                	//user input or other kinds of errors.
 			                  priceerror.textContent = message;
 			  				  priceerror.classList.remove("invisible");
@@ -374,6 +384,9 @@
 				  //This brings up the popup bubble on the form.
 			  }
 		  })
+		  backButton.addEventListener('click', (e) => {
+			  pageOrchestrator.refresh();
+		  });
 	  }
   }
   
@@ -422,13 +435,14 @@
   function PageOrchestrator(){
 
 	this.start = function(){
-		
 		//first check to be logged in as a worker.
 		// This check is made on the server side too.
 		if(sessionStorage.getItem('role')!="worker"){
 			window.location.href = "index.html";
 		}
 		else{
+			body = document.getElementsByTagName("body")[0];
+			
 			//set the name of the user.
 			namefield = new NameField(sessionStorage.getItem('name'),
 					document.getElementById('user_name')
@@ -459,8 +473,12 @@
 		}
 	};
 	
-	this.refresh = function(){	
-		//gets the page to a default status
+	this.refresh = function(){	//gets the page to a default status	
+		
+		//these change the background image.
+		body.classList.add("workerpage");
+		body.classList.remove("pricepage");
+		
 		namefield.show();
 		quotationtable.show();
 		freetable.show();
@@ -468,12 +486,24 @@
 		errorBox.hide();
 	};
 	
+	this.changeToPricePage = function(item){ 
+		//called to change the current page to only show useful informations
+		// to make the quotation.
+  		freetable.hide();
+  		quotationtable.hide();
+		body.classList.add("pricepage");
+		body.classList.remove("workerpage");
+		pricediv.show(item);
+	}
+	
 	this.showSuccess = function(message){
+		// called in case of success.
 		pageOrchestrator.refresh();
 		errorBox.setSuccess(message);
 		window.scrollTo(0.0);
 	};
 	this.showError = function(message){
+		// called in case of error.
 		pageOrchestrator.refresh();
 		errorBox.setError(message);
 		window.scrollTo(0.0);

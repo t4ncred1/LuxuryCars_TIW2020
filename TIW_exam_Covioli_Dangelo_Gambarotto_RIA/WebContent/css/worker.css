@@ -4,6 +4,10 @@
 	background-image:linear-gradient(rgba(0,0,0,0.0), rgba(0,0,0,0.6)), url("./resources/ferrari_enzo.jpg");
 }
 
+.pricepage{
+	background-image:linear-gradient(rgba(0,0,0,0.0), rgba(0,0,0,0.6)), url("./resources/maseratim.jpg");
+}
+
 #free
 
 #productcell{
