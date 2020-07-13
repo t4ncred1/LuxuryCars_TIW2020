@@ -83,7 +83,7 @@
 					  var list = JSON.parse(message);
 					  self.update(list);
 					  break;
-				  case 503: // server error + message.
+				  case 500: // server error + message.
 					  tabella.classList.add("invisible");
 					  error.textContent = message;
 					  error.classList.remove("invisible");
@@ -166,7 +166,7 @@
 					  var list = JSON.parse(message);
 					  self.update(list);
 					  break;
-				  case 503: // server error + message.
+				  case 500: // server error + message.
 					  error.textContent = message;
 					  tabella.classList.add("invisible"); 
 					  	//inserted because the table could be visible after some manipulation.
@@ -362,7 +362,7 @@
 			                	//all ok. Insertion went smoothly.
 			                	pageOrchestrator.showSuccess(message);
 			                	break;
-			            	case 503:
+			            	case 500:
 			                	//server error
 			                	pageOrchestrator.showError(message);
 			                	break;

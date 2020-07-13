@@ -74,7 +74,7 @@ public class FreeQuotations extends HttpServlet {
 			qlist = qDAO.getFreeQuotations(language);
 		} catch (SQLException e){
 			String errormessage = "E' stato riscontrato un errore cercando di ottenere dei risultati dal database.";
-			response.setStatus(503);
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			response.getWriter().write(errormessage);
 		}
 		String json = gson.toJson(qlist);

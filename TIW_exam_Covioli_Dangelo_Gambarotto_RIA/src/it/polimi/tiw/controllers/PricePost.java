@@ -113,7 +113,7 @@ public class PricePost extends HttpServlet {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			String errormessage = "Il database non funziona";
-			response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			response.getWriter().write(errormessage);
 			return;
 		}
@@ -141,7 +141,7 @@ public class PricePost extends HttpServlet {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			String errormessage = "Il database non funziona";
-			response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			response.getWriter().write(errormessage);
 			return;
 		}
