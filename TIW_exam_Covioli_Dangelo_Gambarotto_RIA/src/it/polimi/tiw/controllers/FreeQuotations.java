@@ -47,6 +47,7 @@ public class FreeQuotations extends HttpServlet {
     }
     
     public void init() throws ServletException {
+    	// manage the connection to the DB.
 		try {
 			ServletContext context = getServletContext();
 			String driver = context.getInitParameter("dbDriver");
@@ -64,15 +65,17 @@ public class FreeQuotations extends HttpServlet {
 		gson = new Gson();
     }
     
-
+    // Gives back the list of pending requests for a quotation.
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		QuotationDAO qDAO = new QuotationDAO(connection);
 		List<QuotationBean> qlist = null;
-		String language="_it";
+		String language="_it"; //the database is the same as the HTML counterpart, thus we need to pass a
+								// language to each method.
 		response.setContentType("application/json");
 		try{
 			qlist = qDAO.getFreeQuotations(language);
 		} catch (SQLException e){
+			//DB error.
 			String errormessage = "E' stato riscontrato un errore cercando di ottenere dei risultati dal database.";
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			response.getWriter().write(errormessage);

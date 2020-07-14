@@ -1,3 +1,18 @@
+/*  _______ _______          __                                    
+ * |__   __|_   _\ \        / /                                    
+ *    | |    | |  \ \  /\  / /                                     
+ *    | |    | |   \ \/  \/ /                                      
+ *    | |   _| |_   \  /\  /                                       
+ *    |_|  |_____|   \/  \/   
+ * 
+ * exam project - a.y. 2019-2020
+ * Politecnico di Milano
+ * 
+ * Tancredi Covioli   mat. 944834
+ * Alessandro Dangelo mat. 945149
+ * Luca Gambarotto    mat. 928094
+ */
+
 package it.polimi.tiw.controllers;
 
 import java.io.IOException;
@@ -21,7 +36,7 @@ import it.polimi.tiw.DAO.UserDAO;
 import it.polimi.tiw.utils.DynamicJsonObject;
 
 @WebServlet("/Login")
-@MultipartConfig
+@MultipartConfig //needed because 
 public class Login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection = null;
@@ -31,6 +46,7 @@ public class Login extends HttpServlet {
 	}
 
 	public void init() throws ServletException {
+    	// manage the connection to the DB.
 		try {
 			ServletContext context = getServletContext();
 			String driver = context.getInitParameter("dbDriver");
@@ -49,7 +65,7 @@ public class Login extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		//check the username and password against the DB
 		String usrn = null;
 		String pwd = null;
 		usrn = request.getParameter("username");
@@ -66,7 +82,7 @@ public class Login extends HttpServlet {
 			user = userDao.checkCredentials(usrn, pwd);
 		} catch (SQLException e) {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			response.getWriter().println("Errore del server, riprova più tardi");
+			response.getWriter().println("Errore del server, riprova piï¿½ tardi");
 			return;
 		}
 
@@ -74,11 +90,16 @@ public class Login extends HttpServlet {
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 			response.getWriter().println("Nome utente o password errati!");
 		} else {
+			// Remember! this might create the new session IF ONE DOES NOT ALREADY EXIST.
 			request.getSession().setAttribute("user", user);
+			
 			response.setStatus(HttpServletResponse.SC_OK);
 			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");
-
+			
+			//send back a JSON object containing all the infos about the currently logged user.
+			// (these information will be used only to display personalized messages to the user,
+			// not to authenticate him)
 			DynamicJsonObject personal = new DynamicJsonObject();
 			personal.addAttribute("name", user.getName());
 			personal.addAttribute("role", user.getRole());

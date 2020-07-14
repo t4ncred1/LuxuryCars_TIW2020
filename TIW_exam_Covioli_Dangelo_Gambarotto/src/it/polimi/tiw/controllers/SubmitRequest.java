@@ -1,3 +1,18 @@
+/*  _______ _______          __                                    
+ * |__   __|_   _\ \        / /                                    
+ *    | |    | |  \ \  /\  / /                                     
+ *    | |    | |   \ \/  \/ /                                      
+ *    | |   _| |_   \  /\  /                                       
+ *    |_|  |_____|   \/  \/   
+ * 
+ * exam project - a.y. 2019-2020
+ * Politecnico di Milano
+ * 
+ * Tancredi Covioli   mat. 944834
+ * Alessandro Dangelo mat. 945149
+ * Luca Gambarotto    mat. 928094
+*/
+
 package it.polimi.tiw.controllers;
 
 import java.io.IOException;
@@ -54,8 +69,12 @@ public class SubmitRequest extends HttpServlet {
 		}
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	/*
+	 * Retrieves the informations sent through the form for the request of a new quotation
+	 * and creates the new quotation after some checks are performed.
+	 * The parameters sent with the form are:
+	 * 1) productId
+	 * 2) options selected
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
@@ -68,21 +87,28 @@ public class SubmitRequest extends HttpServlet {
 		ProductDAO pDAO = new ProductDAO(connection);
 		QuotationDAO qDAO = new QuotationDAO(connection);
 		ProductBean product;
+		
 		try {
 			product = pDAO.getProductById(productId, "");
 			List<Integer> options = new ArrayList<>();
 			String[] selectedOptions = request.getParameterValues("options");
 			if(selectedOptions==null) {
+				// as in other parts of the backend, a cookie is sent
+				// with the redirection to the page to transmit
+				// non sensitive data.
 				Cookie success = new Cookie("success","false");
 				response.addCookie(success);
 				response.setCharacterEncoding("UTF-8");
 				response.sendRedirect(response.encodeRedirectURL(getServletContext().getContextPath()+"/HomeClient"));
 				return;
 			}
+			// A check is performed on the options sent to only add an option to the option list of 
+			// a quotation request if the option is valid for the product selected.
 			for(String o : selectedOptions) {
 				int oId = Integer.parseInt(o);
 				if(product.isAValidOption(oId)) options.add(oId);
 			}
+			// Here is made the check for the number of options added to the quotation request.
 			if(options.size()==0) {
 				Cookie success = new Cookie("success","false");
 				response.addCookie(success);

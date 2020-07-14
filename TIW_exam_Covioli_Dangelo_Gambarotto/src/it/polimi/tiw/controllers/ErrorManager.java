@@ -1,3 +1,18 @@
+/*  _______ _______          __                                    
+ * |__   __|_   _\ \        / /                                    
+ *    | |    | |  \ \  /\  / /                                     
+ *    | |    | |   \ \/  \/ /                                      
+ *    | |   _| |_   \  /\  /                                       
+ *    |_|  |_____|   \/  \/   
+ * 
+ * exam project - a.y. 2019-2020
+ * Politecnico di Milano
+ * 
+ * Tancredi Covioli   mat. 944834
+ * Alessandro Dangelo mat. 945149
+ * Luca Gambarotto    mat. 928094
+*/
+
 package it.polimi.tiw.controllers;
 
 import java.io.IOException;
@@ -30,7 +45,7 @@ public class ErrorManager extends HttpServlet {
     public ErrorManager() {
         super();
     }
-
+    
     public void init() throws ServletException {
 		ServletContext servletContext = getServletContext();
 		ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
@@ -42,9 +57,7 @@ public class ErrorManager extends HttpServlet {
 		templateResolver.setSuffix(".html");
     }
     
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
+	// This servlet is used as a catchall for all kinds of errors.
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		Integer baseCode = HttpServletResponse.SC_SERVICE_UNAVAILABLE;
@@ -58,14 +71,17 @@ public class ErrorManager extends HttpServlet {
 		String errorMessage = (String) request.getAttribute("javax.servlet.error.message");
 		
 		System.out.println("An Error was thrown:");
+		//in case of server side error.
 		if (throwable!=null) {
 			throwable.printStackTrace(); //print the stack trace in the console anyway
 			ctx.setVariable("thrown", throwable.getClass().toString());
 		}
+		//in case of an explicit status code
 		if (statusCode!=null) {
 			baseCode = statusCode;
 			System.out.println(" The error had a status code "+baseCode+".");
 		}
+		//the servlet that caused the error
 		if (servletName!=null) {
 			System.out.println(" The error was brought up by servlet "+servletName+".");
 		}
@@ -73,6 +89,8 @@ public class ErrorManager extends HttpServlet {
 			ctx.setVariable("errorMessage", errorMessage);
 			System.out.println(" The error message was "+errorMessage+".");
 		}
+		
+		//used to know which home page to send the user to.
 		if (request.getSession(false)!=null && request.getSession(false).getAttribute("user")!=null) {
 			
 			switch(((UserBean)request.getSession(false).getAttribute("user")).getRole()) {
@@ -84,7 +102,6 @@ public class ErrorManager extends HttpServlet {
 				break;
 			}
 		}
-		System.out.println(request.getSession(false)!=null? (request.getSession(false).getAttribute("user")!=null? "L'utente c'è" : "L'utente non c'è") : "la sessione non c'è");//TODO remove this
 		ctx.setVariable("errorCode", baseCode);
 		System.out.println("End of error report.");
 		

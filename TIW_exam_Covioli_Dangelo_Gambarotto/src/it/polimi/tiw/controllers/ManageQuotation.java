@@ -1,3 +1,18 @@
+/*  _______ _______          __                                    
+ * |__   __|_   _\ \        / /                                    
+ *    | |    | |  \ \  /\  / /                                     
+ *    | |    | |   \ \/  \/ /                                      
+ *    | |   _| |_   \  /\  /                                       
+ *    |_|  |_____|   \/  \/   
+ * 
+ * exam project - a.y. 2019-2020
+ * Politecnico di Milano
+ * 
+ * Tancredi Covioli   mat. 944834
+ * Alessandro Dangelo mat. 945149
+ * Luca Gambarotto    mat. 928094
+*/
+
 package it.polimi.tiw.controllers;
 
 import java.io.IOException;
@@ -72,6 +87,7 @@ public class ManageQuotation extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
+    // Gives back the form for the insertion of a price.
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		String language="";
@@ -111,6 +127,7 @@ public class ManageQuotation extends HttpServlet {
 		ServletContext servletContext = getServletContext();
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
 		//if the error cookie was passed, set the context and delete it.
+		// The cookie is passed from the POST method of this same servlet.
 		if (request.getCookies()!=null) {
 			for (Cookie c : request.getCookies()) {
 				if (c.getName().equals("priceerror") && c.getValue().equals("true")) {
@@ -136,8 +153,6 @@ public class ManageQuotation extends HttpServlet {
 			}
 			ctx.setVariable("quotation", q);
 		} catch (SQLException e) {
-			// TODO error handling: SQLException
-//			e.printStackTrace();
 			response.setCharacterEncoding("UTF-8");
 			response.sendError(503, "The database in not currently working.");
 			return;
@@ -146,7 +161,6 @@ public class ManageQuotation extends HttpServlet {
 		response.setCharacterEncoding("UTF-8");
 		templateEngine.process(path, ctx, response.getWriter());
 		return;
-		//DONE check if the user is logged in (supposedly done via filter)
 	}
 
 	
@@ -154,6 +168,7 @@ public class ManageQuotation extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
+	// Manages the insertion of a price.
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		String language="";
@@ -192,7 +207,7 @@ public class ManageQuotation extends HttpServlet {
 			return;
 		}
 
-		//check if the quotation ID is set
+		//check if the quotation ID is set and if it represents a pending quotations.
 		try {
 			List<Integer> freeIDs = qDAO.getFreeQuotations(language).stream()
 					.map(id -> id.getQuotationId())
@@ -203,14 +218,13 @@ public class ManageQuotation extends HttpServlet {
 				return;
 			}
 		} catch (SQLException e) {
-			// TODO error handling: SQLException
 			e.printStackTrace();
 			response.setCharacterEncoding("UTF-8");
 			response.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE, "Database Not Working.");
 			return;
-			
 		}
 		
+		// Check if the value of price is acceptable.
 		if(price<=0) {
 			//redirect to the page, but with the additional parameter "error" set to true.
 			System.out.println("error while checking the sign of the element " + Double.parseDouble(request.getParameter("price")));

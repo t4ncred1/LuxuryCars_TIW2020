@@ -1,3 +1,18 @@
+/*  _______ _______          __                                    
+ * |__   __|_   _\ \        / /                                    
+ *    | |    | |  \ \  /\  / /                                     
+ *    | |    | |   \ \/  \/ /                                      
+ *    | |   _| |_   \  /\  /                                       
+ *    |_|  |_____|   \/  \/   
+ * 
+ * exam project - a.y. 2019-2020
+ * Politecnico di Milano
+ * 
+ * Tancredi Covioli   mat. 944834
+ * Alessandro Dangelo mat. 945149
+ * Luca Gambarotto    mat. 928094
+ */
+
 package it.polimi.tiw.controllers;
 
 import java.io.IOException;
@@ -20,8 +35,9 @@ import com.google.gson.*;
 import it.polimi.tiw.DAO.QuotationDAO;
 import it.polimi.tiw.beans.QuotationBean;
 import it.polimi.tiw.beans.UserBean;
-/**
+/*
  * Servlet implementation class ManagedQuotations
+ * Provides the past managed quotations of a worker.
  */
 @WebServlet("/ManagedQuotations")
 public class ManagedQuotations extends HttpServlet {
@@ -34,10 +50,10 @@ public class ManagedQuotations extends HttpServlet {
      */
     public ManagedQuotations() {
         super();
-        // TODO Auto-generated constructor stub
     }
     
     public void init() throws ServletException {
+    	// manage the connection to the DB.
 		try {
 			ServletContext context = getServletContext();
 			String driver = context.getInitParameter("dbDriver");
@@ -62,12 +78,14 @@ public class ManagedQuotations extends HttpServlet {
 		QuotationDAO qDAO = new QuotationDAO(connection);
 		List<QuotationBean> qlist = null;
 		String language="_it";
-		HttpSession s = request.getSession(false);
+		HttpSession s = request.getSession(false); // should only return a valid session thanks to Session Filters
 		UserBean u = (UserBean) s.getAttribute("user");
 		response.setContentType("application/json");
 		try{
+			// get the previously managed quotations
 			qlist = qDAO.getWorkerQuotations(u.getUserid(), language);
 		} catch (SQLException e){
+			// DB error
 			String errormessage = "È stato riscontrato un errore cercando di ottenere dei risultati dal database.";
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			response.getWriter().write(errormessage);
@@ -82,6 +100,17 @@ public class ManagedQuotations extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
+	}
+	
+	public void destroy() {
+		try {
+			if (connection != null) {
+				connection.close();
+			}
+		} catch (SQLException sqle) {
+			sqle.printStackTrace();
+			System.out.println("There was an error while trying to close the connection to the database.");
+		}
 	}
 
 }

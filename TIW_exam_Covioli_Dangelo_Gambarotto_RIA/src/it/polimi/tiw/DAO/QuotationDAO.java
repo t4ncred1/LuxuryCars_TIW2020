@@ -52,6 +52,7 @@ public class QuotationDAO {
 					quotation.setProductId(result.getInt("Q.productId"));
 					quotation.setProductName(result.getNString("P.name"));
 					OptionDAO opDAO = new OptionDAO(con);
+					// Please Note: this function also returns the list of options given back from the OptionDAO
 					quotation.setOptions(opDAO.getOptionByQuotation(qID, language));
 					freeQuotations.add(quotation);
 				}

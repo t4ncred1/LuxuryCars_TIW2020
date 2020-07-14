@@ -1,3 +1,18 @@
+/*  _______ _______          __                                    
+ * |__   __|_   _\ \        / /                                    
+ *    | |    | |  \ \  /\  / /                                     
+ *    | |    | |   \ \/  \/ /                                      
+ *    | |   _| |_   \  /\  /                                       
+ *    |_|  |_____|   \/  \/   
+ * 
+ * exam project - a.y. 2019-2020
+ * Politecnico di Milano
+ * 
+ * Tancredi Covioli   mat. 944834
+ * Alessandro Dangelo mat. 945149
+ * Luca Gambarotto    mat. 928094
+*/
+
 package it.polimi.tiw.controllers;
 
 import java.io.BufferedInputStream;
@@ -34,6 +49,8 @@ public class ProductImage extends HttpServlet {
 	public void init() throws ServletException {
 		try {
 			ServletContext context = getServletContext();
+			// This additional parameter "imagesFolderPath" is needed because the servlet
+			// uses the images saved on the server.
 			archivePath = context.getInitParameter("imagesFolderPath");
 			String driver = context.getInitParameter("dbDriver");
 			String url = context.getInitParameter("dbUrl");
@@ -49,7 +66,7 @@ public class ProductImage extends HttpServlet {
 		}
 	}
 
-	
+	// Returns the product image (either a thumbnail or a full image).
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	
 		int productId = Integer.parseInt(request.getParameter("product"));
@@ -58,9 +75,12 @@ public class ProductImage extends HttpServlet {
 		
 		try {
 				String imgPath;
+				// ImgPath actually represents the name of the image, since the
+				// actual directory is taken from the server configuration file (web.xml)
 				imgPath = pDAO.getImagePath(productId);
 				String thumb = request.getParameter("thumbnail");
 				if(thumb!=null && thumb.equals("true")) {
+					// If the requested image is a thumbnail, search for it.
 					imgPath = "thumbnail_" + imgPath;
 				}
 					
@@ -69,7 +89,8 @@ public class ProductImage extends HttpServlet {
 		        ServletOutputStream outStream;
 		        outStream = response.getOutputStream();
 		        FileInputStream fin = new FileInputStream(archivePath+imgPath);
-		
+		        
+		        //Reads from the image file.
 		        BufferedInputStream bin = new BufferedInputStream(fin);
 		        BufferedOutputStream bout = new BufferedOutputStream(outStream);
 		        int ch =0; ;
@@ -81,7 +102,8 @@ public class ProductImage extends HttpServlet {
 		        bout.close();
 		        outStream.close();
 		} catch (SQLException e) {
-			//TODO come gestiamo questo errore?
+			//NOTA: For this error, the error manager can't be called since
+			// the result expected is an image, not a page.
 		
 			e.printStackTrace();
 			return;

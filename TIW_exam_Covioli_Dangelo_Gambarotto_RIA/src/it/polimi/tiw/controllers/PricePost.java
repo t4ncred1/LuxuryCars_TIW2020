@@ -1,3 +1,18 @@
+/*  _______ _______          __                                    
+ * |__   __|_   _\ \        / /                                    
+ *    | |    | |  \ \  /\  / /                                     
+ *    | |    | |   \ \/  \/ /                                      
+ *    | |   _| |_   \  /\  /                                       
+ *    |_|  |_____|   \/  \/   
+ * 
+ * exam project - a.y. 2019-2020
+ * Politecnico di Milano
+ * 
+ * Tancredi Covioli   mat. 944834
+ * Alessandro Dangelo mat. 945149
+ * Luca Gambarotto    mat. 928094
+ */
+
 package it.polimi.tiw.controllers;
 
 import java.io.IOException;
@@ -40,6 +55,7 @@ public class PricePost extends HttpServlet {
     }
     
     public void init() throws ServletException {
+    	// manage the connection to the DB.
 		try {
 			ServletContext context = getServletContext();
 			String driver = context.getInitParameter("dbDriver");
@@ -62,9 +78,11 @@ public class PricePost extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		response.setContentType("text/plain;charset=UTF-8");	
-		String language="_it";
 		
-		HttpSession s = request.getSession(false);
+		String language="_it"; //the database is the same as the HTML counterpart, thus we need to pass a
+								// language to each method.
+		
+		HttpSession s = request.getSession(false);	// should only return a valid session thanks to Session Filters
 		UserBean u = (UserBean) s.getAttribute("user");
 		Double price = 0.0;
 		int intPrice = 0;
@@ -98,25 +116,6 @@ public class PricePost extends HttpServlet {
 			response.getWriter().write(errormessage);
 			return;
 		}
-
-		//check if the quotation ID is set
-		try {
-			List<Integer> freeIDs = qDAO.getFreeQuotations(language).stream()
-					.map(id -> id.getQuotationId())
-					.collect(Collectors.toList());
-			if(!freeIDs.contains(qID)) {
-				String errormessage = "L'id passato non è tra gli ID liberi";
-				response.setStatus(422);
-				response.getWriter().write(errormessage);
-				return;
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			String errormessage = "Il database non funziona";
-			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			response.getWriter().write(errormessage);
-			return;
-		}
 		
 		if(price<=0) {
 			String errormessage = "Il prezzo inserito deve essere maggiore di 0";
@@ -132,9 +131,30 @@ public class PricePost extends HttpServlet {
 			response.getWriter().write(errormessage);
 			return;
 		}
-		Double newprice = price * 100;
+		
+		//check if the quotation ID is set
+		try {
+			List<Integer> freeIDs = qDAO.getFreeQuotations(language).stream()
+					.map(id -> id.getQuotationId())
+					.collect(Collectors.toList());
+			if(!freeIDs.contains(qID)) {
+				String errormessage = "L'id passato non è tra gli ID liberi";
+				response.setStatus(422);
+				response.getWriter().write(errormessage);
+				return;
+			}
+		} catch (SQLException e) {
+			// database error
+			e.printStackTrace();
+			String errormessage = "Il database non funziona";
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			response.getWriter().write(errormessage);
+			return;
+		}
+		
+		Double newprice = price * 100; // The price is saved in cents.
 		intPrice = newprice.intValue();
-				
+			
 		//set the price for the quotation
 		try {
 			qDAO.setQuotationPrice(qID, intPrice, u.getUserid());
@@ -148,5 +168,15 @@ public class PricePost extends HttpServlet {
 		response.setStatus(HttpServletResponse.SC_OK);
 		response.getWriter().write("Il nuovo prezzo è stato inserito correttamente!");
 		return;
+	}
+	public void destroy() {
+		try {
+			if (connection != null) {
+				connection.close();
+			}
+		} catch (SQLException sqle) {
+			sqle.printStackTrace();
+			System.out.println("There was an error while trying to close the connection to the database.");
+		}
 	}
 }

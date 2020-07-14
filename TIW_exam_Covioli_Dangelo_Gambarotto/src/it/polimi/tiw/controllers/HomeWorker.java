@@ -1,3 +1,18 @@
+/*  _______ _______          __                                    
+ * |__   __|_   _\ \        / /                                    
+ *    | |    | |  \ \  /\  / /                                     
+ *    | |    | |   \ \/  \/ /                                      
+ *    | |   _| |_   \  /\  /                                       
+ *    |_|  |_____|   \/  \/   
+ * 
+ * exam project - a.y. 2019-2020
+ * Politecnico di Milano
+ * 
+ * Tancredi Covioli   mat. 944834
+ * Alessandro Dangelo mat. 945149
+ * Luca Gambarotto    mat. 928094
+*/
+
 package it.polimi.tiw.controllers;
 
 import java.io.IOException;
@@ -63,14 +78,17 @@ public class HomeWorker extends HttpServlet {
 		}
     }
     
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
+	//
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		UserBean u = null;
 		HttpSession s = request.getSession(false);
 		u = (UserBean) s.getAttribute("user");
-
+		
+		/* The default language is english. If the string language is empty all
+		 * the options will be retrieved using this language. If the tag in the locale
+		 * contains it the string is filled with _it". Other languages can be added
+		 * adding a column in the DB and adding the related branches in this part
+		 * of the server code. */
 		String language="";
 		if(request.getLocale().toLanguageTag().contains("it")) language="_it";
 		
@@ -80,6 +98,7 @@ public class HomeWorker extends HttpServlet {
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
 		
 		try {
+			//set the necessary elements for the worker page.
 			ctx.setVariable("workerQuotations", qDAO.getWorkerQuotations(u.getUserid(), language));
 			ctx.setVariable("freeQuotations", qDAO.getFreeQuotations(language));
 			ctx.setVariable("name", u.getName());

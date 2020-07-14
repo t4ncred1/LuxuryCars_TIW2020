@@ -1,3 +1,18 @@
+/*  _______ _______          __                                    
+ * |__   __|_   _\ \        / /                                    
+ *    | |    | |  \ \  /\  / /                                     
+ *    | |    | |   \ \/  \/ /                                      
+ *    | |   _| |_   \  /\  /                                       
+ *    |_|  |_____|   \/  \/   
+ * 
+ * exam project - a.y. 2019-2020
+ * Politecnico di Milano
+ * 
+ * Tancredi Covioli   mat. 944834
+ * Alessandro Dangelo mat. 945149
+ * Luca Gambarotto    mat. 928094
+ */
+
 package it.polimi.tiw.controllers;
 
 import java.io.IOException;
@@ -32,7 +47,7 @@ public class Registration extends HttpServlet {
 	public Registration() {
 		super();
 	}
-
+	
 	public void init() throws ServletException {
 		ServletContext servletContext = getServletContext();
 		ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
@@ -64,6 +79,9 @@ public class Registration extends HttpServlet {
 		ServletContext servletContext = getServletContext();
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
 		if (request.getCookies() != null) {
+			
+			// Here we used the same cookie method described in other servlets.
+			
 			for (Cookie c : request.getCookies()) {
 				if (c.getName().equals("registrationError")) {
 					switch(c.getValue()) {
@@ -106,7 +124,7 @@ public class Registration extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
+		
 		String firstName = request.getParameter("firstName");
 		String lastName = request.getParameter("lastName");
 		String username = request.getParameter("username");
@@ -118,6 +136,14 @@ public class Registration extends HttpServlet {
 		UserDAO uDao = new UserDAO(connection);
 
 		try {
+			/* set of checks performed before the registration completion.
+			*	1) no field shall be null.
+			*	2) user must not exist.
+			*	3) role must be either "worker" or "client".
+			*	4) The two inserted passwords must be equal.
+			*	5) The email must respect an email pattern.
+			*/
+			
 			if (firstName == "" || lastName == "" || username == "" || password1 == "" || password2 == "" || role == "" || mail == "") {
 				Cookie error = new Cookie("registrationError", "emptyField");
 				response.addCookie(error);

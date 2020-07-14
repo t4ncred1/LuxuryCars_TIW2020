@@ -16,31 +16,31 @@
   function ErrorBox(_errorbox, _xbutton, _errormessage){
 	  	//error box at the top of the page, signaling wether a submission went smoothly or not.
 		//can have either class error or success. 
-	  this.errorbox = _errorbox;
-		this.xbutton = _xbutton;
-		this.errormessage = _errormessage;
+	  var errorbox = _errorbox;
+		var xbutton = _xbutton;
+		var errormessage = _errormessage;
 		
 		this.hide = function(){
-			this.errorbox.classList.add("invisible");
+			errorbox.classList.add("invisible");
 		}
 		
 		this.setError = function(message){
 			self = this;
-			this.errorbox.setAttribute("class", "error");
-			this.errormessage.textContent = message;
-			this.xbutton.addEventListener('click', (e) => {
-				self.errorbox.classList.add("invisible");
-				self.errormessage.textContent="";
+			errorbox.setAttribute("class", "error");
+			errormessage.textContent = message;
+			xbutton.addEventListener('click', (e) => {
+				errorbox.classList.add("invisible");
+				errormessage.textContent="";
 			});	
 		}
 		
 		this.setSuccess = function(message){
 			self = this;
-			this.errorbox.setAttribute("class", "success");
-			this.errormessage.textContent = message;
-			this.xbutton.addEventListener('click', (e) => {
-				self.errorbox.classList.add("invisible");
-				self.errormessage.textContent="";
+			errorbox.setAttribute("class", "success");
+			errormessage.textContent = message;
+			xbutton.addEventListener('click', (e) => {
+				errorbox.classList.add("invisible");
+				errormessage.textContent="";
 			});	
 		}
 		
@@ -105,7 +105,7 @@
 
 	  this.update = function(quotation_array){
 		  body.innerHTML = ""; //empty the body of the table.
-		  if(quotation_array.length == 0){ 
+		  if(quotation_array.length === 0){ 
 			  //if response is empty, show an error and hide the table.
 			  tabella.classList.add("invisible");
 			  error.textContent = 
@@ -189,7 +189,7 @@
 	  
 	  this.update = function(free_array){
 		  body.innerHTML = ""; //empty the body of the table.
-		  if(free_array.length == 0){ 
+		  if(free_array.length === 0){ 
 			  //if the response contains an empty array, show an error 
 			  //and hide the table.
 			  error.textContent = 
@@ -252,7 +252,7 @@
 	  this.show = function(item){
 		  self = this;
 		  optiontablebody.innerHTML = ""; //empty the body of the table.
-		  if(item.options.length == 0){
+		  if(item.options.length === 0){
 			  //if no options were chosen by the client.
 		  		optiontable.classList.add("invisible");
 		  		optionerror.textContent="Non sono disponibili opzioni " +
@@ -500,13 +500,21 @@
 		// called in case of success.
 		pageOrchestrator.refresh();
 		errorBox.setSuccess(message);
-		window.scrollTo(0.0);
+		window.scrollTo({
+			  top: 0,
+			  left: 100,
+			  behavior: 'smooth'
+			});
 	};
 	this.showError = function(message){
 		// called in case of error.
 		pageOrchestrator.refresh();
 		errorBox.setError(message);
-		window.scrollTo(0.0);
+		window.scrollTo({
+			  top: 0,
+			  left: 100,
+			  behavior: 'smooth'
+			});
 	};
 
   }
