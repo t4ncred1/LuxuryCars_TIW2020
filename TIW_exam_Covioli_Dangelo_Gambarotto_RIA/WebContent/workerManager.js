@@ -491,6 +491,7 @@
 		// to make the quotation.
   		freetable.hide();
   		quotationtable.hide();
+  		errorBox.hide();
 		body.classList.add("pricepage");
 		body.classList.remove("workerpage");
 		pricediv.show(item);
