@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <link rel="icon" type="image/png" th:href="${#servletContext.getInitParameter('favicon_path')}" />
-<meta charset="ISO-8859-1">
+<meta charset="UTF-8">
 <link rel="stylesheet" type="text/css" media="all" href="../css/register.css" th:href="@{/css/register.css}" />
 <title>Sign up</title>
 </head>
@@ -16,7 +16,7 @@
 	<div class="registerbox box">
 		<img class="registerlogo" src="./images/logo.png">
 		<p th:if=" ${errorMsg!=null && errorMsg=='emptyField'}" class="error"  th:text="#{emptyField}">campi vuoti</p>
-		<p th:if=" ${errorMsg!=null && errorMsg=='usedUsername'}" class="error" th:text="#{usedUsername}">username già utilizzato</p>
+		<p th:if=" ${errorMsg!=null && errorMsg=='usedUsername'}" class="error" th:text="#{usedUsername}">username giÃ  utilizzato</p>
 		<p th:if=" ${errorMsg!=null && errorMsg=='wrongRole'}" class="error" th:text="#{wrongRole}">ruolo inserito sbagliato</p>
 		<p th:if=" ${errorMsg!=null && errorMsg=='wrongPassword'}" class="error" th:text="#{wrongPassword}">ruolo inserito sbagliato</p>
 		<p th:if=" ${errorMsg!=null && errorMsg=='wrongEmail'}" class="error" th:text="#{wrongEmail}">ruolo inserito sbagliato</p>
