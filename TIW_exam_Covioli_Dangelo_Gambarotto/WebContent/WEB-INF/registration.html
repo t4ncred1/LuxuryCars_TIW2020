@@ -18,8 +18,8 @@
 		<p th:if=" ${errorMsg!=null && errorMsg=='emptyField'}" class="error"  th:text="#{emptyField}">campi vuoti</p>
 		<p th:if=" ${errorMsg!=null && errorMsg=='usedUsername'}" class="error" th:text="#{usedUsername}">username già utilizzato</p>
 		<p th:if=" ${errorMsg!=null && errorMsg=='wrongRole'}" class="error" th:text="#{wrongRole}">ruolo inserito sbagliato</p>
-		<p th:if=" ${errorMsg!=null && errorMsg=='wrongPassword'}" class="error" th:text="#{wrongPassword}">ruolo inserito sbagliato</p>
-		<p th:if=" ${errorMsg!=null && errorMsg=='wrongEmail'}" class="error" th:text="#{wrongEmail}">ruolo inserito sbagliato</p>
+		<p th:if=" ${errorMsg!=null && errorMsg=='wrongPassword'}" class="error" th:text="#{wrongPassword}">password inserita sbagliata</p>
+		<p th:if=" ${errorMsg!=null && errorMsg=='wrongEmail'}" class="error" th:text="#{wrongEmail}">email inserita sbagliata</p>
 		<p th:if=" ${errorMsg!=null && errorMsg=='success'}" class="success" th:text="#{success}">ruolo inserito sbagliato</p>
 		
 		
