@@ -43,10 +43,12 @@ document.getElementById("registerbutton").addEventListener('click', (e) => {
 		}
 	}
 	
+	
 	function goBackToLogin(){
 	      document.getElementById("pagebody").setAttribute("class", "indexpage");
 	      document.getElementById("registerview").setAttribute("class", "hidden");
 	      document.getElementById("loginview").setAttribute("class", "");
+	      hideErrors();
 	}
 	
 	hideErrors();
@@ -60,12 +62,7 @@ document.getElementById("registerbutton").addEventListener('click', (e) => {
 						document.getElementById("textregister").textContent = message;
 						document.getElementById("errorboxregister").setAttribute("class", "success");
 						document.getElementById("xbuttonregister").setAttribute("class", "close");
-						document.getElementById("errorboxregister").addEventListener('click', (e) => {
-						      document.getElementById("pagebody").setAttribute("class", "indexpage");
-						      document.getElementById("registerview").setAttribute("class", "hidden");
-						      document.getElementById("loginview").setAttribute("class", "");
-						      hideErrors();
-						}, false);
+						document.getElementById("errorboxregister").addEventListener('click', goBackToLogin, false);
 						break;
 					case 400:
 						document.getElementById("textregister").textContent = message;
