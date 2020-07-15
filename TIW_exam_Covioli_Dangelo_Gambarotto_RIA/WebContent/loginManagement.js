@@ -11,7 +11,22 @@
 			return;
 		});	
 	}	
+  
+	function checkLogout(){
+		var showerror = function(message){
+			//TODO eliminare questo codice una volta scelto il da farsi
+//			document.getElementById("text").textContent = message;
+//            document.getElementById("errorbox").setAttribute("class", "error");
+//            document.getElementById("xbutton").setAttribute("class", "close");
+			alert(message);
+		}
+		if (sessionStorage.getItem("logout")) {
+			showerror("Logout effettuato");
+			sessionStorage.removeItem('logout');
+		}
+	}
 	
+  checkLogout();
   document.getElementById("loginbutton").addEventListener('click', (e) => {
     var form = e.target.closest("form");
     if (form.checkValidity()) {

@@ -22,9 +22,9 @@
 	 * quotationDetails = box that shows the details of a submitted
 	 * 						request of quotation
 	 */
-    var errorBox, reqTable, carForm, quotationDetails, pageOrchestrator = new PageOrchestrator();
+    var errorBox, reqTable, carForm, quotationDetails, logout, pageOrchestrator = new PageOrchestrator();
     
-    /* On load the page orchestrator build all the objects needed,
+    /* On load the page orchestrator builds all the objects needed,
      * bind them to the relative elements in the html page and then
      * refresh them all to populate the page with the personal information
      * of the user 
@@ -33,7 +33,40 @@
         pageOrchestrator.start();
 		pageOrchestrator.refresh();
     }, false);
-
+    
+    /*
+     * This function is used to manage the logout routine after a
+     * click event on the logout link is received.
+     * It can manage both effective logout and session expiration before
+     * the logout routine starts.
+     */
+    function Logout(_logout){
+  	  _logout.addEventListener('click', (e) => {
+  		  makeCall("GET", "Logout", null,
+  				  function(req) {
+  			  if (req.readyState == XMLHttpRequest.DONE) {
+  				  var message = req.responseText;
+  				  switch (req.status) {
+  				  case 302: //redirection ok
+  					  sessionStorage.setItem("logout","true");
+  					  window.location.href=message;
+  					  break;
+  				  case 555: // server error + message.
+  					  errorBox.setError(message);
+  					  break;
+  				  case 403: // session expired.
+  					  sessionStorage.setItem("logout","true");
+  					  window.location.href=message;
+  				  default: // servlet connection failed, or other errors arose.
+  					  message = 
+  						  "È avvenuto un errore (Servlet non disponibile)";
+  				  	  errorBox.setError(message);
+  				  }
+  			  }
+  		  }
+  		  );
+  	  	})
+    }
    
     /* this function builds an object that maintains the
      * welcome message on top of the page, filling it with the
@@ -491,6 +524,7 @@
 																selectedOptions : document.getElementById("selectedOptions"),
 																price : document.getElementById("price")
 															})
+					logout = new Logout(document.getElementById("logout"));
 					carForm.registerEvents(this);
 					quotationDetails.hide();
         	}

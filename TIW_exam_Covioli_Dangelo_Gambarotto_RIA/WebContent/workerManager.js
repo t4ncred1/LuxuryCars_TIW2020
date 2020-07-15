@@ -1,18 +1,63 @@
-/**
+/*  _______ _______          __                                    
+ * |__   __|_   _\ \        / /                                    
+ *    | |    | |  \ \  /\  / /                                     
+ *    | |    | |   \ \/  \/ /                                      
+ *    | |   _| |_   \  /\  /                                       
+ *    |_|  |_____|   \/  \/   
  * 
+ * exam project - a.y. 2019-2020
+ * Politecnico di Milano
+ * 
+ * Tancredi Covioli   mat. 944834
+ * Alessandro Dangelo mat. 945149
+ * Gambarotto Luca    mat. 928094
  */
 
 (function() {
 
 // page components
   var quotationtable, freetable, pricediv, errorBox, namefield, body,
-    pageOrchestrator = new PageOrchestrator(); // main controller
+    logout, pageOrchestrator = new PageOrchestrator(); // main controller
 
   window.addEventListener("load", () => {
       pageOrchestrator.start(); // initialize the components
       pageOrchestrator.refresh(); // reset components to the default 
   }, false);
-
+  
+  /*
+   * This function is used to manage the logout routine after a
+   * click event on the logout link is received.
+   * It can manage both effective logout and session expiration before
+   * the logout routine starts.
+   */
+  function Logout(_logout){
+	  _logout.addEventListener('click', (e) => {
+		  makeCall("GET", "Logout", null,
+				  function(req) {
+			  if (req.readyState == XMLHttpRequest.DONE) {
+				  var message = req.responseText;
+				  switch (req.status) {
+				  case 302: //redirection ok
+					  sessionStorage.setItem("logout","true");
+					  window.location.href=message;
+					  break;
+				  case 555: // server error + message.
+					  errorBox.setError(message);
+					  break;
+				  case 403: // session expired.
+					  sessionStorage.setItem("logout","true");
+					  window.location.href=message;
+				  default: // servlet connection failed, or other errors arose.
+					  message = 
+						  "È avvenuto un errore (Servlet non disponibile)";
+				  	  errorBox.setError(message);
+				  }
+			  }
+		  }
+		  );
+	  	})
+  }
+  
   function ErrorBox(_errorbox, _xbutton, _errormessage){
 	  	//error box at the top of the page, signaling wether a submission went smoothly or not.
 		//can have either class error or success. 
@@ -456,6 +501,8 @@
 					document.getElementById("xbutton"),
 					document.getElementById("errortext")
 			);
+			
+			logout = new Logout(document.getElementById("logout"))
 			
 			// 2 - Meta object controlling the objects needed to 
 			// list the informations of a price requests and to 

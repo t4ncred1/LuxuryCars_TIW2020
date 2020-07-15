@@ -39,7 +39,9 @@ public class Logout extends HttpServlet {
 			throws ServletException, IOException {
 		try {
 			request.getSession(false).invalidate();
-			response.sendRedirect(getServletContext().getContextPath());
+			response.setStatus(302);
+			response.getWriter().println(getServletContext().getContextPath());
+			return;
 		} catch (IOException e) {
 			response.sendError(555, "Something wrong in redirecting from logout");
 
