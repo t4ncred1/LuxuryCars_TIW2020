@@ -20,7 +20,7 @@
 
 	<h2 th:text="#{quotations}">Le tue richieste</h2>
 	<div>
-		<table class="table">
+		<table th:if="!${quotations.empty}" class="table">
 			<thead>
 				<tr>
 					<th th:text="#{id}">ID</th>
@@ -39,6 +39,7 @@
 				</tr>
 			</tbody>
 		</table>
+		<span th:if="${quotations.empty}" th:text="#{empty}"></span>
 	</div>
 
 
