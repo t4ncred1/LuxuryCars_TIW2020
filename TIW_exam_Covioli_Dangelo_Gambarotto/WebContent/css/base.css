@@ -63,7 +63,8 @@ a:link, a:visited{
 }
 
 .table tr, .table th{
-	padding: 4px;
+	padding: 8px;
+	line-height: 30px;
 }
 
 .table tr:nth-child(even){
@@ -101,7 +102,6 @@ a:link, a:visited{
 
 
 .button{
-	color: white;
 	border:none;
 	padding: 12px 27px;
 	text-align: center;

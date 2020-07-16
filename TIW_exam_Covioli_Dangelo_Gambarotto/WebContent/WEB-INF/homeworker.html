@@ -51,7 +51,7 @@
 					<td th:text="${q.quotationId}"></td>
 					<td th:text="${q.productName}"></td>
 					<td th:text="${q.clientUsername}"></td>
-					<td><a th:href="@{/ManageQuotation(quotation=${q.quotationId})}"> <span th:text="#{showq}">Visualizza
+					<td><a th:href="@{/ManageQuotation(quotation=${q.quotationId})}" class="button visualButton"> <span th:text="#{showq}">Visualizza
 								richiesta</span></a></td>
 				</tr>
 			</tbody>
