@@ -62,8 +62,8 @@
 						<form action="SubmitRequest" method="POST">
 								<input type="hidden" name="productId" required="required" th:value="${p.id}" />
 								<div th:each="o : ${p.options}">
-									<input type="checkbox" th:id="${o.id}" th:name="options" th:value="${o.id}">
-									<label th:for="${o.name}" th:text="${o.name}"> I have a boat</label><br>
+									<input type="checkbox" th:id="${o.id}" th:name="options" th:value="${o.id}">									
+									<label th:for="${o.name}" th:text="${o.inOffer}?${o.name}+' '+#{offer}:${o.name}"> I have a boat</label><br>
 								</div>
 								<br>
 								<input class="button" type="submit" value="Submit">
