@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <link rel="icon" type="image/png" th:href="${#servletContext.getInitParameter('favicon_path')}" />
-<meta charset="ISO-8859-1">
+<meta charset="UTF-8">
 <title>Luxury Cars</title>
 <link rel="stylesheet" type="text/css" media="all" href="../CSS/client.css" th:href="@{/css/client.css}" />
 </head>
@@ -34,7 +34,7 @@
 					<td th:text="${q.quotationId}">1</td>
 					<td th:text="${q.productName}">Toyota Aygo</td>
 					<td th:text="${q.date}">17/02/1996</td>
-					<td th:if="${q.value}!=0" th:text="${q.value}">100E</td>
+					<td th:if="${q.value}!=0" th:text="${q.value} + '€'">100E</td>
 					<td th:if="${q.value}==0" th:text="#{pending}">100E</td>
 				</tr>
 			</tbody>
