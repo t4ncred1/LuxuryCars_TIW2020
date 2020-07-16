@@ -15,7 +15,7 @@
 
 	<h2 th:text="#{priced}">Preventivi già prezzati</h2>
 	<div>
-		<table class="table">
+		<table class="table" th:unless="${workerQuotations==null or workerQuotations.empty}">
 			<thead>
 				<tr>
 					<th th:text="#{id}">ID</th>
@@ -33,11 +33,12 @@
 				</tr>
 			</tbody>
 		</table>
+		<span th:if="${workerQuotations==null or workerQuotations.empty}" th:text="#{empty}">Non sono mai state fatte quotazioni.</span>
 	</div>
 
 	<h2 th:text="#{toPrice}">Preventivi ancora da prezzare</h2>
 	<div>
-		<table class="table">
+		<table class="table" th:unless="${freeQuotations==null or freeQuotations.empty}">
 			<thead>
 				<tr>
 					<th th:text="#{id}">ID</th>
@@ -56,6 +57,7 @@
 				</tr>
 			</tbody>
 		</table>
+		<span th:if="${freeQuotations==null or freeQuotations.empty}" th:text="#{freeempty}">Non sono mai state fatte quotazioni.</span>
 	</div>
 
 
