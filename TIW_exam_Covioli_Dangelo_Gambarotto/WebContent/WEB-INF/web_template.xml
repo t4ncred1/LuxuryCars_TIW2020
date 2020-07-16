@@ -37,18 +37,28 @@
 	  <filter-name>CheckWorker</filter-name>
 	  <filter-class>it.polimi.tiw.filters.CheckWorker</filter-class>
  	</filter>
+ 	<filter>
+	  <filter-name>CheckClient</filter-name>
+	  <filter-class>it.polimi.tiw.filters.CheckClient</filter-class>
+ 	</filter>
 	<filter-mapping>
 	 <filter-name>CheckSessionTime</filter-name>
 	 <url-pattern>/HomeClient</url-pattern>
 	 <url-pattern>/HomeWorker</url-pattern>
 	 <url-pattern>/ManageQuotation</url-pattern>
 	 <url-pattern>/Logout</url-pattern>
+	 <url-pattern>/SubmitRequest</url-pattern>
 	</filter-mapping>
 	<filter-mapping>
 	 <filter-name>CheckWorker</filter-name>
 	 <url-pattern>/HomeWorker</url-pattern>
 	 <url-pattern>/ManageQuotation</url-pattern>
 	</filter-mapping>
+	<filter-mapping>
+	 <filter-name>CheckClient</filter-name>
+	 <url-pattern>/HomeClient</url-pattern>
+	 <url-pattern>/SubmitRequest</url-pattern>
+	</filter-mapping> 
 	
 	<!-- Error Pages -->
 	<error-page>

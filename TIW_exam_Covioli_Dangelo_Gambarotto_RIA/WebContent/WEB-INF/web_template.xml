@@ -23,12 +23,9 @@
 	  <param-name>imagesFolderPath</param-name>
 	  <param-value>%%path%%</param-value>
 	</context-param>
-	<context-param>
-	  <param-name>favicon_path</param-name>
-	  <param-value>./images/favicon.png</param-value>
-	</context-param>
 	
 	<!-- Filters -->
+	
 	<filter>
 	  <filter-name>CheckSessionPages</filter-name>
 	  <filter-class>it.polimi.tiw.filters.CheckSessionPages</filter-class>
@@ -102,5 +99,4 @@
     	<welcome-file>index.html</welcome-file>
   	</welcome-file-list>
   	
-	
 </web-app>
